@@ -20,7 +20,7 @@ const register = (dispatch) => async ({ email, password, first_name, last_name }
     try {
       const response = await main.post("/api/register/", { email, password, first_name, last_name });
       console.log( response.data);
-        navigate("avatar");
+        navigate("signin");
     } catch (err) {
         console.log(err);
     }
