@@ -8,7 +8,6 @@ const registerScreen = ()=> {
     return(
         <View>
             <RegisterForm 
-                headerText = "Register"
                 onSubmit={register}
             />
         </View>

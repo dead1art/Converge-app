@@ -34,7 +34,7 @@ const App = ({navref}) => {
 
   const rootStack = () => {
     return (
-      <login.Navigator>
+      <login.Navigator >
         <login.Screen 
               name="signin" 
               component={signinScreen}
@@ -42,7 +42,13 @@ const App = ({navref}) => {
                 headerShown:false 
               }
               }/>
-        <login.Screen name="register" component={registerScreen}/>
+        <login.Screen 
+              name="register" 
+              component={registerScreen}
+              options={{
+                headerShown:false 
+              }}/>
+
         <login.Screen name="avatar" component={avatarScreen} /> 
       </login.Navigator>
     )
