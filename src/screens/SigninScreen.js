@@ -5,22 +5,16 @@ import { Context } from '../context/authContext';
 import { Input, Text, Button } from 'react-native-elements';
 
 const signinScreen = ({navigation})=> {
-
+    
     const {signin} = useContext(Context);
 
     return (
         <View>
         <LoginForm 
-            headerText="Login"
             onSubmit={signin}
+            onNavigate={() => navigation.navigate('register')}
         />
-        <Button
-            title="Not a registered Member? Register now"
-            type="clear"
-            onPress={()=>{
-                navigation.navigate('register');
-            }}
-        />
+        
         </View>
     ); 
 }
