@@ -10,6 +10,8 @@ const LoginForm = ({onSubmit,onNavigate}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    console.log(password.length);
+
     return (
         <SafeAreaView  style={styles.container}>
 
@@ -17,7 +19,6 @@ const LoginForm = ({onSubmit,onNavigate}) => {
 
             <View style={styles.content}>
 
-                {/* <Text style={styles.logo}> Converge. </Text> */}
 
                 <Image
                     source={require('../../assets/logo.png')}
@@ -49,15 +50,18 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     onChangeText={setPassword}
                     placeholder='Password' 
                     secureTextEntry 
-                    // leftIcon={
-                    //     // <Icon
-                    //     //     name='key'
-                    //     //     size={24}
-                    //     //     color='black'
-                    //     // />
-                    //          }      
+                    rightIcon=
+                    {password.length<8 &&
+                        <Icon
+                            name='exclamation'
+                            size={24}
+                            color='red'
+                        />    
+                    } 
                 />
-
+                {/* {password.length<8 && 
+                <Text>Please enter password that is longer than 8 characters</Text>
+                } */}
                     <Button 
                         
                         titleStyle={{ 

@@ -1,14 +1,17 @@
 import React, {useContext} from 'react'
 import { View, Text, Button, StyleSheet} from 'react-native';
 import RegisterForm from '../components/RegisterForm';
-import { Context } from '../context/authContext';
+// import {AuthContext} from '../../App';
+import AuthContext from '../context/AuthContext';
 
-const registerScreen = ()=> {
-    const {register} = useContext(Context);
+
+const registerScreen = ({navigation})=> {
+    const {authContextValue} = useContext(AuthContext);
     return(
         <View>
             <RegisterForm 
-                onSubmit={register}
+                onSubmit={authContextValue.register}
+                // onNavigation={navigation.navigate('signin')}
             />
         </View>
     );

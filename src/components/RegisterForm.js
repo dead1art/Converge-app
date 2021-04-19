@@ -3,7 +3,7 @@ import { View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 
 
-const RegisterForm = ({onSubmit})=> {
+const RegisterForm = ({onSubmit,onNavigation})=> {
     const [first_name, setFname] = useState('');
     const [last_name, setLname] = useState('');
     const [email, setEmail] = useState('');

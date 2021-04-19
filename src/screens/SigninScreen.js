@@ -1,20 +1,21 @@
 import React, { useContext } from 'react'
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import LoginForm from '../components/LoginForm';
-import { Context } from '../context/authContext';
+import AuthContext from '../context/AuthContext';
 import { Input, Text, Button } from 'react-native-elements';
 
 const signinScreen = ({navigation})=> {
     
-    const {signin} = useContext(Context);
+    const {authContextValue} = useContext(AuthContext);
 
     return (
         <View>
+        <KeyboardAvoidingView>
         <LoginForm 
-            onSubmit={signin}
+            onSubmit={authContextValue.signIn}
             onNavigate={() => navigation.navigate('register')}
         />
-        
+        </KeyboardAvoidingView>
         </View>
     ); 
 }
