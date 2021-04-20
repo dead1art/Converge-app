@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import LoginForm from '../components/LoginForm';
-import AuthContext from '../context/AuthContext';
+// import {AuthContext} from '../../App';
+import {AuthContext} from '../context/AuthContext';
 import { Input, Text, Button } from 'react-native-elements';
 
 const signinScreen = ({navigation})=> {

@@ -1,5 +1,5 @@
 import React,{createContext, useContext} from 'react';
 
-export default AuthContext = createContext({
+export const AuthContext = createContext({
   setDefault: 'set auth properties here'
 });
