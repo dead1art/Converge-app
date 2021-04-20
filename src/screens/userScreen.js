@@ -76,7 +76,7 @@ const userScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="white"/>
     <Button title="props"
-          onPress={() => navigation.navigate('edit') }
+          onPress={() => navigation.navigate('edit',{userInfo}) }
         />
         <Profile 
         data={userInfo} 
