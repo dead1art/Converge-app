@@ -65,7 +65,7 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        backgroundColor: '#e3eaf4',
+        backgroundColor: 'white',
         width: '100%',
         height: Dimensions.get('screen').height,
     },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         color: '#a7a7a7',
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#e0dfe9',
     },
 })
 

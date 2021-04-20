@@ -10,7 +10,16 @@ const LoginForm = ({onSubmit,onNavigate}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    console.log(password.length);
+    const [warning, setWarning] = useState(false)
+
+    function onFocusHandler() {
+        if(password.length < 8){
+            setWarning(true)
+        }
+        else{
+            setWarning(false)
+        }
+    }
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -28,7 +37,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                 <View style={styles.login}> 
 
                 <Input
-                    inputContainerStyle={{ borderBottomWidth: 0,}}
+                    inputContainerStyle={{ borderBottomWidth: 0,
+                        backgroundColor: '#e0dfe9',
+                        borderRadius:20,
+                        height: 60,
+                    }}
                     inputStyle={styles.input}
                     value={email}
                     autoCapitalize="none" 
@@ -43,27 +56,34 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     //          }
                     />
                 <Input 
-                    inputContainerStyle={{ borderBottomWidth: 0}}
+                    inputContainerStyle={{ borderBottomWidth: 0, 
+                        backgroundColor: '#e0dfe9',
+                        borderRadius:20,
+                        height: 60,
+                    }}
                     inputStyle={styles.input}
                     value={password} 
                     autoCapitalize="none"
                     onChangeText={setPassword}
                     placeholder='Password' 
                     secureTextEntry 
+                    onFocus={() => onFocusHandler()}
                     rightIcon=
-                    {password.length<8 &&
+                    {warning &&
                         <Icon
                             name='exclamation'
                             size={24}
+                            style={{ marginRight: 15,}}
                             color='red'
                         />    
                     } 
+                    
                 />
                 {/* {password.length<8 && 
                 <Text>Please enter password that is longer than 8 characters</Text>
                 } */}
                     <Button 
-                        
+                        disabled={!password}
                         titleStyle={{ 
                             color: 'white',
                         }}  
@@ -119,7 +139,7 @@ const styles = StyleSheet.create ({
     container:{
         width: '100%',
         height: Dimensions.get('screen').height,
-        backgroundColor: '#e3eaf4',
+        backgroundColor: 'white',
     },
     content:{
         height: Dimensions.get('screen').height,
@@ -138,11 +158,10 @@ const styles = StyleSheet.create ({
         bottom: 220,
     },
     input: {
-        padding: 15,
+        borderRadius:30,
         paddingHorizontal: 20,
         color: 'black',
-        borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#e0dfe9',
     },
     signup:{
         position: 'absolute',

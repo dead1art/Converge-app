@@ -1,9 +1,10 @@
-import React, { useContext,useEffect} from 'react';
-import { View,Text, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useContext,useEffect, useState} from 'react';
+import { View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 // import {AuthContext} from '../../App';
-import AuthContext from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import main from '../api/main';
+import Profile from '../components/Profile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -37,14 +38,17 @@ const reducer = (state, action) => {
 }
 
 
-const userScreen = () => {
+const userScreen = ({navigation}) => {
+
+  const [tags, setTags] = useState([])
+
   const { authContextValue }  = useContext(AuthContext);
 
   const { state: authState } = useContext(AuthContext);
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const tag = state.users;
+  const userInfo = state.users;
 
   useEffect(()=>{
     const getUser = async() =>{
@@ -53,8 +57,10 @@ const userScreen = () => {
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
           }
+          
         });
         dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
+
       }
       catch(err){
         console.log(err);
@@ -64,15 +70,37 @@ const userScreen = () => {
     getUser();
   },[]);
   
+  console.log(userInfo)
 
   return (
-    <SafeAreaView forceInset={{ top: 'always' }}>
-      {/* {state.users.tags.map(tag)} */}
-        <Button onPress={authContextValue.signOut} title='signout' />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="white"/>
+    <Button title="props"
+          onPress={() => navigation.navigate('edit') }
+        />
+        <Profile 
+        data={userInfo} 
+        signout={authContextValue.signOut} 
+        />
+
+        
+
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({});
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fbfcfc',
+    alignItems: 'center',
+    width: '100%',
+    height: Dimensions.get('screen').height,
+  },  
+
+});
 
 export default userScreen;

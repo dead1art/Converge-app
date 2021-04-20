@@ -1,33 +1,106 @@
 import signinScreen from './src/screens/SigninScreen';
 import registerScreen from './src/screens/RegisterScreen';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import homeScreen from './src/screens/homeScreen';
-import settingScreen from './src/screens/settingScreen';
+import searchScreen from './src/screens/searchScreen';
 import userScreen from './src/screens/userScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
-import { Button, Text, TextInput, View } from 'react-native';
+import { Button, Text, TextInput, View, StyleSheet } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
-import AuthContext from './src/context/AuthContext';
+import {AuthContext} from './src/context/AuthContext';
+import { StatusBar } from 'react-native';
+import { Dimensions } from 'react-native';
+import chatScreen from './src/screens/chatScreen'
+import createScreen from './src/screens/createScreen' 
+import editScreen from './src/screens/editScreen'
 
-
-
+  // const AuthContext = React.createContext();
 
   const login = createStackNavigator(); 
 
-  const Tab = createMaterialBottomTabNavigator();
+  const user = createStackNavigator();
+
+  const Tab = createBottomTabNavigator();
+
+  const getTabBarVisible = (route) => {
+  const params = route.params;
+  if (params) {
+    if (params.tabBarVisible === false) {
+      return false;
+    }
+  }
+  return true;
+};
 
   const homeStack = ()=>{
     return (
-      <Tab.Navigator>
+      <Tab.Navigator
+      initialRouteName="home"
+      backBehavior="initialRoute"
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
+        showLabel: false,
+        style: {
+        backgroundColor: 'white',
+        position: 'absolute',
+        height: 60,
+        borderTopWidth: 0,
+        }
+      }}
+      
+      >
         <Tab.Screen 
             name="home" 
             component={homeScreen}
+            options={{
+              tabBarIcon: ({focused}) => (
+                <MaterialIcons name="home" size={32} color={focused? "#2663FF" : "#a7b2c6"}/>
+              )
+            }}
         />
-        <Tab.Screen name="setting" component={settingScreen}/>
-        <Tab.Screen name="user" component={userScreen} />
+        <Tab.Screen 
+        name="search" 
+        component={searchScreen}
+        options={{
+              tabBarIcon: ({focused}) => (
+                <Ionicons name="search" size={26} color={focused? "#2663FF" : "#a7b2c6"}/>
+              )
+            }}
+        />
+
+        <Tab.Screen 
+        name="create" 
+        component={createScreen}
+        options={{
+              tabBarIcon: ({focused}) => (
+                <Ionicons name="add-circle" size={30} color={focused? "#2663FF" : "#a7b2c6"}/>
+              )
+            }}
+        />
+
+        <Tab.Screen 
+        name="chat" 
+        component={chatScreen}
+        options={{
+              tabBarIcon: ({focused}) => (
+                <Ionicons name="chatbox" size={28} color={focused? "#2663FF" : "#a7b2c6"}/>
+              )
+            }}
+        />
+
+        <Tab.Screen 
+        name="userStack" 
+        component={userStack}
+        options={{
+              tabBarIcon: ({focused}) => (
+                <MaterialIcons name="person" size={32} color={focused? "#2663FF" : "#a7b2c6"}/>
+              )
+            }}
+        />
       </Tab.Navigator>
     )
   }
@@ -49,6 +122,24 @@ import AuthContext from './src/context/AuthContext';
                 headerShown:false 
               }}/>
       </login.Navigator>
+    )
+  }
+
+  const userStack = () => {
+    return (
+      <user.Navigator initialRouteName="user" screenOptions={{headerShown: false}}>
+
+        <user.Screen 
+        name="user"
+        component={userScreen}
+        />
+
+        <user.Screen 
+        name="edit"
+        component={editScreen}
+        />
+
+      </user.Navigator>
     )
   }
 
@@ -150,30 +241,41 @@ export default function App({ navigation }) {
   );
 
   return (
+    <View style={styles.container}> 
+          
+
     <AuthContext.Provider value={{authContextValue,state}}>
-      <NavigationContainer>
-        <Stack.Navigator>
+
+      <NavigationContainer >
+        <Stack.Navigator screenOptions={{headerShown: false}}>
           {state.isLoading ? (
             <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
-            <Stack.Screen
+            ) : state.userToken == null ? (
+              <Stack.Screen
               name="signin"
               component={rootStack}
               options={{
-                headerLeft:null,
-                headerShown:false,
                 animationTypeForReplace: state.isSignout ? 'pop' : 'push',
               }}
-            />
+              />
           ) : (
             <Stack.Screen name="homestack" component={homeStack}
-                options={{
-                  title: 'MyScreen',
-                  headerLeft:null,
+            options={{
+ 
             }} />
-          )}
+            )}
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
+<StatusBar barStyle="dark-content" backgroundColor="white"/>
+            </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: Dimensions.get('screen').height,
+  },
+})
