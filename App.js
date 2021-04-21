@@ -6,13 +6,12 @@ import searchScreen from './src/screens/searchScreen';
 import userScreen from './src/screens/userScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
-import { Button, Text, TextInput, View, StyleSheet } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Button, Text, TextInput, View, StyleSheet} from 'react-native';
+import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
-import { StatusBar } from 'react-native';
 import { Dimensions } from 'react-native';
 import chatScreen from './src/screens/chatScreen'
 import createScreen from './src/screens/createScreen' 
@@ -45,9 +44,9 @@ import editScreen from './src/screens/editScreen'
         keyboardHidesTabBar: true,
         showLabel: false,
         style: {
-        backgroundColor: 'white',
+        backgroundColor: "#ffffff",
         position: 'absolute',
-        height: 60,
+        height: 70,
         borderTopWidth: 0,
         }
       }}
@@ -58,7 +57,7 @@ import editScreen from './src/screens/editScreen'
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name="home" size={32} color={focused? "#2663FF" : "#a7b2c6"}/>
+                <MaterialIcons name="home" size={32} color={focused? "black" : "#a3a3a4"}/>
               )
             }}
         />
@@ -67,7 +66,7 @@ import editScreen from './src/screens/editScreen'
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="search" size={26} color={focused? "#2663FF" : "#a7b2c6"}/>
+                <Ionicons name="search" size={26} color={focused? "black" : "#a3a3a4"}/>
               )
             }}
         />
@@ -77,7 +76,7 @@ import editScreen from './src/screens/editScreen'
         component={createScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="add-circle" size={30} color={focused? "#2663FF" : "#a7b2c6"}/>
+                <Ionicons name="add-circle" size={30} color={focused? "black" : "#a3a3a4"}/>
               )
             }}
         />
@@ -87,7 +86,7 @@ import editScreen from './src/screens/editScreen'
         component={chatScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="chatbox" size={28} color={focused? "#2663FF" : "#a7b2c6"}/>
+                <Ionicons name="chatbox" size={28} color={focused? "black" : "#a3a3a4"}/>
               )
             }}
         />
@@ -97,7 +96,7 @@ import editScreen from './src/screens/editScreen'
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name="person" size={32} color={focused? "#2663FF" : "#a7b2c6"}/>
+                <MaterialIcons name="person" size={32} color={focused? "black" : "#a3a3a4"}/>
               )
             }}
         />
@@ -267,7 +266,6 @@ export default function App({ navigation }) {
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
-<StatusBar barStyle="dark-content" backgroundColor="white"/>
             </View>
   );
 }

@@ -4,7 +4,8 @@ import { View, Text, Button, StyleSheet, Image, Dimensions, StatusBar} from 'rea
 import { ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
-import data from '../../assets/data'
+import data from '../../assets/data';
+import { FocusAwareStatusBar } from '../components/statusbar'
 
 const homeScreen = ()=> {
 
@@ -22,6 +23,7 @@ const homeScreen = ()=> {
 
         <SafeAreaView style={styles.container}>
             
+                <ScrollView>
 
             <View style={styles.header}>
 
@@ -34,16 +36,15 @@ const homeScreen = ()=> {
             <View style={styles.section}> 
                 
                 <Text style={styles.label}> Latest blogs </Text>
-                <ScrollView>
 
                 {data.map((data) => (
                     <Feed key={data.id} info={data}/>
                     ))}
                 
-                </ScrollView>
             </View>
 
-    
+                </ScrollView>
+    <FocusAwareStatusBar style="auto" />
 
         </SafeAreaView>
     );
@@ -91,29 +92,28 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width: '100%',
-        backgroundColor: 'white',
+        backgroundColor: '#E5E8EE',
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex: 1,
-        padding:10,
+        marginTop:30,
     },
 
     section: {
         flex: 8,
-        marginBottom:60,
-        paddingTop: 20,
+        marginBottom:80,
+        paddingTop: 10,
     },
 
     feed:{
         padding: 20,
         marginHorizontal: 10,
-        backgroundColor: '#f8f8f8',
+        marginBottom:20,
         borderRadius: 20,
-        marginBottom: 20,
-        borderColor: '#e3eaf4',
-
+        backgroundColor: '#ffffff',
+        borderColor: '#ecf1f5',
     },
     avatar:{
         width: 50,
@@ -146,10 +146,10 @@ const styles = StyleSheet.create({
     },
     logo:{
         textAlign: 'center',
-        fontSize: 40,
+        fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#2663FF',
+        color: 'black',
         paddingBottom: 20,
     },
     label:{
