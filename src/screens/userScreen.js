@@ -6,6 +6,7 @@ import {AuthContext} from '../context/AuthContext';
 import main from '../api/main';
 import Profile from '../components/Profile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FocusAwareStatusBar } from '../components/statusbar'
 
 const initialState = {
   users:[],
@@ -40,8 +41,6 @@ const reducer = (state, action) => {
 
 const userScreen = ({navigation}) => {
 
-  const [tags, setTags] = useState([])
-
   const { authContextValue }  = useContext(AuthContext);
 
   const { state: authState } = useContext(AuthContext);
@@ -69,18 +68,23 @@ const userScreen = ({navigation}) => {
 
     getUser();
   },[]);
-  
-  console.log(userInfo)
 
   return (
     <SafeAreaView style={styles.container}>
+
+      <FocusAwareStatusBar style="auto" />
+    {/* <Button title="props"
+          onPress={() => navigation.navigate('edit', {userInfo}) }
+        /> */}
       <StatusBar barStyle="dark-content" backgroundColor="white"/>
     <Button title="props"
           onPress={() => navigation.navigate('edit',{userInfo}) }
         />
+
         <Profile 
         data={userInfo} 
         signout={authContextValue.signOut} 
+        nav={() => navigation.navigate('edit', {userInfo})}
         />
 
         

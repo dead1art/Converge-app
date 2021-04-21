@@ -1,44 +1,42 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, StyleSheet, Image, Dimensions} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
-import { SafeAreaView, Dimensions, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AppLoading from 'expo-app-loading';
+import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
+import {FocusAwareStatusBar} from './statusbar';
 
 const LoginForm = ({onSubmit,onNavigate}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [warning, setWarning] = useState(false)
+    let [fontsLoaded] = useFonts({
+    Pacifico_400Regular,
+  });
 
-    function onFocusHandler() {
-        if(password.length < 8){
-            setWarning(true)
-        }
-        else{
-            setWarning(false)
-        }
+    if (!fontsLoaded) {
+     return <AppLoading />;
     }
 
+    else
+
     return (
-        <SafeAreaView  style={styles.container}>
 
-            <StatusBar barStyle="light-content"/>
+        <View style={styles.container}>      
 
-            <View style={styles.content}>
+            <View style={styles.header}> 
 
+                <Text style={styles.logo}> Converge </Text>
 
-                <Image
-                    source={require('../../assets/logo.png')}
-                    style={styles.logo}
-                    />
+            </View>
+
                 
-                <View style={styles.login}> 
+            <View style={styles.content}>
 
                 <Input
                     inputContainerStyle={{ borderBottomWidth: 0,
-                        backgroundColor: '#e0dfe9',
+                        backgroundColor: 'white',
                         borderRadius:20,
                         height: 60,
                     }}
@@ -47,17 +45,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     autoCapitalize="none" 
                     onChangeText={setEmail}
                     placeholder='Email' 
-                    // leftIcon={
-                    //     // <Icon
-                    //     //     name='key'
-                    //     //     size={24}
-                    //     //     color='black'
-                    //     // />
-                    //          }
                     />
+                    
                 <Input 
                     inputContainerStyle={{ borderBottomWidth: 0, 
-                        backgroundColor: '#e0dfe9',
+                        backgroundColor: 'white',
                         borderRadius:20,
                         height: 60,
                     }}
@@ -67,11 +59,10 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     onChangeText={setPassword}
                     placeholder='Password' 
                     secureTextEntry 
-                    onFocus={() => onFocusHandler()}
                     rightIcon=
-                    {warning &&
-                        <Icon
-                            name='exclamation'
+                    {password.length<8 &&
+                        <Ionicons
+                            name='warning'
                             size={24}
                             style={{ marginRight: 15,}}
                             color='red'
@@ -79,16 +70,18 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     } 
                     
                 />
+
                 {/* {password.length<8 && 
                 <Text>Please enter password that is longer than 8 characters</Text>
                 } */}
+
                     <Button 
                         disabled={!password}
                         titleStyle={{ 
                             color: 'white',
                         }}  
                         buttonStyle={{
-                            backgroundColor: '#4a5ebd',
+                            backgroundColor: 'black',
                             padding:15,
                             borderRadius: 20,
                             marginHorizontal: 10,
@@ -111,11 +104,10 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                             <Ionicons name="md-logo-google" style={{marginRight: 10}} size={24} color="white" />
                         }
                         />  
-                    
-                
-                </View>
+                     
+            </View>
 
-                <View style={styles.signup}>
+            <View style={styles.footer}>
 
                     <Button
                         title="New to Converge ? Register now"
@@ -124,11 +116,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
             
                     />
                     
-                </View>
-
             </View>
 
-        </SafeAreaView>
+            <FocusAwareStatusBar style="auto"/>
+
+        </View>
     )
 
 
@@ -137,36 +129,42 @@ const LoginForm = ({onSubmit,onNavigate}) => {
 const styles = StyleSheet.create ({
 
     container:{
+        display:'flex',
         width: '100%',
+        backgroundColor:'#E5E8EE',
         height: Dimensions.get('screen').height,
-        backgroundColor: 'white',
     },
+
+    header: {
+        flex:1,
+        marginTop: 30,
+    },
+
     content:{
-        height: Dimensions.get('screen').height,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
+        flex: 2,
+        marginHorizontal: 10,
+        paddingTop: 50,
     },
+
+    footer:{
+        flex:1,
+        justifyContent: 'center',
+    },
+
     logo: {
-        position: 'absolute',
-        top: 100,
+        marginTop: 30,
+        fontSize: 60,
+        textAlign: 'center',
+        fontFamily: 'Pacifico_400Regular',
     },
-    login:{
-        width: '80%',
-        margin: 20,
-        position: 'absolute',
-        bottom: 220,
-    },
+
     input: {
         borderRadius:30,
         paddingHorizontal: 20,
         color: 'black',
-        backgroundColor: '#e0dfe9',
+        backgroundColor: 'white',
     },
-    signup:{
-        position: 'absolute',
-        bottom: 120,
-    },
+
     new:{
         color: 'white',
     },   

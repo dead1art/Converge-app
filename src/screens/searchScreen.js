@@ -4,6 +4,7 @@ import { Input, Text, Button } from 'react-native-elements';
 import { View, StyleSheet, Dimensions, StatusBar} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { DarkTheme } from '@react-navigation/native';
+import { FocusAwareStatusBar } from '../components/statusbar'
 
 const SearchScreen = ()=> {
 
@@ -18,6 +19,7 @@ const SearchScreen = ()=> {
                 theme={DarkTheme}
                 inputStyle={{fontSize: 20, color: 'black'}}
                 containerStyle={{
+                    backgroundColor:'#E5E8EE',
                     borderTopWidth:0,
                     borderBottomWidth:0,
                     width: '100%',
@@ -32,9 +34,10 @@ const SearchScreen = ()=> {
 
         <View style={styles.footer}>
 
-            <Text>{search} </Text>
+            <Text style={styles.events}> Events </Text>
         </View>
 
+<FocusAwareStatusBar style="auto" />
         </SafeAreaView>
     );
 };
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         width: '100%',
-        backgroundColor: 'white',
+        backgroundColor: '#E5E8EE',
         height: Dimensions.get('screen').height,
     },
     header:{
@@ -51,18 +54,20 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection: 'row',
         backgroundColor: 'white',
-        marginTop: 20,
+        marginTop: 30,
         marginHorizontal:10,
     },
 
     footer:{
         flex:5,
-        borderTopLeftRadius: 60,
-        borderTopRightRadius: 60,
+        alignItems: 'center',
+        padding: 20,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
         backgroundColor: 'white',
     },
     input:{
-        backgroundColor: '#f3f3f3',
+        backgroundColor: '#E5E8EE',
         borderRadius: 30,
         color: 'black',
         padding: 5,
@@ -70,6 +75,10 @@ const styles = StyleSheet.create({
     },  
     button:{
         marginRight:50,
+    },
+    events: {
+        fontSize: 32,
+        fontWeight: 'bold',
     },
 });
 
