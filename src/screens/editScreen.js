@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
@@ -8,6 +11,7 @@ import { ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
  
 const editScreen = ({route, navigation}) => {
+
 
     // Image Picker
 
@@ -182,6 +186,15 @@ const editScreen = ({route, navigation}) => {
 
     </View>
 
+
+const editScreen = ({navigation, route}) => {
+    console.log(route.params);
+    const bio = route.params;
+
+    // console.log(bio);
+
+    return (
+        <View>
             <MaterialIcons
             name="arrow-back"
             size={24}
@@ -192,13 +205,25 @@ const editScreen = ({route, navigation}) => {
             }}
             onPress={() => navigation.goBack()}
             />
+
             
             <FocusAwareStatusBar style="auto" />
 
             </ScrollView>
            
-</SafeAreaView>
+    </SafeAreaView>
 
+
+            <Text> Edit Screen </Text>
+            <Text> {bio.userInfo.bio} </Text>
+            <Image
+                    source={{uri:bio.userInfo.profile_picture}}
+                    style={{
+                        width: '100%',
+                        height: '100%',}
+                    }
+                    />
+        </View>
     )
 }
 
