@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { View, StyleSheet, Dimensions, StatusBar} from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { MaterialIcons } from "@expo/vector-icons"
 import { DarkTheme } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '../components/statusbar'
 
@@ -17,6 +18,9 @@ const SearchScreen = ()=> {
 
                 <SearchBar
                 theme={DarkTheme}
+                searchIcon={
+                    <MaterialIcons name="search" size={26} />
+                }
                 inputStyle={{fontSize: 20, color: 'black'}}
                 containerStyle={{
                     backgroundColor:'#E5E8EE',

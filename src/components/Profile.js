@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import { Dimensions } from 'react-native';
 import { View,Text, StyleSheet, Modal, Image} from 'react-native';
 import { Button, Avatar } from "react-native-elements"
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 function Profile({signout, data, nav}) {
 
@@ -28,10 +28,21 @@ function Profile({signout, data, nav}) {
         <Text style={styles.name}> {first_name} {last_name} </Text> 
       <Text style={bio=="null" ? styles.nobio : styles.bio}>{bio ? bio : "Edit Your Bio"}</Text>
     <Button 
-            titleStyle={{color: "white"}}
+            icon={
+                <Ionicons
+                name="pencil-sharp"
+                size={24}
+                />
+            }
+            titleStyle={{color: "black"}}
+            type="outline"
+            containerStyle={{
+                            marginTop: 20,
+                            borderRadius: 20,
+            }}
             buttonStyle={{ 
-                backgroundColor: '#2663FF',
-                marginTop: 20,
+                borderColor: 'black',
+                borderWidth: 2,
                 borderRadius: 20,
                 paddingHorizontal: 20,}}
                 title="Edit Profile" 
@@ -57,16 +68,26 @@ function Profile({signout, data, nav}) {
     {/* SignOut Button */}
 
       <Button 
-            titleStyle={{
-                color: 'white',
+            icon={
+                <Ionicons
+                name="exit"
+                size={24}
+                />
+            }
+            titleStyle={{color: "black"}}
+            type="outline"
+            containerStyle={{
+                            marginTop: 20,
+                            borderRadius: 20,
             }}
-            buttonStyle={{
-                backgroundColor: '#2663FF',
-                marginTop: 30,
+            buttonStyle={{ 
+                borderColor: 'black',
+                borderWidth: 2,
                 borderRadius: 20,
                 paddingHorizontal: 20,}}
-                title="SignOut" 
-                onPress={signout}/>
+                title="Sign Out" 
+                onPress={signout}
+                />
 
     </View>
 
@@ -86,6 +107,7 @@ const styles = StyleSheet.create({
     header: {
         flex: 2,
         alignItems: 'center',
+        marginTop: 20,
         width: '100%',
         paddingTop:60,
         backgroundColor: 'white',

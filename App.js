@@ -45,6 +45,8 @@ import editScreen from './src/screens/editScreen'
         showLabel: false,
         style: {
         backgroundColor: "#ffffff",
+        // borderTopRightRadius: 20,
+        // borderTopLeftRadius: 20,
         position: 'absolute',
         height: 70,
         borderTopWidth: 0,
@@ -57,7 +59,7 @@ import editScreen from './src/screens/editScreen'
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name="home" size={32} color={focused? "black" : "#a3a3a4"}/>
+                <Ionicons name={focused? "home" : "home-outline"} size={32} color={focused? "black" : "black"}/>
               )
             }}
         />
@@ -66,7 +68,7 @@ import editScreen from './src/screens/editScreen'
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="search" size={26} color={focused? "black" : "#a3a3a4"}/>
+                <Ionicons name={focused? "search" : "search-outline"} size={28} color={focused? "black" : "black"}/>
               )
             }}
         />
@@ -76,7 +78,7 @@ import editScreen from './src/screens/editScreen'
         component={createScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="add-circle" size={30} color={focused? "black" : "#a3a3a4"}/>
+                <Ionicons name={focused? "add-circle" : "add-circle-outline"} size={34} color={focused? "black" : "black"}/>
               )
             }}
         />
@@ -86,7 +88,7 @@ import editScreen from './src/screens/editScreen'
         component={chatScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="chatbox" size={28} color={focused? "black" : "#a3a3a4"}/>
+                <Ionicons name={focused? "chatbox" : "chatbox-outline"} size={28} color={focused? "black" : "black"}/>
               )
             }}
         />
@@ -96,7 +98,7 @@ import editScreen from './src/screens/editScreen'
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name="person" size={32} color={focused? "black" : "#a3a3a4"}/>
+                <MaterialIcons name={focused? "person" : "person-outline"} size={32} color={focused? "black" : "black"}/>
               )
             }}
         />

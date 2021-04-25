@@ -1,4 +1,4 @@
-const data = [ 
+export default [ 
 
     {
     id: Math.random().toString(),
@@ -74,5 +74,3 @@ const data = [
 
 
 ]
-
-export default data;
