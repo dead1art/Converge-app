@@ -6,12 +6,15 @@ import { Input, Avatar, Button } from "react-native-elements"
 import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import main from '../api/main';
+import {AuthContext} from '../context/AuthContext';
+import axios from 'axios';
  
 const editScreen = ({route, navigation}) => {
 
-    // Image Picker
+      const { state: authState } = React.useContext(AuthContext);
 
-    const [image, setImage] = useState(null);
+    // Image Picker
 
   useEffect(() => {
     (async () => {
@@ -32,25 +35,62 @@ const editScreen = ({route, navigation}) => {
       quality: 1,
     });
 
-    console.log(result);
+     console.log(result.uri)
+    // if (!result.cancelled) {
+    // }
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
+    // ImagePicker saves the taken photo to disk and returns a local URI to it
+  let localUri = result.uri;
+  let filename = localUri.split('/').pop();
+
+  // Infer the type of the image
+  let match = /\.(\w+)$/.exec(filename);
+  let type = match ? `image/${match[1]}` : `image`;
+  console.log(filename)
+  console.log(type)
+  setImage(result.uri)
+
+  // Upload the image using the fetch and FormData APIs
+  let formData = new FormData();
+  // Assume "photo" is the name of the form field the server expects
+  formData.append('image', { uri: localUri, name: filename, type });
+
+  await fetch("https://converge-project.herokuapp.com/api/profile/", {
+    method: 'PUT',
+    body: formData,
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  });
+
   };
 
     // Image Picker
 
     const {userInfo} = route.params;
 
-    const [picture, setPicture] = useState(userInfo.profile_picture)
+    const [image, setImage] = useState(userInfo.profile_picture)
     const [fname, setFname] = useState(userInfo.first_name)
     const [lname, setLname] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)
     const [dob, setDob] = useState(userInfo.dob)
     const [email, setEmail] = useState(userInfo.email)
 
-    {image && console.log(image)}
+    // {image && console.log(image)}
+
+    const editProfileHandler = async(image, bio, dob ) => {
+        try {
+            const response = await main.put("/api/profile/", {image, bio, dob}, {
+                 headers: {
+            'Authorization': `Bearer ${authState.userToken}` 
+          }
+            });
+            console.log(image)
+            console.log(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         
@@ -67,10 +107,15 @@ const editScreen = ({route, navigation}) => {
 
         <Avatar
         rounded
+        containerStyle={{
+            borderWidth:6,
+            borderColor:'white',
+            backgroundColor: 'white',
+        }}
         size={150}
         source={{
             uri:
-            picture=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : picture,
+            image=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
         }}
         />
 
@@ -163,22 +208,11 @@ const editScreen = ({route, navigation}) => {
                 onChangeText={setEmail} />
             </View>          
 
-    
+
 
 
     {/* SignOut Button */}
 
-      <Button 
-            titleStyle={{
-                color: 'white',
-            }}
-            buttonStyle={{
-                backgroundColor: '#2663FF',
-                marginTop: 30,
-                borderRadius: 20,
-                paddingHorizontal: 20,}}
-                title="Save Changes" 
-                />
 
     </View>
 
@@ -191,6 +225,20 @@ const editScreen = ({route, navigation}) => {
                 left:20,
             }}
             onPress={() => navigation.goBack()}
+            />
+
+            <Ionicons
+            name="checkmark-outline"
+            size={24}
+            style={{
+                backgroundColor: 'white',
+                borderRadius: 30,
+                padding: 10,
+                position: 'absolute',
+                top:50,
+                right:20,
+            }}
+           
             />
             
             <FocusAwareStatusBar style="auto" />

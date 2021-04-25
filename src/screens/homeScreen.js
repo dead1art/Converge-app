@@ -1,17 +1,28 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import { View, Text, Button, StyleSheet, Image, Dimensions, StatusBar} from 'react-native';
-import { ScrollView } from 'react-native';
+import { RefreshControl, View, Text, Button, StyleSheet, Image, Dimensions, StatusBar, FlatList} from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
 import data from '../../assets/data';
 import { FocusAwareStatusBar } from '../components/statusbar'
+import Feed from '../components/Feed'
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const homeScreen = ()=> {
 
     let [fontsLoaded] = useFonts({
     Pacifico_400Regular,
   });
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
     if (!fontsLoaded) {
      return <AppLoading />;
@@ -22,8 +33,7 @@ const homeScreen = ()=> {
     return(
 
         <SafeAreaView style={styles.container}>
-            
-                <ScrollView>
+
 
             <View style={styles.header}>
 
@@ -37,55 +47,34 @@ const homeScreen = ()=> {
                 
                 <Text style={styles.label}> Latest blogs </Text>
 
-                {data.map((data) => (
+                <FlatList 
+                data={data}
+                key={data.id}
+                renderItem={({item}) => (
+                    <Feed info={item}/>
+                    )}
+                snapToAlignment={"start"}
+                showsVerticalScrollIndicator={false} 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+                />
+
+                {/* {data.map((data) => (
                     <Feed key={data.id} info={data}/>
-                    ))}
+                ))} */}
                 
             </View>
 
-                </ScrollView>
     <FocusAwareStatusBar style="auto" />
 
         </SafeAreaView>
     );
 };
 
-function Feed(props) {
-    const {id, avatar, name, caption, img, event} = props.info;
-    
-    return(
-
-
-        <View style={styles.feed}>
-
-            <View style={styles.details}> 
-
-            <Image source={{ uri : avatar}}
-                   style={styles.avatar}
-                   />
-
-            <Text style={styles.name}>{name}</Text>
-
-            </View>
-
-
-            <View style={styles.content}>
-            
-            <Text style={styles.caption}>{caption}</Text>
-
-            {img!=null && <Image source={{ uri : img}}
-                   style={styles.image}
-                   /> }
-            <Text style={styles.event}> #{event} </Text>
-            
-            </View>
-
-
-        </View>
-
-
-    )
-}
 
 const styles = StyleSheet.create({
 
@@ -98,12 +87,12 @@ const styles = StyleSheet.create({
 
     header: {
         flex: 1,
-        marginTop:30,
+        marginVertical:20,
     },
 
     section: {
         flex: 8,
-        marginBottom:80,
+        marginBottom:70,
         paddingTop: 10,
     },
 
