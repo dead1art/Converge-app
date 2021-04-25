@@ -71,10 +71,16 @@ const userScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <FocusAwareStatusBar style="auto" />
     {/* <Button title="props"
           onPress={() => navigation.navigate('edit', {userInfo}) }
         /> */}
+      <StatusBar barStyle="dark-content" backgroundColor="white"/>
+    <Button title="props"
+          onPress={() => navigation.navigate('edit',{userInfo}) }
+        />
+
         <Profile 
         data={userInfo} 
         signout={authContextValue.signOut} 

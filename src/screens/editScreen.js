@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
@@ -12,7 +15,12 @@ import axios from 'axios';
  
 const editScreen = ({route, navigation}) => {
 
-      const { state: authState } = React.useContext(AuthContext);
+// <<<<<<< editProfile
+//       const { state: authState } = React.useContext(AuthContext);
+// =======
+
+//     // Image Picker
+// >>>>>>> master
 
     // Image Picker
 
@@ -216,6 +224,15 @@ const editScreen = ({route, navigation}) => {
 
     </View>
 
+
+const editScreen = ({navigation, route}) => {
+    console.log(route.params);
+    const bio = route.params;
+
+    // console.log(bio);
+
+    return (
+        <View>
             <MaterialIcons
             name="arrow-back"
             size={24}
@@ -227,26 +244,40 @@ const editScreen = ({route, navigation}) => {
             onPress={() => navigation.goBack()}
             />
 
-            <Ionicons
-            name="checkmark-outline"
-            size={24}
-            style={{
-                backgroundColor: 'white',
-                borderRadius: 30,
-                padding: 10,
-                position: 'absolute',
-                top:50,
-                right:20,
-            }}
+// <<<<<<< editProfile
+//             <Ionicons
+//             name="checkmark-outline"
+//             size={24}
+//             style={{
+//                 backgroundColor: 'white',
+//                 borderRadius: 30,
+//                 padding: 10,
+//                 position: 'absolute',
+//                 top:50,
+//                 right:20,
+//             }}
            
-            />
+//             />
+// =======
+// >>>>>>> master
             
             <FocusAwareStatusBar style="auto" />
 
             </ScrollView>
            
-</SafeAreaView>
+    </SafeAreaView>
 
+
+            <Text> Edit Screen </Text>
+            <Text> {bio.userInfo.bio} </Text>
+            <Image
+                    source={{uri:bio.userInfo.profile_picture}}
+                    style={{
+                        width: '100%',
+                        height: '100%',}
+                    }
+                    />
+        </View>
     )
 }
 
