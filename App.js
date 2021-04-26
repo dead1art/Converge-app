@@ -135,10 +135,10 @@ import editScreen from './src/screens/editScreen'
         component={userScreen}
         />
 
-        <user.Screen 
+        {/* <user.Screen 
         name="edit"
         component={editScreen}
-        />
+        /> */}
 
       </user.Navigator>
     )
@@ -264,7 +264,9 @@ export default function App({ navigation }) {
             options={{
  
             }} />
-            )}
+            )
+            }
+            <Stack.Screen name="edit" component={editScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>

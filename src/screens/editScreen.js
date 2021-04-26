@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
@@ -15,9 +13,9 @@ import axios from 'axios';
  
 const editScreen = ({route, navigation}) => {
 
-// <<<<<<< editProfile
-//       const { state: authState } = React.useContext(AuthContext);
-// =======
+
+      const { state: authState } = React.useContext(AuthContext);
+
 
 //     // Image Picker
 // >>>>>>> master
@@ -63,13 +61,30 @@ const editScreen = ({route, navigation}) => {
   // Assume "photo" is the name of the form field the server expects
   formData.append('image', { uri: localUri, name: filename, type });
 
-  await fetch("https://converge-project.herokuapp.com/api/profile/", {
-    method: 'PUT',
-    body: formData,
+//   await fetch("https://converge-project.herokuapp.com/api/profile/", {
+//     method: 'PUT',
+//     body: formData,
+//     headers: {
+//       'content-type': 'multipart/form-data',
+//     },
+//   });
+
+axios({
+    method: "put",
+    url: "https://converge-project.herokuapp.com/api/profile/",
+    data: formData,
     headers: {
-      'content-type': 'multipart/form-data',
-    },
-  });
+        "Content-Type": "multipart/form-data",
+        'Authorization': `Bearer ${authState.userToken}`},
+  })
+    .then(function (response) {
+      //handle success
+      console.log(response);
+    })
+    .catch(function (response) {
+      //handle error
+      console.log(response);
+    });
 
   };
 
@@ -86,15 +101,15 @@ const editScreen = ({route, navigation}) => {
 
     // {image && console.log(image)}
 
-    const editProfileHandler = async(image, bio, dob ) => {
+    const editProfileHandler = async(bio, dob ) => {
         try {
-            const response = await main.put("/api/profile/", {image, bio, dob}, {
+            const response = await main.put("/api/profile/", { bio, dob}, {
                  headers: {
             'Authorization': `Bearer ${authState.userToken}` 
-          }
+            }
             });
-            console.log(image)
             console.log(response.data)
+            navigation.goBack();
         } catch (error) {
             console.error(error);
         }
@@ -216,36 +231,58 @@ const editScreen = ({route, navigation}) => {
                 onChangeText={setEmail} />
             </View>          
 
-
+            <Ionicons
+            name="checkmark-outline"
+            size={24}
+            style={{
+                backgroundColor: 'white',
+                borderRadius: 30,
+                padding: 10,
+                position: 'absolute',
+                top:50,
+                right:20,
+            }
+        }
+           onPress={()=>{
+            editProfileHandler(bio,dob)
+           }}
+            />
 
 
     {/* SignOut Button */}
 
 
     </View>
+       
+    <FocusAwareStatusBar style="auto" />
+
+</ScrollView>
+
+</SafeAreaView>
+    
+    )};
 
 
-const editScreen = ({navigation, route}) => {
-    console.log(route.params);
-    const bio = route.params;
+// const editScreen = ({navigation, route}) => {
+//     console.log(route.params);
+//     const bio = route.params;
 
-    // console.log(bio);
+//     // console.log(bio);
 
-    return (
-        <View>
-            <MaterialIcons
-            name="arrow-back"
-            size={24}
-            style={{
-                position: 'absolute',
-                top:50,
-                left:20,
-            }}
-            onPress={() => navigation.goBack()}
-            />
+//     return (
+//         <View>
+//             <MaterialIcons
+//             name="arrow-back"
+//             size={24}
+//             style={{
+//                 position: 'absolute',
+//                 top:50,
+//                 left:20,
+//             }}
+//             onPress={() => navigation.goBack()}
+//             />
 
-// <<<<<<< editProfile
-//             <Ionicons
+//            <Ionicons
 //             name="checkmark-outline"
 //             size={24}
 //             style={{
@@ -258,28 +295,18 @@ const editScreen = ({navigation, route}) => {
 //             }}
            
 //             />
-// =======
-// >>>>>>> master
-            
-            <FocusAwareStatusBar style="auto" />
-
-            </ScrollView>
-           
-    </SafeAreaView>
-
-
-            <Text> Edit Screen </Text>
-            <Text> {bio.userInfo.bio} </Text>
-            <Image
-                    source={{uri:bio.userInfo.profile_picture}}
-                    style={{
-                        width: '100%',
-                        height: '100%',}
-                    }
-                    />
-        </View>
-    )
-}
+//             <Text> Edit Screen </Text>
+//             <Text> {bio.userInfo.bio} </Text>
+//             <Image
+//                     source={{uri:bio.userInfo.profile_picture}}
+//                     style={{
+//                         width: '100%',
+//                         height: '100%',}
+//                     }
+//                     />
+//         </View>
+//     )
+// }
 
 const styles = StyleSheet.create({
     container: {

@@ -1,5 +1,5 @@
 import React, { useContext,useEffect, useState} from 'react';
-import { View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar } from 'react-native';
+import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 // import {AuthContext} from '../../App';
 import {AuthContext} from '../context/AuthContext';
@@ -7,6 +7,11 @@ import main from '../api/main';
 import Profile from '../components/Profile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FocusAwareStatusBar } from '../components/statusbar'
+import { ScrollView } from 'react-native';
+import {
+  NavigationContainer,
+  useIsFocused,
+} from '@react-navigation/native';
 
 const initialState = {
   users:[],
@@ -38,8 +43,9 @@ const reducer = (state, action) => {
   }
 }
 
-
 const userScreen = ({navigation}) => {
+
+  const isFocused = useIsFocused();
 
   const { authContextValue }  = useContext(AuthContext);
 
@@ -48,7 +54,6 @@ const userScreen = ({navigation}) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const userInfo = state.users;
-
   useEffect(()=>{
     const getUser = async() =>{
       try{
@@ -59,7 +64,7 @@ const userScreen = ({navigation}) => {
           
         });
         dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
-
+        console.log(response.data);
       }
       catch(err){
         console.log(err);
@@ -67,28 +72,20 @@ const userScreen = ({navigation}) => {
     }
 
     getUser();
-  },[]);
+  },[isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
 
       <FocusAwareStatusBar style="auto" />
-    {/* <Button title="props"
-          onPress={() => navigation.navigate('edit', {userInfo}) }
-        /> */}
       <StatusBar barStyle="dark-content" backgroundColor="white"/>
-    <Button title="props"
-          onPress={() => navigation.navigate('edit',{userInfo}) }
-        />
-
         <Profile 
         data={userInfo} 
         signout={authContextValue.signOut} 
         nav={() => navigation.navigate('edit', {userInfo})}
         />
 
-        
-
+      
     </SafeAreaView>
   );
 };
