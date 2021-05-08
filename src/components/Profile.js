@@ -16,7 +16,6 @@ function Profile({signout, data, nav}) {
     <View style={styles.header}>
         {/* <Text style={styles.header__profile}> Profile </Text> */}
 
-
     <Avatar
   rounded
   size={150}
@@ -26,7 +25,7 @@ function Profile({signout, data, nav}) {
   }}
 />
         <Text style={styles.name}> {first_name} {last_name} </Text> 
-      <Text style={bio=="null" ? styles.nobio : styles.bio}>{bio ? bio : "Edit Your Bio"}</Text>
+      <Text style={bio=="null" ? styles.nobio : styles.bio}> {bio ? bio : "Edit Your Bio"} </Text>
     <Button 
             icon={
                 <Ionicons

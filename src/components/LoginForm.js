@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import {FocusAwareStatusBar} from './statusbar';
+import { DarkTheme } from '@react-navigation/native';
 
 const LoginForm = ({onSubmit,onNavigate}) => {
 

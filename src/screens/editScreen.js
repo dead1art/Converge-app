@@ -231,18 +231,23 @@ axios({
                 onChangeText={setEmail} />
             </View>          
 
+            <Button 
+            containerStyle={{
+                borderRadius: 20,
+                position: 'absolute',
+                top: 20,
+                right: 30,
+            }}
+            buttonStyle={{
+                padding: 10,
+                backgroundColor: 'white',
+            }}   
+            icon={ 
             <Ionicons
             name="checkmark-outline"
-            size={24}
-            style={{
-                backgroundColor: 'white',
-                borderRadius: 30,
-                padding: 10,
-                position: 'absolute',
-                top:50,
-                right:20,
+            size={30}
+            />
             }
-        }
            onPress={()=>{
             editProfileHandler(bio,dob)
            }}
@@ -251,62 +256,16 @@ axios({
 
     {/* SignOut Button */}
 
+    <FocusAwareStatusBar style="auto" />
 
     </View>
        
-    <FocusAwareStatusBar style="auto" />
 
 </ScrollView>
 
 </SafeAreaView>
     
     )};
-
-
-// const editScreen = ({navigation, route}) => {
-//     console.log(route.params);
-//     const bio = route.params;
-
-//     // console.log(bio);
-
-//     return (
-//         <View>
-//             <MaterialIcons
-//             name="arrow-back"
-//             size={24}
-//             style={{
-//                 position: 'absolute',
-//                 top:50,
-//                 left:20,
-//             }}
-//             onPress={() => navigation.goBack()}
-//             />
-
-//            <Ionicons
-//             name="checkmark-outline"
-//             size={24}
-//             style={{
-//                 backgroundColor: 'white',
-//                 borderRadius: 30,
-//                 padding: 10,
-//                 position: 'absolute',
-//                 top:50,
-//                 right:20,
-//             }}
-           
-//             />
-//             <Text> Edit Screen </Text>
-//             <Text> {bio.userInfo.bio} </Text>
-//             <Image
-//                     source={{uri:bio.userInfo.profile_picture}}
-//                     style={{
-//                         width: '100%',
-//                         height: '100%',}
-//                     }
-//                     />
-//         </View>
-//     )
-// }
 
 const styles = StyleSheet.create({
     container: {
@@ -319,7 +278,7 @@ const styles = StyleSheet.create({
     content: {
         width: '100%',
         borderRadius: 40,
-        marginTop: 20,
+        marginTop: 30,
         flex: 1,
         padding: 20,
         alignItems: 'center',
