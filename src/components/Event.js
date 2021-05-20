@@ -1,15 +1,19 @@
 import React, { useState} from 'react';
 import { Dimensions } from 'react-native';
-import { View,Text, StyleSheet, Modal, ImageBackground } from 'react-native';
+import { View,Text, StyleSheet, Modal, ImageBackground, TouchableOpacity } from 'react-native';
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 
-function Event({eventdata}) {
-    const { name, image, location, date, dateMonth } = eventdata;
+function Event({eventdata, press}) {
+    const { id, name, image, location, date, dateMonth } = eventdata;
 
     return(
         <SafeAreaView style={styles.container}>
+
+            <TouchableOpacity
+            onPress={press}
+            >
 
             <ImageBackground
             borderRadius={20}
@@ -22,7 +26,7 @@ function Event({eventdata}) {
                     <View style={styles.content__details}>
                         <Text style={[styles.content__name,{color: 'white',
                          fontWeight: 'bold'
-                         }]}>{name}</Text> 
+                        }]}>{name}</Text> 
                         <Text style={[styles.content__location,{color: 'white'}]}>{location}</Text>
                     </View>
 
@@ -37,6 +41,8 @@ function Event({eventdata}) {
                     </View>
 
             </ImageBackground>
+        
+            </TouchableOpacity>
 
         </SafeAreaView>
     )
@@ -46,9 +52,10 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         alignItems: 'center',
-        padding: 10,
+        width: '100%',
+        height: '100%',
     },
-
+    
     image:{
         margin: 10,
         width: 300,

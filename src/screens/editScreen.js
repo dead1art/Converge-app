@@ -92,7 +92,7 @@ axios({
 
     const {userInfo} = route.params;
 
-    const [image, setImage] = useState(userInfo.profile_picture)
+    const [image, setImage] = useState(userInfo.image)
     const [fname, setFname] = useState(userInfo.first_name)
     const [lname, setLname] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)

@@ -9,6 +9,7 @@ import { FocusAwareStatusBar } from '../components/statusbar'
 import events from '../../assets/events';
 import categorys from '../../assets/category'
 import Event from '../components/Event'
+import {theme,tabBar} from '../../src/constants/colors'
 import Carousel from 'react-native-snap-carousel';
 import { createFilter } from 'react-native-search-filter';
 import { ScrollView } from 'react-native';
@@ -16,11 +17,12 @@ import { Modal } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 
 
-const SearchScreen = ()=> {
+const SearchScreen = ({navigation})=> {
 
     const [search, setSearch] = useState('')
     const [eventdata, setEventdata] = useState(events)
     const [disabled, setDisabled] = useState('')
+    const [identifier, setIdentifier] = useState('')
 
     const KEYS_TO_FILTER = ['name','location']
     
@@ -30,11 +32,13 @@ const SearchScreen = ()=> {
         if(name == "All"){
             setEventdata(events)
             setDisabled(id)
+            setIdentifier(name)
         }
         else{
 
             setEventdata(events.filter(item => item.category === name))
             setDisabled(id)
+            setIdentifier(name)
         }
     }  
 
@@ -47,17 +51,19 @@ const SearchScreen = ()=> {
                 <SearchBar
                 theme={DarkTheme}
                 searchIcon={
-                    <MaterialIcons name="search" size={26} />
+                    <MaterialIcons name="search" size={26} color={theme.accent} />
                 }
-                inputStyle={{fontSize: 20, color: 'black'}}
+                inputStyle={{fontSize: 20, color: theme.accent}}
                 containerStyle={{
-                    backgroundColor:'#E5E8EE',
                     borderTopWidth:0,
                     borderBottomWidth:0,
+                    borderRadius:20,
+                    marginTop:10,
                     width: '100%',
-                }}
+                }}     
                 inputContainerStyle={styles.input}
                 placeholder="Search for any events"
+                placeholderTextColor={theme.accentLite}
                 onChangeText={setSearch}
                 value={search}
                 />
@@ -79,13 +85,22 @@ const SearchScreen = ()=> {
                     <Button
                     type="clear"
                     key={item.id}
+                    icon={
+                    <MaterialIcons
+                    name="sports-football"
+                    />
+                
+                }
                     titleStyle={{
                         paddingVertical: 10,
                         paddingHorizontal:10,
-                        color: 'black'}}
+                        color: '#1E1F20'}}
+                        disabledStyle={{backgroundColor: theme.accent}}
+                        disabledTitleStyle={{color:'white'}}
                         containerStyle={{
-                            borderRadius:10,
-                            backgroundColor: 'white'
+                            borderRadius:20,
+                            backgroundColor: "#e9e8e9",
+                        
                         }}
                         disabled={disabled.indexOf(item.id) !== -1}
                         onPress={() => toggleHandler(item.name, item.id)}
@@ -100,20 +115,21 @@ const SearchScreen = ()=> {
 
         <View style={styles.footer}>
 
-            <Text style={styles.events__header}> Events </Text>
+            <Text style={styles.events__header}> Featured Events </Text>
 
             <View style={styles.events}>
                 
                 <Carousel
               data={filteredEvents}
               renderItem={({item}) => (
-                  <Event eventdata={item} />
+                  <Event key={item.id} eventdata={item} press={() => navigation.navigate('event', {item})} />
               )}
-              keyExtractor={item => item.id}
-              sliderWidth={400}
-              itemWidth={300}
-                sliderHeight={500}
+              sliderWidth={320}
+              itemWidth={320}
+              sliderHeight={500}
             />
+
+            <Text> {identifier} </Text>
 
             </View>
 
@@ -129,36 +145,39 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         width: '100%',
-        backgroundColor: '#E5E8EE',
+        backgroundColor: 'white',
+        alignItems: 'center',
         height: Dimensions.get('screen').height,
     },
     header:{
         flex:1,
         display:'flex',
         flexDirection: 'row',
-        backgroundColor: 'white',
         marginTop: 30,
         marginHorizontal:10,
+        backgroundColor: 'green',
+        width: '100%',
+        height: '100%',
     },
 
     section:{
         flex: 1,
-    
-        marginVertical:20,
+        paddingVertical:20,
+        backgroundColor: 'brown',
     },
 
     footer:{
-        flex:5,
+        flex:4,
         alignItems: 'center',
-        paddingVertical: 20,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        backgroundColor: 'white',
+        paddingTop: 20,
+        width: '90%',
+        borderRadius:30,
+        backgroundColor: 'red',
+        marginBottom:80,
     },
     input:{
-        backgroundColor: '#E5E8EE',
         borderRadius: 30,
-        color: 'black',
+        color: 'white',
         padding: 5,
         paddingHorizontal:10,
     },  
@@ -171,11 +190,10 @@ const styles = StyleSheet.create({
     },
     events: {
         marginVertical: 20,
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'white',
+        height: '80%',
+        width: '90%',
+        backgroundColor: 'yellow',
     },
-
 
     category:{
         marginHorizontal: 10,
