@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width: '100%',
-        backgroundColor: '#E5E8EE',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
         height: Dimensions.get('screen').height,
     },
 
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
         flex: 8,
         marginBottom:70,
         paddingTop: 10,
+        
     },
 
     feed:{
@@ -138,12 +140,12 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: 'black',
+        color: '#4a465e',
         paddingBottom: 20,
     },
     label:{
         fontSize: 18,
-        color: 'gray',
+        color: '#bab0b0',
         fontWeight: '700',
         marginLeft: 20,
         marginBottom: 20,

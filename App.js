@@ -16,6 +16,8 @@ import { Dimensions } from 'react-native';
 import chatScreen from './src/screens/chatScreen'
 import createScreen from './src/screens/createScreen' 
 import editScreen from './src/screens/editScreen'
+import eventScreen from './src/screens/eventScreen'
+import {tabBar} from './src/constants/colors'
 
   // const AuthContext = React.createContext();
 
@@ -44,12 +46,13 @@ import editScreen from './src/screens/editScreen'
         keyboardHidesTabBar: true,
         showLabel: false,
         style: {
-        backgroundColor: "#ffffff",
+        backgroundColor: "white",
         // borderTopRightRadius: 20,
         // borderTopLeftRadius: 20,
         position: 'absolute',
         height: 70,
-        borderTopWidth: 0,
+        elevation:0,
+        borderTopWidth:0,
         }
       }}
       
@@ -59,7 +62,7 @@ import editScreen from './src/screens/editScreen'
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "home" : "home-outline"} size={32} color={focused? "black" : "black"}/>
+                <Ionicons name={focused?"home" : "home-outline"} size={32} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -68,7 +71,7 @@ import editScreen from './src/screens/editScreen'
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "search" : "search-outline"} size={28} color={focused? "black" : "black"}/>
+                <Ionicons name={focused?"search" : "search-outline"} size={28} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -78,7 +81,7 @@ import editScreen from './src/screens/editScreen'
         component={createScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "add-circle" : "add-circle-outline"} size={34} color={focused? "black" : "black"}/>
+                <Ionicons name={focused?"add-circle" : "add-circle-outline"} size={34} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -88,7 +91,7 @@ import editScreen from './src/screens/editScreen'
         component={chatScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "chatbox" : "chatbox-outline"} size={28} color={focused? "black" : "black"}/>
+                <Ionicons name={focused?"chatbox" : "chatbox-outline"} size={28} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -98,7 +101,7 @@ import editScreen from './src/screens/editScreen'
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name={focused? "person" : "person-outline"} size={32} color={focused? "black" : "black"}/>
+                <MaterialIcons name={focused?"person" : "person-outline"} size={32} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -145,8 +148,6 @@ import editScreen from './src/screens/editScreen'
   }
 
 
-
-
 const initialState = {
   isLoading: true,
   isSignout: false,
@@ -175,7 +176,6 @@ const reducer = (state, action) => {
       };
   }
 }
-
 
 function SplashScreen() {
   return (
@@ -266,6 +266,7 @@ export default function App({ navigation }) {
             }} />
             )
             }
+            <Stack.Screen name="event" component={eventScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
         </Stack.Navigator>
       </NavigationContainer>

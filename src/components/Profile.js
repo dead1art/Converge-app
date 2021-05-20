@@ -6,7 +6,7 @@ import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 function Profile({signout, data, nav}) {
 
-  const { first_name, last_name, profile_picture, bio, dob, email } = data;
+  const { first_name, last_name, image, bio, dob, email } = data;
 
   return(
     <View style={styles.container}>
@@ -16,17 +16,16 @@ function Profile({signout, data, nav}) {
     <View style={styles.header}>
         {/* <Text style={styles.header__profile}> Profile </Text> */}
 
-
     <Avatar
   rounded
   size={150}
   source={{
     uri:
-      profile_picture=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : profile_picture,
+      image=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
   }}
 />
         <Text style={styles.name}> {first_name} {last_name} </Text> 
-      <Text style={bio=="null" ? styles.nobio : styles.bio}>{bio ? bio : "Edit Your Bio"}</Text>
+      <Text style={bio=="null" ? styles.nobio : styles.bio}> {bio ? bio : "Edit Your Bio"} </Text>
     <Button 
             icon={
                 <Ionicons
