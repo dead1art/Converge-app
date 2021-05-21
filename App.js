@@ -18,6 +18,8 @@ import createScreen from './src/screens/createScreen'
 import editScreen from './src/screens/editScreen'
 import eventScreen from './src/screens/eventScreen'
 import {tabBar} from './src/constants/colors'
+import { Provider as EventProvider } from './src/context/eventContext';
+
 
   // const AuthContext = React.createContext();
 
@@ -246,7 +248,7 @@ export default function App({ navigation }) {
           
 
     <AuthContext.Provider value={{authContextValue,state}}>
-
+    <EventProvider>
       <NavigationContainer >
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {state.isLoading ? (
@@ -270,6 +272,7 @@ export default function App({ navigation }) {
             <Stack.Screen name="edit" component={editScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
+      </EventProvider>
     </AuthContext.Provider>
             </View>
   );
