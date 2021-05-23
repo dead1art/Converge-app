@@ -44,10 +44,11 @@ const styles= StyleSheet.create({
     feed:{
         padding: 20,
         borderBottomWidth:1,
-        width:'100%',
-        borderRadius: 0,
+        marginHorizontal: 10,
+        borderRadius: 20,
         backgroundColor: '#ffffff',
         borderColor: '#ecf1f5',
+        marginVertical:10,
     },
     avatar:{
         width: 50,

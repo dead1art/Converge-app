@@ -7,7 +7,7 @@ import userScreen from './src/screens/userScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import { Button, Text, TextInput, View, StyleSheet} from 'react-native';
-import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {  Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
@@ -62,7 +62,7 @@ import {tabBar} from './src/constants/colors'
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused?"home" : "home-outline"} size={32} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="home" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -71,7 +71,7 @@ import {tabBar} from './src/constants/colors'
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused?"search" : "search-outline"} size={28} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="search" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -81,7 +81,7 @@ import {tabBar} from './src/constants/colors'
         component={createScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused?"add-circle" : "add-circle-outline"} size={34} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="plus-circle" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -91,7 +91,7 @@ import {tabBar} from './src/constants/colors'
         component={chatScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused?"chatbox" : "chatbox-outline"} size={28} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="message-square" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -101,7 +101,7 @@ import {tabBar} from './src/constants/colors'
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <MaterialIcons name={focused?"person" : "person-outline"} size={32} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="user" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />

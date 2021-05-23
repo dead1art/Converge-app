@@ -59,7 +59,9 @@ const SearchScreen = ({navigation})=> {
                     borderBottomWidth:0,
                     borderRadius:20,
                     marginTop:10,
-                    width: '100%',
+                    backgroundColor: '#f1eff6',
+                    width: '90%',
+                    marginHorizontal:20,
                 }}     
                 inputContainerStyle={styles.input}
                 placeholder="Search for any events"
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 30,
         marginHorizontal:10,
-        backgroundColor: 'green',
+        alignItems:'center',
         width: '100%',
         height: '100%',
     },
@@ -164,6 +166,8 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical:20,
         backgroundColor: 'brown',
+        width: '100%',
+        height: '100%',
     },
 
     footer:{

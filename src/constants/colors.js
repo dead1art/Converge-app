@@ -6,7 +6,7 @@ export {
 
 const tabBar = {
     background: '#1E1F20',
-    focused: '#070809',
+    focused: '#2c1658',
     notFocused: '#a3a3a6',
 }
 

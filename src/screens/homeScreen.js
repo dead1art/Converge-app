@@ -45,7 +45,7 @@ const homeScreen = ()=> {
 
             <View style={styles.section}> 
                 
-                <Text style={styles.label}> Latest blogs </Text>
+                {/* <Text style={styles.label}> Latest blogs </Text> */}
 
                 <FlatList 
                 data={data}
@@ -82,20 +82,21 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f1eff6',
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex: 1,
-        marginVertical:20,
+        paddingVertical: 30,
+        backgroundColor: 'white',
+        width: '100%',
+        height: '100%',
     },
 
     section: {
-        flex: 8,
+        flex: 6,
         marginBottom:70,
-        paddingTop: 10,
-        
     },
 
     feed:{
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#4a465e',
+        color: '#2c1658',
         paddingBottom: 20,
     },
     label:{
