@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { View, StyleSheet, Dimensions, StatusBar, FlatList} from 'react-native';
@@ -15,12 +15,44 @@ import { createFilter } from 'react-native-search-filter';
 import { ScrollView } from 'react-native';
 import { Modal } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
+import { Context as eventContext} from '../context/eventContext';
+import main from '../api/main';
+import {AuthContext} from '../context/AuthContext';
 
 
 const SearchScreen = ({navigation})=> {
 
+    const { state: authState } = useContext(AuthContext);
+
+    const {dispatch} = useContext(eventContext);
+    const {state: event} =useContext(eventContext);
+
+    useEffect(()=>{
+        const getEvents= async() =>{
+            try{
+                dispatch({type:"fetch_events_request"})
+                const response = await main.get('/api/event/',{
+                    headers: {
+                      'Authorization': `Bearer ${authState.userToken}` 
+                    }
+                  })
+                // console.log(response);
+                dispatch({type:"fetch_events_success",payload:response.data})
+            }
+            catch(err)
+            {
+                dispatch({type:"fetch_events_failure"});
+                console.log(err);
+            }
+        }
+        getEvents();
+    },[authState.userToken]);
+
+
+    // console.log(event.events);
+
     const [search, setSearch] = useState('')
-    const [eventdata, setEventdata] = useState(events)
+    const [eventdata, setEventdata] = useState(event.events)
     const [disabled, setDisabled] = useState('')
     const [identifier, setIdentifier] = useState('')
 
@@ -30,13 +62,13 @@ const SearchScreen = ({navigation})=> {
 
     const toggleHandler = (name,id) => {
         if(name == "All"){
-            setEventdata(events)
+            setEventdata(event.events)
             setDisabled(id)
             setIdentifier(name)
         }
         else{
 
-            setEventdata(events.filter(item => item.category === name))
+            setEventdata(event.events.filter(item => item.category === name))
             setDisabled(id)
             setIdentifier(name)
         }

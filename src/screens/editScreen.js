@@ -10,17 +10,40 @@ import * as ImagePicker from 'expo-image-picker';
 import main from '../api/main';
 import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
+import * as Location from 'expo-location';
  
 const editScreen = ({route, navigation}) => {
 
-
       const { state: authState } = React.useContext(AuthContext);
 
+  // location access
+  
+  const [current,setCurrent] = useState(null); 
+  const [location, setLocation] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-//     // Image Picker
-// >>>>>>> master
+  useEffect(()=>{
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
-    // Image Picker
+      let current = await Location.getCurrentPositionAsync({});
+
+      var lat = current.coords.latitude;
+      let log = current.coords.longitude;
+
+      setLocation([lat,log]);
+
+      setCurrent(current);
+
+    })();
+  },[])
+
+  console.log(location);
+
 
   useEffect(() => {
     (async () => {
@@ -103,7 +126,7 @@ axios({
 
     const editProfileHandler = async(bio, dob ) => {
         try {
-            const response = await main.put("/api/profile/", { bio, dob}, {
+            const response = await main.put("/api/profile/", { bio, dob,location}, {
                  headers: {
             'Authorization': `Bearer ${authState.userToken}` 
             }
