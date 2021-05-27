@@ -53,8 +53,7 @@ import { Provider as EventProvider } from './src/context/eventContext';
         // borderTopLeftRadius: 20,
         position: 'absolute',
         height: 70,
-        elevation:0,
-        borderTopWidth:0,
+
         }
       }}
       

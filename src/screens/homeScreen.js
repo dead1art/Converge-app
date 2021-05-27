@@ -4,6 +4,7 @@ import { RefreshControl, View, Text, Button, StyleSheet, Image, Dimensions, Stat
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
 import data from '../../assets/data';
+import {theme} from '../constants/colors'
 import { FocusAwareStatusBar } from '../components/statusbar'
 import Feed from '../components/Feed'
 
@@ -82,14 +83,14 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: '#f1eff6',
+        backgroundColor:'#ffffff',
         height: Dimensions.get('screen').height,
     },
 
     header: {
-        flex: 1,
-        paddingVertical: 30,
-        backgroundColor: 'white',
+        flex:1,
+        paddingVertical: 20,
+        backgroundColor: '#f1f4fa',
         width: '100%',
         height: '100%',
     },
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#2c1658',
+        color: '#42465a',
         paddingBottom: 20,
     },
     label:{

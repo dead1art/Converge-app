@@ -1,13 +1,13 @@
 import React from 'react'
 import { Dimensions } from 'react-native';
-import { View, Text, StyleSheet, Image} from 'react-native'
+import { View, Text, StyleSheet, ImageBackground} from 'react-native'
 import { Button } from 'react-native-elements'
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { MaterialIcons } from "@expo/vector-icons"
 
 const eventScreen = ({route, navigation}) => {
 
-    const {id,name,location,image,date} = route.params.item;
+    const {id,title,addr,image,event_date} = route.params.item;
 
     console.log(route.params.item)
 
@@ -16,48 +16,51 @@ const eventScreen = ({route, navigation}) => {
         <View style={styles.container}>
 
             <View style={styles.header}>
+                <ImageBackground style={styles.image} source={{uri: image}} >
                 <Button
                 type="clear"
-                // containerStyle={styles.backIcon}
+                containerStyle={{
+                    position:'absolute',
+                    left:30,
+                    top:50,
+                    backgroundColor:'white',
+                    borderRadius: 10,
+                }}
                 icon={
                     <MaterialIcons
                     name="arrow-back"
-                    size={30}
+                    size={28}
                     />
                 }
                 onPress={() => navigation.goBack()} />
-                <Text style={styles.header__name}> {name} </Text>
-
+                </ImageBackground>
             </View>
 
             <View style={styles.content}>
-                <Image style={styles.image} source={{uri: image}} />
-                <View style={styles.details}>
-                    <View style={styles.details__date}>
-                        <MaterialIcons
-                        name="calendar-today"
-                        size={24}
-                        color='gray'
-                        />
-                        <Text> {date} </Text>   
-                    </View>
-
-                    <View style={styles.details__place}>
-                        <MaterialIcons
-                        name="location-pin"
-                        size={24}
-                        color='gray'
-                        />
-                        <Text> {location} </Text>   
-                    </View>        
-                </View>
-            </View>
-
-            <View style={styles.footer}>
-                <Text>Event Description Goes Here</Text>
-                <Text> Event Location goes here</Text>
                 
+
+                <Text style={styles.event__name}> {title} </Text>
+                
+                <View style={styles.event__date}>
+                    <MaterialIcons
+                    name="calendar-today"
+                    size={26}
+                    color='gray'
+                    />
+                    <Text> {event_date} </Text>   
+                </View>
+
+                <View style={styles.event__place}>
+                    <MaterialIcons
+                    name="location-pin"
+                    size={26}
+                    color='gray'
+                    />
+                    <Text> {addr} </Text>   
+                </View>        
+          
             </View>
+
 
         <FocusAwareStatusBar style="auto"/>
 
@@ -75,53 +78,42 @@ const styles = StyleSheet.create({
     },
 
     header:{
-        flex:0.3,
-        width:'90%',
+        flex:1,
+        width:'100%',
+        height:'100%',
         justifyContent:'flex-start',
-        marginTop:'20%',
         flexDirection:'row',
     },
 
     content:{
         flex:1,
-        width: '80%',
+        width: '100%',
         backgroundColor: 'white',
-        borderRadius:30,
-        elevation:10,
-    },
-
-    footer:{
-        flex:1,
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20,
     },
     
     image:{
-        flex:2,
-        borderTopLeftRadius:30,
-        borderTopRightRadius:30,
         height:'100%',
         width:'100%',
     },
     
-    details:{
-        flex:1,
+    
+    event__name:{
+        fontSize: 34,
+        fontWeight:'bold',
+        padding:10,
+    },
+    
+    event__date:{
         flexDirection:'row',
-        justifyContent:'space-between',
-        paddingTop:20,
         paddingHorizontal: 20,
+        paddingVertical:10,
     },
 
-    backIcon:{
-
+    event__place:{
+        flexDirection: 'row',
+        paddingHorizontal: 20,
+        paddingVertical:10,
     },
-
-    header__name:{
-        marginLeft: 20,
-        marginTop:2,
-        fontSize: 30,
-    },
-
 })
 
 export default eventScreen

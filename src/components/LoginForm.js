@@ -82,7 +82,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                             color: 'white',
                         }}  
                         buttonStyle={{
-                            backgroundColor: 'black',
+                            backgroundColor: '#0b2dfa',
                             padding:15,
                             borderRadius: 20,
                             marginHorizontal: 10,
@@ -96,6 +96,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                             borderRadius: 20,
                             marginTop: 25,
                             padding: 15,
+                            backgroundColor: 'black',
                             marginHorizontal: 10,
                         }}
                         title="Sign-in with Google"
@@ -132,7 +133,7 @@ const styles = StyleSheet.create ({
     container:{
         display:'flex',
         width: '100%',
-        backgroundColor:'#E5E8EE',
+        backgroundColor:'#f1f4fa',
         height: Dimensions.get('screen').height,
     },
 
