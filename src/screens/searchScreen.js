@@ -46,7 +46,7 @@ const SearchScreen = ({navigation})=> {
             }
         }
         getEvents();
-    },[authState.userToken]);
+    },[]);
 
 
     // console.log(event.events);

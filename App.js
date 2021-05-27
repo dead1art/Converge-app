@@ -193,6 +193,10 @@ const Stack = createStackNavigator();
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  const client_id="7G9ugODJhtBbJee4EURnmJFILJUpAFJ2COPKjqCz";
+  const client_secret="z3asQ77QYQRsZkaWYX7R7JpAp0kVPo6ifQeGlQX1mXWaNMrqCfVbsRM4jBN2k2SpiZC28EH2uFGEN9YLNgBB69WA9dpZN3NtBj4pl6fW1ps27VC2glU5Ng9tIysQ7mXv"
+  const grant_type="password";
+
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       let userToken;
@@ -210,12 +214,27 @@ export default function App({ navigation }) {
 
   const authContextValue = React.useMemo(
     () => ({
+      signinGoogle: async({token})=>{
+        try{
+          console.log(token);
+          const response = await main.post("/api/convert-token/",{ token, backend: "google-oauth2", client_id, client_secret, grant_type: "convert_token" });
+          console.log(response);
+          await AsyncStorage.setItem("token", response.data.access_token);
+          dispatch({type: 'SIGN_IN', token:response.data.access_token})
+        }
+        catch(err)
+        {
+          console.log(err);
+        }
+      },
       signIn: async ({email, password}) => {
         try{
-          const response = await main.post("/api/token/", { email, password });
-          console.log( response.data.access);
-          await AsyncStorage.setItem("token", response.data.access);
-          dispatch({ type: 'SIGN_IN', token:response.data.access  });
+          const username=email;
+          console.log(client_id);
+          const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
+          console.log( response.data);
+          await AsyncStorage.setItem("token", response.data.access_token);
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token  });
          }
       catch(err)
         {
@@ -225,11 +244,12 @@ export default function App({ navigation }) {
       },
       register:async({email, password, first_name, last_name})=>{
         try {
+          const username=email;
           await main.post("/api/register/", { email, password, first_name, last_name });
-          const response = await main.post("/api/token/", { email, password });
+          const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
           console.log( response.data.access);
-          await AsyncStorage.setItem("token", response.data.access);
-          dispatch({ type: 'SIGN_IN', token:response.data.access  });  
+          await AsyncStorage.setItem("token", response.data.access_token);
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token});  
         } catch (err) {
             console.log(err);
         }
@@ -247,7 +267,7 @@ export default function App({ navigation }) {
     <View style={styles.container}> 
           
 
-    <AuthContext.Provider value={{authContextValue,state}}>
+    <AuthContext.Provider value={{authContextValue,state,dispatch}}>
     <EventProvider>
       <NavigationContainer >
         <Stack.Navigator screenOptions={{headerShown: false}}>
