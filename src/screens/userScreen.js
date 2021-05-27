@@ -53,6 +53,8 @@ const userScreen = ({navigation}) => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  console.log(authState.userToken);
+
   const userInfo = state.users;
   useEffect(()=>{
     const getUser = async() =>{
