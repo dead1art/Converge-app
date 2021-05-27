@@ -149,8 +149,6 @@ axios({
 
 
         <Text style={styles.header__profile}> Edit Profile </Text>
-
-
         <Avatar
         rounded
         containerStyle={{

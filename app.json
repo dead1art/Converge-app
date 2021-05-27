@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "converge",
     "name": "converge",
     "slug": "converge",
     "version": "1.0.0",
@@ -20,6 +21,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.yourcompany.converge",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
