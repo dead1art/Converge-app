@@ -23,10 +23,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
     const client_secret="z3asQ77QYQRsZkaWYX7R7JpAp0kVPo6ifQeGlQX1mXWaNMrqCfVbsRM4jBN2k2SpiZC28EH2uFGEN9YLNgBB69WA9dpZN3NtBj4pl6fW1ps27VC2glU5Ng9tIysQ7mXv"
 
     WebBrowser.maybeCompleteAuthSession();
+    // 1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         expoClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
-        androidClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
+        androidClientId: '1057006535522-tcrubkaerism29irmamo96jplrg8uckb.apps.googleusercontent.com',
         webClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
       });
 
@@ -137,6 +138,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                          />    
 
                     <Button
+                        disabled={!request}
                         buttonStyle={{
                             borderRadius: 20,
                             marginTop: 25,
