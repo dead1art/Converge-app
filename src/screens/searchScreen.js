@@ -76,10 +76,11 @@ const SearchScreen = ({navigation})=> {
     return(
 
         <SafeAreaView style={styles.container}>
+            
 
         <View style={styles.header}>
 
-                <Text style={styles.header__title}> Discover the Most Amazing Events </Text>
+                <Text style={styles.header__title}>Discover The Most Amazing Events</Text>
 
                 <SearchBar
                 theme={DarkTheme}
@@ -160,7 +161,7 @@ const SearchScreen = ({navigation})=> {
                   <Event key={item.id} eventdata={item} press={() => navigation.navigate('event', {item})} />
               )}
               sliderWidth={350}
-              itemWidth={350}
+              itemWidth={390}
               sliderHeight={300}
             />
 
@@ -188,7 +189,6 @@ const styles = StyleSheet.create({
     header:{
         flex:1,
         marginTop: 30,
-        marginHorizontal:10,
         alignItems:'center',
         width: '100%',
         height: '100%',
@@ -203,10 +203,12 @@ const styles = StyleSheet.create({
     },
 
     header__title:{
+        // width:'80%',
         textAlign:'left',
         fontWeight: 'bold',
         fontSize:30,
-        margin:20,
+        marginVertical:20,
+        marginHorizontal:20,
     },
 
     input:{
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
     events__header: {
         fontSize: 32,
         fontWeight: 'bold',
+        marginLeft: 10,
     },
     events: {
         marginVertical: 20,
@@ -228,7 +231,7 @@ const styles = StyleSheet.create({
     },
 
     category:{
-        marginHorizontal: 10,
+        marginHorizontal: 0,
         flexDirection: 'row',
     },
 
