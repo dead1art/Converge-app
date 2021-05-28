@@ -1,131 +1,174 @@
 import React from 'react'
 import { Dimensions } from 'react-native';
-import { View, Text, StyleSheet, Image} from 'react-native'
+import { View, SafeAreaView, Text, StyleSheet, ImageBackground } from 'react-native'
 import { Button } from 'react-native-elements'
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { MaterialIcons } from "@expo/vector-icons"
+import { theme } from '../constants/colors'
+import { ScrollView } from 'react-native-gesture-handler';
 
-const eventScreen = ({route, navigation}) => {
+const eventScreen = ({ route, navigation }) => {
 
-    const {id,name,location,image,date} = route.params.item;
+    const { id, title, addr, image, event_date } = route.params.item;
 
     console.log(route.params.item)
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+
 
             <View style={styles.header}>
-                <Button
-                type="clear"
-                // containerStyle={styles.backIcon}
-                icon={
-                    <MaterialIcons
-                    name="arrow-back"
-                    size={30}
-                    />
-                }
-                onPress={() => navigation.goBack()} />
-                <Text style={styles.header__name}> {name} </Text>
-
+                <ImageBackground style={styles.image} source={{ uri: image }} >
+                    <Button
+                        type="clear"
+                        containerStyle={{
+                            position: 'absolute',
+                            left: 30,
+                            top: 50,
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                        }}
+                        icon={
+                            <MaterialIcons
+                                name="arrow-back"
+                                size={28}
+                                color={'black'}
+                            />
+                        }
+                        onPress={() => navigation.goBack()} />
+                </ImageBackground>
             </View>
 
             <View style={styles.content}>
-                <Image style={styles.image} source={{uri: image}} />
-                <View style={styles.details}>
-                    <View style={styles.details__date}>
-                        <MaterialIcons
-                        name="calendar-today"
-                        size={24}
-                        color='gray'
-                        />
-                        <Text> {date} </Text>   
-                    </View>
 
-                    <View style={styles.details__place}>
-                        <MaterialIcons
-                        name="location-pin"
-                        size={24}
-                        color='gray'
-                        />
-                        <Text> {location} </Text>   
-                    </View>        
+
+                <Text style={styles.event__name}> {title} </Text>
+
+                <View style={styles.event__date}>
+                    <Button
+                        type="clear"
+                        containerStyle={{
+                            backgroundColor: theme.lightblue,
+                            borderRadius: 10,
+                        }}
+                        icon={
+                            <MaterialIcons
+                                name="calendar-today"
+                                size={26}
+                                color={theme.blue}
+                            />
+                        }
+                    />
+                    <Text style={styles.event__dateTitle}> {event_date} </Text>
                 </View>
+
+                <View style={styles.event__place}>
+                    <Button
+                        type="clear"
+                        containerStyle={{
+                            backgroundColor: theme.lightblue,
+                            borderRadius: 10,
+                        }}
+                        icon={
+                            <MaterialIcons
+                                name="location-pin"
+                                size={26}
+                                color={theme.blue}
+                            />
+                        }
+                    />
+                    <Text style={styles.event__placeTitle}> {addr} </Text>
+                </View>
+
+                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, incidunt tenetur, reiciendis dolor repudiandae necessitatibus illum consequatur quisquam modi aliquid esse odit culpa provident! Voluptas cum dolores sunt facilis! Cupiditate.
+                Ut consectetur voluptates ducimus officia eveniet cumque? Cum rerum excepturi culpa suscipit ut recusandae unde praesentium tempora ex tenetur sint dolorem cumque perspiciatis commodi iusto minima in, reprehenderit facere. Doloribus.</Text>
+
             </View>
 
-            <View style={styles.footer}>
-                <Text>Event Description Goes Here</Text>
-                <Text> Event Location goes here</Text>
-                
-            </View>
 
-        <FocusAwareStatusBar style="auto"/>
+            <Button
+                type="clear"
+                containerStyle={{
+                    position: 'absolute',
+                    left: '10%',
+                    right: '10%',
+                    width: '80%',
+                    bottom: 30,
+                    backgroundColor: theme.blue,
+                    borderRadius: 30,
+                    paddingHorizontal: 20,
+                    paddingVertical: 5,
+                }}
+                title="Join Event"
+                titleStyle={{ color: 'white' }}
+            />
 
-        </View>
+            <FocusAwareStatusBar style="auto" />
+
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        height: Dimensions.get('screen').height,
+    container: {
+        flex: 1,
         width: '100%',
-        backgroundColor: '#Eff7fc',
-        alignItems: 'center',
-    },
-
-    header:{
-        flex:0.3,
-        width:'90%',
-        justifyContent:'flex-start',
-        marginTop:'20%',
-        flexDirection:'row',
-    },
-
-    content:{
-        flex:1,
-        width: '80%',
+        height: Dimensions.get('screen').height,
         backgroundColor: 'white',
-        borderRadius:30,
-        elevation:10,
     },
 
-    footer:{
-        flex:1,
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20,
+    header: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
     },
-    
-    image:{
-        flex:2,
-        borderTopLeftRadius:30,
-        borderTopRightRadius:30,
-        height:'100%',
-        width:'100%',
+
+    content: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: 'white',
     },
-    
-    details:{
-        flex:1,
-        flexDirection:'row',
-        justifyContent:'space-between',
-        paddingTop:20,
+
+    image: {
+        height: '100%',
+        width: '100%',
+    },
+
+
+    event__name: {
+        fontSize: 34,
+        fontWeight: 'bold',
+        padding: 10,
+    },
+
+    event__date: {
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingHorizontal: 20,
+        paddingVertical: 10,
     },
 
-    backIcon:{
-
+    event__place: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
 
-    header__name:{
+    event__dateTitle: {
         marginLeft: 20,
-        marginTop:2,
-        fontSize: 30,
     },
 
+    event__placeTitle: {
+        marginLeft: 20,
+    },
 })
 
 export default eventScreen
 
- 
+
 
 

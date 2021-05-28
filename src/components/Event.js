@@ -6,7 +6,7 @@ import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 
 function Event({eventdata, press}) {
-    const { id, name, image, location, date, dateMonth } = eventdata;
+    const { id, title, image, addr, event_date, dateMonth } = eventdata;
 
     return(
         <SafeAreaView style={styles.container}>
@@ -26,15 +26,15 @@ function Event({eventdata, press}) {
                     <View style={styles.content__details}>
                         <Text style={[styles.content__name,{color: 'white',
                          fontWeight: 'bold'
-                        }]}>{name}</Text> 
-                        <Text style={[styles.content__location,{color: 'white'}]}>{location}</Text>
+                        }]}>{title}</Text> 
+                        <Text style={[styles.content__location,{color: 'white'}]}>{addr}</Text>
                     </View>
 
                     <View style={styles.content__date}>
                         <Text style={{
                             fontSize:18,
                             fontWeight: 'bold',
-                        }}>{date}</Text>
+                        }}>{event_date}</Text>
                         <Text style={{
                             fontSize:18,
                         }}>{dateMonth} </Text>

@@ -12,11 +12,13 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
     return(
         <SafeAreaView style={styles.container}> 
 
-            <View style={styles.content}> 
+        <View style={styles.header}>
 
             <Text style={styles.title}> Create Your Account </Text>
 
-            <View style={styles.form}>
+        </View>
+
+        <View style={styles.content}> 
                 
             <Input 
             inputStyle={styles.input} 
@@ -46,17 +48,21 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
             onChangeText={setPassword} 
             placeholder='Password' />            
         
-            </View>
+        
+        </View>    
+
+        <View style={styles.footer}>
 
             <Button 
-            buttonStyle={{ backgroundColor: '#4a5ebd', 
+            buttonStyle={{ backgroundColor: '#1e5eff', 
+            padding:10,
             marginTop: 30,
             borderRadius: 20,
-            paddingHorizontal: 20,}}
+            width:110,}}
             title="Sign-Up" 
             onPress={() => onSubmit({ email, password, first_name, last_name })}/>
 
-            </View>    
+        </View>
 
         </SafeAreaView>
     );
@@ -64,33 +70,42 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#f1f4fa',
         width: '100%',
         height: Dimensions.get('screen').height,
     },
+
+    header:{
+        flex:0.8,
+        alignItems: 'center',
+        marginTop:'20%',
+    },
+
     content:{
-        marginTop: '20%',
-        display: 'flex',
+        flex:2,
+        marginHorizontal:20,
         alignItems: 'center',
     },
-    form:{
-        alignItems: 'flex-start',
-        width: '80%',
-        marginTop: 10,
+
+    footer:{
+        flex:1,
+        alignItems: 'center',
     },
+
     title:{
         fontSize: 30,
         fontWeight: "700",
-        color: "#302b63",
+        color: "black",
         marginBottom: 40,
     },
     input:{
         padding: 15,
         paddingHorizontal: 20,
-        color: '#a7a7a7',
+        color: 'black',
         borderRadius: 20,
-        backgroundColor: '#e0dfe9',
+        backgroundColor: '#ffffff',
     },
 })
 

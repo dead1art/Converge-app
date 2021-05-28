@@ -4,6 +4,7 @@ import { RefreshControl, View, Text, Button, StyleSheet, Image, Dimensions, Stat
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
 import data from '../../assets/data';
+import {theme} from '../constants/colors'
 import { FocusAwareStatusBar } from '../components/statusbar'
 import Feed from '../components/Feed'
 
@@ -45,7 +46,7 @@ const homeScreen = ()=> {
 
             <View style={styles.section}> 
                 
-                <Text style={styles.label}> Latest blogs </Text>
+                {/* <Text style={styles.label}> Latest blogs </Text> */}
 
                 <FlatList 
                 data={data}
@@ -82,20 +83,21 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor:'#ffffff',
         height: Dimensions.get('screen').height,
     },
 
     header: {
-        flex: 1,
-        marginVertical:20,
+        flex:1,
+        paddingVertical: 20,
+        backgroundColor: '#f1f4fa',
+        width: '100%',
+        height: '100%',
     },
 
     section: {
-        flex: 8,
+        flex: 6,
         marginBottom:70,
-        paddingTop: 10,
-        
     },
 
     feed:{
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#4a465e',
+        color: '#42465a',
         paddingBottom: 20,
     },
     label:{
