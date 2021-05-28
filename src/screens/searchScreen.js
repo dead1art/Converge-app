@@ -6,7 +6,6 @@ import { SearchBar } from 'react-native-elements';
 import { MaterialIcons } from "@expo/vector-icons"
 import { DarkTheme } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '../components/statusbar'
-import events from '../../assets/events';
 import categorys from '../../assets/category'
 import Event from '../components/Event'
 import {theme,tabBar} from '../../src/constants/colors'
@@ -76,41 +75,42 @@ const SearchScreen = ({navigation})=> {
 
     return(
 
-        <KeyboardAvoidingView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            
 
         <View style={styles.header}>
+
+                <Text style={styles.header__title}>Discover The Most Amazing Events</Text>
 
                 <SearchBar
                 theme={DarkTheme}
                 searchIcon={
-                    <MaterialIcons name="search" size={26} color={theme.accent} />
+                    <MaterialIcons name="search" size={26} color={theme.gray} />
                 }
-                inputStyle={{fontSize: 20, color: theme.accent}}
+                inputStyle={{fontSize: 20, color: theme.blue}}
                 containerStyle={{
                     borderTopWidth:0,
                     borderBottomWidth:0,
                     borderRadius:20,
                     marginTop:10,
-                    width: '100%',
+                    backgroundColor: theme.lightblue,
+                    width: '90%',
+                    marginHorizontal:20,
+                    marginVertical:30,
                 }}     
                 inputContainerStyle={styles.input}
                 placeholder="Search for any events"
-                placeholderTextColor={theme.accentLite}
+                placeholderTextColor={theme.gray}
                 onChangeText={setSearch}
                 value={search}
                 />
 
-        </View>
-
-        <View style={styles.section}>
-
-                <ScrollView 
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                >
-
-
             <View style={styles.category}> 
+
+            <ScrollView 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            >
 
             {categorys.map(item => (
                 <View style={styles.category__items}> 
@@ -126,12 +126,12 @@ const SearchScreen = ({navigation})=> {
                     titleStyle={{
                         paddingVertical: 10,
                         paddingHorizontal:10,
-                        color: '#1E1F20'}}
-                        disabledStyle={{backgroundColor: theme.accent}}
+                        color: theme.gray}}
+                        disabledStyle={{backgroundColor: theme.blue}}
                         disabledTitleStyle={{color:'white'}}
                         containerStyle={{
                             borderRadius:20,
-                            backgroundColor: "#e9e8e9",
+                            backgroundColor: theme.lightblue,
                         
                         }}
                         disabled={disabled.indexOf(item.id) !== -1}
@@ -140,11 +140,15 @@ const SearchScreen = ({navigation})=> {
                 </View>
             ))}
 
+            </ScrollView>
+
             </View>
 
-            </ScrollView>
+
         </View>
 
+               
+     
         <View style={styles.footer}>
 
             <Text style={styles.events__header}> Featured Events </Text>
@@ -156,9 +160,9 @@ const SearchScreen = ({navigation})=> {
               renderItem={({item}) => (
                   <Event key={item.id} eventdata={item} press={() => navigation.navigate('event', {item})} />
               )}
-              sliderWidth={320}
-              itemWidth={320}
-              sliderHeight={500}
+              sliderWidth={350}
+              itemWidth={390}
+              sliderHeight={300}
             />
 
             <Text> {identifier} </Text>
@@ -168,7 +172,7 @@ const SearchScreen = ({navigation})=> {
         </View>
 
 <FocusAwareStatusBar style="auto" />
-        </KeyboardAvoidingView>
+        </SafeAreaView>
     );
             
 };
@@ -181,36 +185,35 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: Dimensions.get('screen').height,
     },
+
     header:{
         flex:1,
-        display:'flex',
-        flexDirection: 'row',
         marginTop: 30,
-        marginHorizontal:10,
-        backgroundColor: 'green',
+        alignItems:'center',
         width: '100%',
         height: '100%',
     },
 
-    section:{
-        flex: 1,
-        paddingVertical:20,
-        backgroundColor: 'brown',
+    footer:{
+        flex:1.5,
+        justifyContent: 'flex-start',
+        paddingTop: 10,
+        width: '100%',
+        height:'100%',
     },
 
-    footer:{
-        flex:4,
-        alignItems: 'center',
-        paddingTop: 20,
-        width: '90%',
-        borderRadius:30,
-        backgroundColor: 'red',
-        marginBottom:80,
+    header__title:{
+        // width:'80%',
+        textAlign:'left',
+        fontWeight: 'bold',
+        fontSize:30,
+        marginVertical:20,
+        marginHorizontal:20,
     },
+
     input:{
         borderRadius: 30,
         color: 'white',
-        padding: 5,
         paddingHorizontal:10,
     },  
     button:{
@@ -219,16 +222,16 @@ const styles = StyleSheet.create({
     events__header: {
         fontSize: 32,
         fontWeight: 'bold',
+        marginLeft: 10,
     },
     events: {
         marginVertical: 20,
         height: '80%',
         width: '90%',
-        backgroundColor: 'yellow',
     },
 
     category:{
-        marginHorizontal: 10,
+        marginHorizontal: 0,
         flexDirection: 'row',
     },
 

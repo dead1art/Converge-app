@@ -15,12 +15,12 @@ function Feed(props) {
                    style={styles.avatar}
                    />
 
-            <Text style={styles.name}>{name}</Text>
 
             </View>
 
-
             <View style={styles.content}>
+
+            <Text style={styles.name}>{name}</Text>
             
             <Text style={styles.caption}>{caption}</Text>
 
@@ -43,11 +43,9 @@ function Feed(props) {
 const styles= StyleSheet.create({
     feed:{
         padding: 20,
-        borderBottomWidth:1,
-        width:'100%',
-        borderRadius: 0,
-        backgroundColor: '#ffffff',
+        borderTopWidth:2,
         borderColor: '#ecf1f5',
+        flexDirection:'row',
     },
     avatar:{
         width: 50,
@@ -57,25 +55,26 @@ const styles= StyleSheet.create({
     details:{
         flexDirection: 'row',
     },
+    content:{
+        marginHorizontal:10,
+        width: '80%',
+        height:'100%',
+    },
+
     name:{
         fontSize: 16,
         fontWeight: 'bold',
-        marginTop: 3,
-        marginLeft: 15,
-    },
-    content:{
-        marginTop: 10,
-        paddingVertical: 10,
     },
     caption:{
+        flex:1,
         width: '100%',
         color: 'black',
-        marginBottom: 10,
+        marginVertical: 5,
     },
     image:{
         width: 280,
         height: 180,
-        borderRadius: 5,
+        borderRadius: 15,
         marginVertical: 10,
     },
     event: {
