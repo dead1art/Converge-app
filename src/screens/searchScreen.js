@@ -73,14 +73,11 @@ const SearchScreen = ({navigation})=> {
         }
     }  
 
+    const Header = () => {
     return(
-
-        <SafeAreaView style={styles.container}>
-            
-
         <View style={styles.header}>
 
-                <Text style={styles.header__title}>Discover The Most Amazing Events</Text>
+                <Text style={styles.header__title}>Discover the most amazing events</Text>
 
                 <SearchBar
                 theme={DarkTheme}
@@ -131,8 +128,7 @@ const SearchScreen = ({navigation})=> {
                         disabledTitleStyle={{color:'white'}}
                         containerStyle={{
                             borderRadius:20,
-                            backgroundColor: theme.lightblue,
-                        
+                            backgroundColor: theme.lightblue,   
                         }}
                         disabled={disabled.indexOf(item.id) !== -1}
                         onPress={() => toggleHandler(item.name, item.id)}
@@ -142,32 +138,28 @@ const SearchScreen = ({navigation})=> {
 
             </ScrollView>
 
+
             </View>
-
-
-        </View>
-
-               
-     
-        <View style={styles.footer}>
 
             <Text style={styles.events__header}> Featured Events </Text>
 
-            <View style={styles.events}>
+        </View>
+    )
+}
+
+    return(
+
+        <SafeAreaView style={styles.container}>          
+     
+        <View style={styles.section}>
                 
-                <Carousel
+                <FlatList
               data={filteredEvents}
+              ListHeaderComponent={Header}
               renderItem={({item}) => (
                   <Event key={item.id} eventdata={item} press={() => navigation.navigate('event', {item})} />
               )}
-              sliderWidth={350}
-              itemWidth={390}
-              sliderHeight={300}
             />
-
-            <Text> {identifier} </Text>
-
-            </View>
 
         </View>
 
@@ -177,29 +169,30 @@ const SearchScreen = ({navigation})=> {
             
 };
 
+
+
 const styles = StyleSheet.create({
     container:{
         flex: 1,
         width: '100%',
         backgroundColor: 'white',
-        alignItems: 'center',
         height: Dimensions.get('screen').height,
     },
 
     header:{
         flex:1,
-        marginTop: 30,
+        marginTop: 10,
         alignItems:'center',
         width: '100%',
         height: '100%',
     },
 
-    footer:{
-        flex:1.5,
-        justifyContent: 'flex-start',
-        paddingTop: 10,
+    section:{
+        flex:1,
+        marginTop: 20,
         width: '100%',
         height:'100%',
+        marginBottom:70,
     },
 
     header__title:{
@@ -223,15 +216,16 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         marginLeft: 10,
+        marginBottom:10,
     },
     events: {
-        marginVertical: 20,
-        height: '80%',
-        width: '90%',
+        height: '100%',
+        width: '100%',
     },
 
     category:{
-        marginHorizontal: 0,
+        marginTop: 10,
+        marginBottom:30,
         flexDirection: 'row',
     },
 

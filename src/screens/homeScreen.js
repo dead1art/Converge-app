@@ -36,12 +36,6 @@ const homeScreen = ()=> {
         <SafeAreaView style={styles.container}>
 
 
-            <View style={styles.header}>
-
-                <Text style={styles.logo}> Converge </Text> 
-            
-            </View>
-
         
 
             <View style={styles.section}> 
@@ -54,6 +48,7 @@ const homeScreen = ()=> {
                 renderItem={({item}) => (
                     <Feed info={item}/>
                     )}
+                ListHeaderComponent={header}
                 snapToAlignment={"start"}
                 showsVerticalScrollIndicator={false} 
                 refreshControl={
@@ -76,6 +71,17 @@ const homeScreen = ()=> {
     );
 };
 
+function header(){
+    return(
+        <View>
+            <View style={styles.header}>
+
+                <Text style={styles.logo}> Converge </Text> 
+            
+            </View>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
 
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
 
     header: {
         flex:1,
-        paddingVertical: 20,
+        paddingTop: 10,
         backgroundColor: '#f1f4fa',
         width: '100%',
         height: '100%',
