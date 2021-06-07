@@ -51,6 +51,10 @@ const LoginForm = ({onSubmit,onNavigate}) => {
           }
           signInGoogle();
           }
+          else
+          {
+              alert("unable to sign in")
+          }
       }, [response]);
 
       

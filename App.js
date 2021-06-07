@@ -44,17 +44,19 @@ import { Provider as EventProvider } from './src/context/eventContext';
       <Tab.Navigator
       initialRouteName="home"
       backBehavior="initialRoute"
-      tabBarOptions={{
+      tabBarOptions={{  
         keyboardHidesTabBar: true,
         showLabel: false,
         style: {
         backgroundColor: "white",
         // borderTopRightRadius: 20,
         // borderTopLeftRadius: 20,
+        borderTopWidth:0,
+        elevation:0,
         position: 'absolute',
-        height: 70,
-
+        height: 60,
         }
+        
       }}
       
       >
@@ -82,7 +84,7 @@ import { Provider as EventProvider } from './src/context/eventContext';
         component={createScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="plus-circle" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Feather name="plus-circle" size={30} color={focused? tabBar.active : tabBar.active}/>
               )
             }}
         />

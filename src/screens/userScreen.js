@@ -1,5 +1,5 @@
 import React, { useContext,useEffect, useState} from 'react';
-import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar } from 'react-native';
+import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 // import {AuthContext} from '../../App';
 import {AuthContext} from '../context/AuthContext';
@@ -53,12 +53,20 @@ const userScreen = ({navigation}) => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  // --LoadingScreen
+
+  const [isloading, setIsloading] = useState(false)
+  const [error, setError] = useState(null)
+
+  // LoadingScreen--
+
   console.log(authState.userToken);
 
   const userInfo = state.users;
   useEffect(()=>{
     const getUser = async() =>{
       try{
+        setIsloading(true)
         const response= await main.get('/api/profile/',{
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
@@ -67,14 +75,35 @@ const userScreen = ({navigation}) => {
         });
         dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
         console.log(response.data);
+        setIsloading(false)
       }
       catch(err){
+        setIsloading(false)
         console.log(err);
+        setError(err)
       }
     }
 
     getUser();
   },[isFocused]);
+
+  if (isloading) {
+        return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="black" />
+        </View>
+        );
+    }
+
+    if (error) {
+        return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18}}>
+            {error}
+            </Text>
+        </View>
+        );
+    }
 
   return (
     <SafeAreaView style={styles.container}>
