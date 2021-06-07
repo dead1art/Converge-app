@@ -44,7 +44,8 @@ const styles= StyleSheet.create({
     feed:{
         padding: 20,
         borderTopWidth:2,
-        borderColor: '#ecf1f5',
+        borderColor: '#e8ebf3',
+        backgroundColor: 'white',
         flexDirection:'row',
     },
     avatar:{

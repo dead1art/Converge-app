@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dimensions } from 'react-native';
-import { View, SafeAreaView, Text, StyleSheet, ImageBackground } from 'react-native'
+import { View, SafeAreaView, Text, StyleSheet, Image } from 'react-native'
 import { Button } from 'react-native-elements'
 import { FocusAwareStatusBar } from '../components/statusbar'
 import { MaterialIcons } from "@expo/vector-icons"
@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const eventScreen = ({ route, navigation }) => {
 
-    const { id, title, addr, image, event_date } = route.params.item;
+    const { id, title, addr, image, event_date, desc, max_attendees } = route.params.item;
 
     console.log(route.params.item)
 
@@ -17,16 +17,22 @@ const eventScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
 
+        <ScrollView>
 
             <View style={styles.header}>
-                <ImageBackground style={styles.image} source={{ uri: image }} >
+
+                    <Image 
+                        style={styles.image} 
+                        source={{ uri: image }} 
+                    />
+
                     <Button
                         type="clear"
                         containerStyle={{
                             position: 'absolute',
                             left: 30,
                             top: 50,
-                            backgroundColor: 'white',
+                            backgroundColor: 'rgba(255,255,255,0.5)',
                             borderRadius: 10,
                         }}
                         icon={
@@ -37,7 +43,7 @@ const eventScreen = ({ route, navigation }) => {
                             />
                         }
                         onPress={() => navigation.goBack()} />
-                </ImageBackground>
+  
             </View>
 
             <View style={styles.content}>
@@ -49,14 +55,14 @@ const eventScreen = ({ route, navigation }) => {
                     <Button
                         type="clear"
                         containerStyle={{
-                            backgroundColor: theme.lightblue,
+                            backgroundColor: theme.blue,
                             borderRadius: 10,
                         }}
                         icon={
                             <MaterialIcons
                                 name="calendar-today"
                                 size={26}
-                                color={theme.blue}
+                                color="white"
                             />
                         }
                     />
@@ -67,25 +73,43 @@ const eventScreen = ({ route, navigation }) => {
                     <Button
                         type="clear"
                         containerStyle={{
-                            backgroundColor: theme.lightblue,
+                            backgroundColor: theme.blue,
                             borderRadius: 10,
                         }}
                         icon={
                             <MaterialIcons
                                 name="location-pin"
                                 size={26}
-                                color={theme.blue}
+                                color="white"
                             />
                         }
                     />
                     <Text style={styles.event__placeTitle}> {addr} </Text>
                 </View>
 
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, incidunt tenetur, reiciendis dolor repudiandae necessitatibus illum consequatur quisquam modi aliquid esse odit culpa provident! Voluptas cum dolores sunt facilis! Cupiditate.
-                Ut consectetur voluptates ducimus officia eveniet cumque? Cum rerum excepturi culpa suscipit ut recusandae unde praesentium tempora ex tenetur sint dolorem cumque perspiciatis commodi iusto minima in, reprehenderit facere. Doloribus.</Text>
+                <View style={styles.event__attendees}>                    
+                    <Button
+                        type="clear"
+                        containerStyle={{
+                            backgroundColor: theme.blue,
+                            borderRadius: 10,
+                        }}
+                        icon={
+                            <MaterialIcons
+                                name="person"
+                                size={26}
+                                color="white"
+                            />
+                        }
+                    />
+                    <Text style={styles.event__placeTitle}> Max Members: {max_attendees} </Text>                        
+                </View>
+
+                <Text style={styles.description}>{desc}</Text>
 
             </View>
 
+            </ScrollView>
 
             <Button
                 type="clear"
@@ -94,9 +118,9 @@ const eventScreen = ({ route, navigation }) => {
                     left: '10%',
                     right: '10%',
                     width: '80%',
-                    bottom: 30,
+                    bottom: 20,
                     backgroundColor: theme.blue,
-                    borderRadius: 30,
+                    borderRadius: 20,
                     paddingHorizontal: 20,
                     paddingVertical: 5,
                 }}
@@ -122,8 +146,6 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        justifyContent: 'flex-start',
-        flexDirection: 'row',
     },
 
     content: {
@@ -133,15 +155,15 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        height: '100%',
+        height: 300,
         width: '100%',
     },
-
 
     event__name: {
         fontSize: 34,
         fontWeight: 'bold',
         padding: 10,
+        marginVertical:10,
     },
 
     event__date: {
@@ -158,12 +180,27 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
 
+    event__attendees: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+
     event__dateTitle: {
         marginLeft: 20,
+        fontSize:15,
     },
 
     event__placeTitle: {
         marginLeft: 20,
+        fontSize:15,
+    },
+
+    description:{
+        padding:20,
+        marginTop: 10,
+        // backgroundColor: 'gray',
     },
 })
 

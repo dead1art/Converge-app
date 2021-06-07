@@ -33,10 +33,7 @@ const homeScreen = ()=> {
 
     return(
 
-        <SafeAreaView style={styles.container}>
-
-
-        
+        <SafeAreaView style={styles.container}>   
 
             <View style={styles.section}> 
                 
@@ -89,21 +86,21 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor:'#ffffff',
+        backgroundColor:'#e8ebf3',
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex:1,
-        paddingTop: 10,
-        backgroundColor: '#f1f4fa',
+        paddingTop: 30,
+        backgroundColor: '#e8ebf3',
         width: '100%',
         height: '100%',
     },
 
     section: {
         flex: 6,
-        marginBottom:70,
+        marginBottom:60,
     },
 
     feed:{
@@ -148,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#42465a',
+        color: '#090a0a',
         paddingBottom: 20,
     },
     label:{

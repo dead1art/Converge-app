@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native';
 import { View,Text, StyleSheet, Modal, Image, TouchableOpacity } from 'react-native';
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { ImageBackground } from 'react-native';
 
 function Event({eventdata, press}) {
     const { id, title, image, addr, event_date, dateMonth } = eventdata;
@@ -13,10 +14,11 @@ function Event({eventdata, press}) {
             style={styles.container}
             >
 
-                    <Image
+                    <ImageBackground
+                    borderRadius={20}
                     style={styles.image}
                     source={{uri : image}}
-                    />
+                    >
                
 
                     <View style={styles.content__details}>
@@ -24,6 +26,8 @@ function Event({eventdata, press}) {
                         <Text style={styles.content__location}>{addr}</Text>
                         <Text style={{ fontSize:14,  color:'gray',}}>{event_date}</Text>
                     </View>
+
+                    </ImageBackground>
         
             </TouchableOpacity>
     )
@@ -31,18 +35,19 @@ function Event({eventdata, press}) {
 
 const styles = StyleSheet.create({
     container:{
-        width: '100%',
+        flex:1,
         flexDirection: 'row',
-        padding: 20,
-        backgroundColor: '#f1f4fa',
-        borderRadius:10,
-        marginBottom:10,
+        height:280,
+        marginHorizontal:10,
+        marginVertical:10,
+        backgroundColor: 'white',
+        borderColor: '#eff7fc',
+        borderRadius: 20,
     },
     
     image:{
-        width: 100,
-        height: 100,
-        borderRadius: 20,
+        width: '100%',
+        height: '100%',
     },
 
     // content:{
@@ -58,15 +63,22 @@ const styles = StyleSheet.create({
     // },
 
     content__details:{
-        marginTop:10,
-        marginLeft:10,
+        paddingLeft:20,
+        color: 'white',
+        marginTop:'50%',
+        paddingTop: 10,
+        // marginHorizontal:10,
+        borderBottomLeftRadius:20,
+        borderBottomRightRadius:20,
+        height: 94,
+        backgroundColor: 'rgba(0,0,0, 0.5)',
         textAlign: 'justify',
     },
 
     content__name:{
         fontWeight:'bold',
         fontSize: 20,
-        color:'black',
+        color:'white',
     },
 
     content__location:{
