@@ -14,7 +14,9 @@ import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
 import { Dimensions } from 'react-native';
 import chatScreen from './src/screens/chatScreen'
-import createScreen from './src/screens/createScreen' 
+import createScreen from './src/screens/createScreen'
+import createPost from './src/screens/create/createPost';
+import createEvent from './src/screens/create/createEvent';
 import editScreen from './src/screens/editScreen'
 import eventScreen from './src/screens/eventScreen'
 import {tabBar} from './src/constants/colors'
@@ -26,6 +28,8 @@ import { Provider as EventProvider } from './src/context/eventContext';
   const login = createStackNavigator(); 
 
   const user = createStackNavigator();
+
+  const create = createStackNavigator();
 
   const Tab = createBottomTabNavigator();
 
@@ -65,7 +69,7 @@ import { Provider as EventProvider } from './src/context/eventContext';
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="home" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "home" : "home-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -74,17 +78,17 @@ import { Provider as EventProvider } from './src/context/eventContext';
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="search" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "search" : "search-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
 
         <Tab.Screen 
         name="create" 
-        component={createScreen}
+        component={createStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="plus-circle" size={30} color={focused? tabBar.active : tabBar.active}/>
+                <Ionicons name="add-circle-sharp" size={34} color={focused? tabBar.focused : tabBar.active}/>
               )
             }}
         />
@@ -94,7 +98,7 @@ import { Provider as EventProvider } from './src/context/eventContext';
         component={chatScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="message-square" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "chatbox" : "chatbox-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -104,7 +108,7 @@ import { Provider as EventProvider } from './src/context/eventContext';
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Feather name="user" size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "person" : "person-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -149,6 +153,30 @@ import { Provider as EventProvider } from './src/context/eventContext';
       </user.Navigator>
     )
   }
+
+  const createStack = () => {
+    return (
+      <create.Navigator initialRouteName="createEvent" screenOptions={{headerShown: false}}>
+
+        <create.Screen 
+        name="create"
+        component={createScreen}
+        />
+
+        <create.Screen 
+        name="createEvent"
+        component={createEvent}
+        />
+
+        <create.Screen 
+        name="createPost"
+        component={createPost}
+        />
+
+      </create.Navigator>
+    )
+  }
+
 
 
 const initialState = {

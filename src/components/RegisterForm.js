@@ -46,6 +46,7 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
             inputStyle={styles.input} 
             inputContainerStyle={{borderBottomWidth:0}}
             value={password}
+            secureTextEntry
             onChangeText={setPassword} 
             placeholder='Password' />            
         
