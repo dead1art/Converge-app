@@ -6,13 +6,15 @@ export {
 
 const tabBar = {
     background: '#1E1F20',
-    focused: '#1e5eff',
+    focused: '#0d1de8',
     notFocused: '#a0a0a0',
+    active: '#090a0a',
 }
 
 const theme = {
     white: 'white',
-    blue: '#1e5eff',
-    lightblue: '#f1f4fa',
+    blue: '#0d1de8',
+    lightblue: '#b3bbd2',
     gray: '#42465a',
+    black: '#090a0a',
 }
