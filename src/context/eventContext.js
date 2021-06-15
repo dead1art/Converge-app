@@ -54,7 +54,7 @@ const eventReducer = (state, action) =>{
     }
 }
 
-const addSong = (dispatch) => async({}) => {
+const addEvent = (dispatch) => async({}) => {
 
 }
 

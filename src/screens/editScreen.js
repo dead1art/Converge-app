@@ -11,6 +11,7 @@ import main from '../api/main';
 import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
 import * as Location from 'expo-location';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
  
 const editScreen = ({route, navigation}) => {
 
@@ -107,26 +108,69 @@ axios({
     .catch(function (response) {
       //handle error
       console.log(response);
+
     });
 
   };
 
-    // Image Picker
+  //date picker logic
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+    // console.log(date);
+    
+    const date_str = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
+
+    console.log(date_str);
+
+    let formData = new FormData();
+
+    formData.append('dob',date_str);
+
+    axios({
+        method: "put",
+        url: "https://converge-project.herokuapp.com/api/profile/",
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${authState.userToken}`},
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+    
+        });
+    
+  };
+
+    // Image Picker
     const {userInfo} = route.params;
 
     const [image, setImage] = useState(userInfo.image)
     const [fname, setFname] = useState(userInfo.first_name)
     const [lname, setLname] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)
-    const [dob, setDob] = useState(userInfo.dob)
     const [email, setEmail] = useState(userInfo.email)
 
     // {image && console.log(image)}
 
-    const editProfileHandler = async(bio, dob ) => {
+    const editProfileHandler = async(bio) => {
         try {
-            const response = await main.put("/api/profile/", { bio, dob,location}, {
+            const response = await main.put("/api/profile/", { bio,location}, {
                  headers: {
             'Authorization': `Bearer ${authState.userToken}` 
             }
@@ -223,7 +267,7 @@ axios({
             
             <View style={styles.info}> 
                 <Text> Date Of Birth </Text>
-                <Input 
+                {/* <Input 
                 inputContainerStyle={{ 
                     marginTop:10,
                     borderBottomWidth: 0, 
@@ -233,7 +277,15 @@ axios({
                 }}
                 style={styles.input}
                 value={dob} 
-                onChangeText={setDob} />
+                onChangeText={setDob} /> */}
+                <Button title="Show Date Picker" onPress={showDatePicker} style={{borderRadius:20,height:50}
+                } />
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
             </View>
             
             <View style={styles.info}>
@@ -270,7 +322,7 @@ axios({
             />
             }
            onPress={()=>{
-            editProfileHandler(bio,dob)
+            editProfileHandler(bio)
            }}
             />
 
