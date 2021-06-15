@@ -6,6 +6,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import {FocusAwareStatusBar} from './statusbar';
 import { DarkTheme } from '@react-navigation/native';
+import {theme} from "../constants/colors"
 import {AuthContext} from '../context/AuthContext';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -49,10 +50,6 @@ const LoginForm = ({onSubmit,onNavigate}) => {
               }
           }
           signInGoogle();
-          }
-          else
-          {
-              alert("unable to sign in")
           }
       }, [response]);
 
@@ -109,15 +106,15 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     onChangeText={setPassword}
                     placeholder='Password' 
                     secureTextEntry 
-                    rightIcon=
-                    {password.length<8 &&
-                        <Ionicons
-                            name='warning'
-                            size={24}
-                            style={{ marginRight: 15,}}
-                            color='red'
-                        />    
-                    } 
+                    // rightIcon=
+                    // {password.length<8 &&
+                    //     <Ionicons
+                    //         name='warning'
+                    //         size={24}
+                    //         style={{ marginRight: 15,}}
+                    //         color='red'
+                    //     />    
+                    // } 
                     
                 />
 
@@ -126,12 +123,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                 } */}
 
                     <Button 
-                        disabled={!password}
                         titleStyle={{ 
                             color: 'white',
                         }}  
                         buttonStyle={{
-                            backgroundColor: '#0b2dfa',
+                            backgroundColor: theme.blue,
                             padding:15,
                             borderRadius: 20,
                             marginHorizontal: 10,
@@ -145,7 +141,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                             borderRadius: 20,
                             marginTop: 25,
                             padding: 15,
-                            backgroundColor: 'black',
+                            backgroundColor: theme.black,
                             marginHorizontal: 10,
                         }}
                         title="Sign-in with Google"
@@ -165,6 +161,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     <Button
                         title="New to Converge ? Register now"
                         type="clear"
+                        titleStyle={{color: theme.blue}}
                         onPress={()=> onNavigate()}
             
                     />
@@ -201,12 +198,14 @@ const styles = StyleSheet.create ({
 
     footer:{
         flex:1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
+        marginBottom:20,
     },
 
     logo: {
         marginTop: 30,
         fontSize: 60,
+        color:theme.black,
         textAlign: 'center',
         fontFamily: 'Pacifico_400Regular',
     },

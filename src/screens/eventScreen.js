@@ -13,6 +13,13 @@ const eventScreen = ({ route, navigation }) => {
 
     console.log(route.params.item)
 
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+                           "July", "August", "September", "October", "November", "December"
+                        ];
+
+    const d = event_date
+
+    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -55,14 +62,14 @@ const eventScreen = ({ route, navigation }) => {
                     <Button
                         type="clear"
                         containerStyle={{
-                            backgroundColor: theme.blue,
+                            backgroundColor: 'white',
                             borderRadius: 10,
                         }}
                         icon={
                             <MaterialIcons
                                 name="calendar-today"
                                 size={26}
-                                color="white"
+                                color={theme.blue}
                             />
                         }
                     />
@@ -73,14 +80,14 @@ const eventScreen = ({ route, navigation }) => {
                     <Button
                         type="clear"
                         containerStyle={{
-                            backgroundColor: theme.blue,
+                            backgroundColor: 'white',
                             borderRadius: 10,
                         }}
                         icon={
                             <MaterialIcons
                                 name="location-pin"
                                 size={26}
-                                color="white"
+                                color={theme.blue}
                             />
                         }
                     />
@@ -91,14 +98,14 @@ const eventScreen = ({ route, navigation }) => {
                     <Button
                         type="clear"
                         containerStyle={{
-                            backgroundColor: theme.blue,
+                            backgroundColor: 'white',
                             borderRadius: 10,
                         }}
                         icon={
                             <MaterialIcons
                                 name="person"
                                 size={26}
-                                color="white"
+                                color={theme.blue}
                             />
                         }
                     />
@@ -119,8 +126,8 @@ const eventScreen = ({ route, navigation }) => {
                     right: '10%',
                     width: '80%',
                     bottom: 20,
-                    backgroundColor: theme.blue,
-                    borderRadius: 20,
+                    backgroundColor: theme.black,
+                    borderRadius: 10,
                     paddingHorizontal: 20,
                     paddingVertical: 5,
                 }}

@@ -27,17 +27,20 @@ const editScreen = ({route, navigation}) => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
+        alert("Location is not turned on")
         return;
       }
 
       let current = await Location.getCurrentPositionAsync({});
 
-      var lat = current.coords.latitude;
       let log = current.coords.longitude;
+      var lat = current.coords.latitude;
 
-      setLocation([lat,log]);
+      setLocation([log,lat]);
 
       setCurrent(current);
+
+      console.log(lat,log)
 
     })();
   },[])
@@ -152,8 +155,7 @@ axios({
         <Avatar
         rounded
         containerStyle={{
-            borderWidth:6,
-            borderColor:'white',
+            marginTop:20,
             backgroundColor: 'white',
         }}
         size={150}
@@ -169,7 +171,7 @@ axios({
                 backgroundColor: '#2663FF',
                 marginTop: 40,
                 marginBottom: 20,
-                borderRadius: 20,
+                borderRadius: 10,
                 paddingHorizontal: 20,}}
                 title='Update Picture'
                 onPress={pickImage}
@@ -182,7 +184,7 @@ axios({
                     marginTop:10,
                     borderBottomWidth: 0, 
                     backgroundColor: 'white',
-                    borderRadius:20,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -197,7 +199,7 @@ axios({
                     marginTop:10,
                     borderBottomWidth: 0, 
                     backgroundColor: 'white',
-                    borderRadius:20,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -213,7 +215,7 @@ axios({
                     marginTop:10,
                     borderBottomWidth: 0, 
                     backgroundColor: 'white',
-                    borderRadius:20,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -228,7 +230,7 @@ axios({
                     marginTop:10,
                     borderBottomWidth: 0, 
                     backgroundColor: 'white',
-                    borderRadius:20,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -244,7 +246,7 @@ axios({
                     marginTop:10,
                     borderBottomWidth: 0, 
                     backgroundColor: 'white',
-                    borderRadius:20,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -306,6 +308,7 @@ const styles = StyleSheet.create({
     },
 
     header__profile: {
+        marginTop: 10,
         marginBottom: 20,
         fontWeight: 'bold',
         fontSize: 30,

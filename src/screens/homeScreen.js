@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     header: {
         flex:1,
         paddingTop: 30,
-        backgroundColor: '#e8ebf3',
+        backgroundColor: theme.white,
         width: '100%',
         height: '100%',
     },
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginBottom:20,
         borderRadius: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.white,
         borderColor: '#ecf1f5',
     },
     avatar:{
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontFamily: 'Pacifico_400Regular',
         marginBottom: 10,
-        color: '#090a0a',
+        color: theme.black,
         paddingBottom: 20,
     },
     label:{
