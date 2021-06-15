@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-nativ
 import { Button } from 'react-native-elements';
 import { FocusAwareStatusBar } from '../components/statusbar'
 
-const createScreen = () => {
+const createScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
@@ -22,6 +22,7 @@ const createScreen = () => {
                         padding:20,
                         borderRadius: 20,
                     }}
+                    onPress={() => navigation.navigate('createEvent')}
                     />
                     
             </View>
@@ -39,6 +40,7 @@ const createScreen = () => {
                         padding:20,
                         borderRadius: 20,
                     }}
+                    onPress={() => navigation.navigate('createPost')}
                     />
 
             </View>

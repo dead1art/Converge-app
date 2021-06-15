@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, Button, StyleSheet, Image, Dimensions } from 'react-native';
+import {theme} from '../constants/colors'
 
 function Feed(props) {
     const {id, avatar, name, caption, img, event} = props.info;
@@ -45,7 +46,7 @@ const styles= StyleSheet.create({
         padding: 20,
         borderTopWidth:2,
         borderColor: '#e8ebf3',
-        backgroundColor: 'white',
+        backgroundColor: theme.white,
         flexDirection:'row',
     },
     avatar:{

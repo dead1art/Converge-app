@@ -1,22 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
-import { View, StyleSheet, Dimensions, StatusBar, FlatList, ActivityIndicator} from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { RefreshControl, View, StyleSheet, Dimensions, StatusBar, FlatList, ActivityIndicator, Modal} from 'react-native';
+import { SearchBar, ButtonGroup } from 'react-native-elements';
 import { MaterialIcons } from "@expo/vector-icons"
 import { DarkTheme } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '../components/statusbar'
-import categorys from '../../assets/category'
+// import categorys from '../../assets/category'
 import Event from '../components/Event'
 import {theme,tabBar} from '../../src/constants/colors'
-import Carousel from 'react-native-snap-carousel';
 import { createFilter } from 'react-native-search-filter';
-import { ScrollView } from 'react-native';
-import { Modal } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native';
 import { Context as eventContext} from '../context/eventContext';
 import main from '../api/main';
 import {AuthContext} from '../context/AuthContext';
+// import Slider from '@react-native-community/slider';
 // import Category from '../components/Category'
 
 
@@ -27,6 +24,24 @@ const SearchScreen = ({navigation})=> {
     const {dispatch} = useContext(eventContext);
     const {state: event} =useContext(eventContext);
 
+    // Slider
+
+    const [radius, setRadius] = useState(500)
+    
+    const buttons = [20,40,60,80,100,150,200,300,400,500]
+
+    const [disabled, setDisabled] = useState('')
+
+
+    const updateRadius = (item,index) => {
+        setRadius(item)
+        console.log(radius)
+        setDisabled(index)
+    }
+ 
+    // Slider
+
+  
     // --LoadingScreen
 
     const [isloading, setIsloading] = useState(false)
@@ -36,11 +51,15 @@ const SearchScreen = ({navigation})=> {
 
     const [search, setSearch] = useState('')
     const eventdata = event.events
-    const [disabled, setDisabled] = useState('')
+    // console.log(eventdata)
 
-    const KEYS_TO_FILTER = ['title', 'location']
+    const KEYS_TO_FILTER = ['title', 'addr', 'event_date']
     
     const filteredEvents = eventdata.filter(createFilter(search, KEYS_TO_FILTER))
+
+    // Search Modal
+    
+    const [isvisible, setIsvisible] = useState(false)
 
     // const toggleHandler = (name,id) => {
     //     if(name == "All"){
@@ -53,6 +72,18 @@ const SearchScreen = ({navigation})=> {
     //     }
     // }  
 
+    // Refreshing
+
+     const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+    // Refreshing
+
+
     // Fetching Events data from The API
 
     useEffect(()=>{
@@ -63,6 +94,9 @@ const SearchScreen = ({navigation})=> {
                 const response = await main.get('/api/event/',{
                     headers: {
                       'Authorization': `Bearer ${authState.userToken}` 
+                    },
+                    params:{
+                        radius: radius,
                     }
                   })
                 // console.log(response);
@@ -78,35 +112,101 @@ const SearchScreen = ({navigation})=> {
             }
         }
         getEvents();
-    },[]);
+    },[radius]);
+
 
     const Header = () => {
 
         return(
+            <View style={styles.header}>
 
-        <View style={styles.header}>
+            <Text style={styles.header__title}>Discover the most amazing events</Text> 
 
-                <Text style={styles.header__title}>Discover the most amazing events</Text>
+            <Button
+                type="clear"
+                icon={
+                    <MaterialIcons name="search" size={28} color={theme.black}
+                    style={{marginRight:10,}}
+                    />
+                }
+                onPress={() => setIsvisible(true)}
 
-            <View style={styles.category}> 
+                containerStyle={{
+                    flexDirection: 'row',
+                    borderRadius:20,
+                    padding:10,
+                    paddingHorizontal:10,
+                    marginTop:20,
+                    justifyContent: 'flex-start',
+                    backgroundColor: theme.lightaccent,        
+                    marginHorizontal:10,
+                }}     
+                inputContainerStyle={styles.input}
+                title="Search for any events"
+                titleStyle={{ color: theme.gray }}
+                onChangeText={setSearch}
+                value={search}
+                />
 
-            <Text> Slider Comes to here </Text>
+            <MaterialIcons
+            name="keyboard-arrow-right"
+            size={50}
+            style={{
+                backgroundColor: theme.blue,
+                color: theme.white,
+                top:136,
+                padding:7,
+                borderRadius:20,
+                right:10,
+                position:'absolute',
+            }}
+            onPress={() => setIsvisible(true)}
+            />
 
-            {/* <FlatList
-            data={categorys}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({item}) => (
-                <Category name={item.name} id={item.id} toggle={() => toggleHandler(item.name, item.id)} disabled={disabled.indexOf(item.id) !== -1}/>
-            )}
-            />       */}
+            {/* ButtonGroup */}
 
+            <Text style={styles.eventsRadiusTitle}> Filter by Distance </Text>
+
+            <View style={styles.buttonGroup}>
+
+                <FlatList
+                    data={buttons}
+                    keyExtractor={index => index.toString()}
+                    renderItem={({item,index}) => (
+                        <Button
+                    type="clear"
+                    containerStyle={{
+                        borderRadius:10,
+                        borderWidth:0,
+                        backgroundColor: theme.lightaccent,
+                        marginTop:20,
+                        marginHorizontal:10,
+                    }}
+                    titleStyle={{
+                        color: theme.gray,
+                        marginHorizontal:5,
+                    }}
+                    disabled={disabled === index}
+                    disabledStyle={{
+                        backgroundColor: theme.blue,
+                    }}
+                    disabledTitleStyle={{
+                        color: theme.white,
+                    }}
+                    title={`${item} km`}
+                    onPress={() => updateRadius(item,index)}
+                    />
+              )}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                />
+            
             </View>
 
-            <Text style={styles.events__header}> Featured Events </Text>
+            {/* ButtonGroup */}
 
-        </View>    
-        )   
+            </View>   
+        )      
     }
 
     if (isloading) {
@@ -129,37 +229,86 @@ const SearchScreen = ({navigation})=> {
 
     return(
 
-        <SafeAreaView style={styles.container}>    
-  
-            <SearchBar
+        <SafeAreaView style={styles.container}>
+
+           <Modal
+           visible={isvisible}
+           animationType="slide"
+           >
+
+               <SearchBar
                 theme={DarkTheme}
                 searchIcon={
-                    <MaterialIcons name="search" size={26} color={theme.gray} />
+                    <MaterialIcons name="search" size={28} color={theme.black} />
                 }
                 inputStyle={{fontSize: 20, color: "black"}}
+                onFocus={() => setIsvisible(true)}
+                autoFocus
                 containerStyle={{
                     borderTopWidth:0,
                     borderBottomWidth:0,
-                    borderRadius:20,
-                    marginTop:60,
-                    backgroundColor: '#e8ebf3',
-                    width: '90%',
-                    marginHorizontal:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius: 20,
+                    marginVertical:20,
+                    marginHorizontal:10,
                 }}     
                 inputContainerStyle={styles.input}
                 placeholder="Search for any events"
                 placeholderTextColor="black"
                 onChangeText={setSearch}
                 value={search}
-                />
+                />  
+
+
+               <Button
+                        type="clear"
+                        containerStyle={{
+                            position: 'absolute',
+                            right: 30,
+                            top: 30,
+                            borderRadius: 10,
+                        }}
+                        icon={
+                            <MaterialIcons
+                                name="close"
+                                size={28}
+                                color={'black'}
+                            />
+                        }
+                        onPress={() => setIsvisible(false)} />
+
+                <FlatList
+              data={filteredEvents}
+              keyExtractor={item => item.id.toString()} 
+              numColumns={1}          
+              ListfooterComponent={ <View style={{height: 40}}> Footer </View> }
+              refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+              renderItem={({item}) => (
+                  <Event eventdata={item} press={() => navigation.navigate('event', {item})} />
+              )}
+              />        
+
+           </Modal>
 
             <View style={styles.events}>
                    
                 <FlatList
               data={filteredEvents}
-              keyExtractor={item => item.id.toString()}           
               ListHeaderComponent={Header}
+              keyExtractor={item => item.id.toString()} 
+              numColumns={2}          
               ListfooterComponent={ <View style={{height: 40}}> Footer </View> }
+              refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
               renderItem={({item}) => (
                   <Event eventdata={item} press={() => navigation.navigate('event', {item})} />
               )}
@@ -179,14 +328,14 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         width: '100%',
-        backgroundColor: 'white',
+        backgroundColor: theme.white,
         height: Dimensions.get('window').height,
     },
 
     header:{
         flex:1,
         marginTop: 10,
-        alignItems:'center',
+        paddingBottom:20,
         width: '100%',
         height: '100%',
     },
@@ -196,7 +345,7 @@ const styles = StyleSheet.create({
         textAlign:'left',
         fontWeight: 'bold',
         fontSize:30,
-        marginVertical:20,
+        marginTop:40,
         marginHorizontal:20,
     },
 
@@ -205,17 +354,32 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingHorizontal:10,
     },  
+
     button:{
         marginRight:50,
     },
+
+    buttonGroup:{
+        flexDirection:'row',
+    },
+
     events__header: {
         fontSize: 32,
         fontWeight: 'bold',
         marginLeft: 10,
         marginBottom:20,
     },
+
+    eventsRadiusTitle:{
+        fontSize: 18,
+        marginTop:20,
+        marginLeft: 20,
+        fontWeight: 'bold',
+        
+    },
+
     events: {
-        flex:1,
+        flex:3,
         marginBottom: 50,
     },
 
