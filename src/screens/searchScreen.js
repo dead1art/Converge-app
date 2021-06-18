@@ -35,12 +35,10 @@ const SearchScreen = ({navigation})=> {
 
     const updateRadius = (item,index) => {
         setRadius(item)
-        console.log(radius)
         setDisabled(index)
     }
  
     // Slider
-
   
     // --LoadingScreen
 

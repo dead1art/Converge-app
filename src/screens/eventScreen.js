@@ -39,7 +39,7 @@ const eventScreen = ({ route, navigation }) => {
                             position: 'absolute',
                             left: 30,
                             top: 50,
-                            backgroundColor: 'rgba(255,255,255,0.5)',
+                            backgroundColor: 'rgba(255,255,255,0.75)',
                             borderRadius: 10,
                         }}
                         icon={

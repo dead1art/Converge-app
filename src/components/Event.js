@@ -4,6 +4,7 @@ import { View,Text, StyleSheet, Modal, Image, TouchableOpacity } from 'react-nat
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
+import { theme } from '../constants/colors';
 
 function Event({eventdata, press}) {
     
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
         height:300,
         marginHorizontal:10,
         marginVertical:10,
-        backgroundColor: 'rgba(255,255,255, 0.5)',
+        backgroundColor: theme.white,
         borderColor: '#eff7fc',
         borderRadius: 20,
     },

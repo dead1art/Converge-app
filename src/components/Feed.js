@@ -44,8 +44,8 @@ function Feed(props) {
 const styles= StyleSheet.create({
     feed:{
         padding: 20,
-        borderTopWidth:2,
-        borderColor: '#e8ebf3',
+        borderTopWidth:1,
+        borderColor: theme.lightaccent,
         backgroundColor: theme.white,
         flexDirection:'row',
     },
