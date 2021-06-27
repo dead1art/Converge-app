@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import { View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
+import {FocusAwareStatusBar} from '../statusbar';
 
 
 const RegisterForm = ({onSubmit,onNavigation})=> {
@@ -65,6 +66,8 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
             onPress={() => onSubmit({ email, password, first_name, last_name })}/>
 
         </View>
+
+        <FocusAwareStatusBar style="auto"/>
 
         </SafeAreaView>
     );

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Button } from 'react-native-elements'
-import { theme,tabBar } from '../constants/colors'
+import { theme,tabBar } from '../../constants/colors'
 
 const Category = ({id,name,toggle,disabled}) => {
     return (
