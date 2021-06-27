@@ -40,7 +40,7 @@ export default [
     id: Math.random().toString(),    
     avatar: "https://images.unsplash.com/photo-1563306406-e66174fa3787?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lybHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     name: 'Sakshi',
-    caption: 'Made new friends yesterday',
+    caption: 'Made new friends',
     img: null,
     event: "Meetup"
     },

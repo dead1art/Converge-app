@@ -4,13 +4,12 @@ import { Input, Text, Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
-import {FocusAwareStatusBar} from './statusbar';
-import { DarkTheme } from '@react-navigation/native';
-import {theme} from "../constants/colors"
-import {AuthContext} from '../context/AuthContext';
+import {FocusAwareStatusBar} from '../statusbar';
+import {theme} from "../../constants/colors"
+import {AuthContext} from '../../context/AuthContext';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import main from '../api/main';
+import main from '../../api/main';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

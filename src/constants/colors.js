@@ -14,7 +14,7 @@ const tabBar = {
 const theme = {
     white: '#f9f9fa',
     blue: '#006aff',
-    lightaccent: '#e1e3ea',
+    lightaccent: '#e5e6ed',
     gray: '#798693',
     black: '#25211e',
 }

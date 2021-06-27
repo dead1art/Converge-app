@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native'
 import { Button } from 'react-native-elements';
-import { FocusAwareStatusBar } from '../components/statusbar'
+import { FocusAwareStatusBar } from '../../components/statusbar'
 
 const createScreen = ({navigation}) => {
 
