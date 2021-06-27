@@ -3,10 +3,10 @@ import { SafeAreaView } from 'react-native';
 import { RefreshControl, View, Text, Button, StyleSheet, Image, Dimensions, StatusBar, FlatList} from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
-import data from '../../assets/data';
-import {theme} from '../constants/colors'
-import { FocusAwareStatusBar } from '../components/statusbar'
-import Feed from '../components/Feed'
+import data from '../../../assets/data';
+import {theme} from '../../constants/colors'
+import { FocusAwareStatusBar } from '../../components/statusbar'
+import Feed from '../../components/home/Feed'
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor:'#e8ebf3',
+        backgroundColor:'#e5e6ed',
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex:1,
         paddingTop: 30,
-        backgroundColor: theme.white,
+        backgroundColor: theme.lightaccent,
         width: '100%',
         height: '100%',
     },

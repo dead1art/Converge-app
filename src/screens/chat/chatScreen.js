@@ -1,12 +1,12 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
-import data from "../../assets/chatroom"
-import { FocusAwareStatusBar } from '../components/statusbar'
+import data from "../../../assets/chatroom"
+import { FocusAwareStatusBar } from '../../components/statusbar'
 import { MaterialIcons } from "@expo/vector-icons"
 import { Button } from 'react-native-elements'
-import { theme } from '../constants/colors'
-import ChatRoom from '../components/Chat/ChatRoom'
+import { theme } from '../../constants/colors'
+import ChatRoom from '../../components/Chat/ChatRoom'
 
 const chatScreen = () => {
     return (

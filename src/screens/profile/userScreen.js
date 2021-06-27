@@ -2,12 +2,11 @@ import React, { useContext,useEffect, useState} from 'react';
 import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 // import {AuthContext} from '../../App';
-import {AuthContext} from '../context/AuthContext';
-import main from '../api/main';
-import Profile from '../components/Profile'
+import {AuthContext} from '../../context/AuthContext';
+import main from '../../api/main';
+import Profile from '../../components/profile/Profile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FocusAwareStatusBar } from '../components/statusbar'
-import { ScrollView } from 'react-native';
+import { FocusAwareStatusBar } from '../../components/statusbar'
 import {
   NavigationContainer,
   useIsFocused,
@@ -62,30 +61,36 @@ const userScreen = ({navigation}) => {
 
   console.log(authState.userToken);
 
+  const url = '/api/profile/'
+
   const userInfo = state.users;
   useEffect(()=>{
+    const abortController = new AbortController()
     const getUser = async() =>{
       try{
         setIsloading(true)
-        const response= await main.get('/api/profile/',{
+        const response = await main.get(url, {
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
-          }
-          
+          }         
         });
-        dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
-        console.log(response.data);
-        setIsloading(false)
+          dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
+          console.log(response.data);
+          setIsloading(false)
       }
       catch(err){
-        setIsloading(false)
-        console.log(err);
-        setError(err)
+          setIsloading(false)
+          console.log(err);
+          setError(err)
       }
     }
 
     getUser();
-  },[isFocused]);
+
+    return () => {
+      abortController.abort()
+    }
+  },[url,isFocused]);
 
   if (isloading) {
         return (

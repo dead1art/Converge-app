@@ -4,7 +4,7 @@ import { View,Text, StyleSheet, Modal, Image, TouchableOpacity } from 'react-nat
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
-import { theme } from '../constants/colors';
+import { theme } from '../../constants/colors';
 
 function Event({eventdata, press}) {
     

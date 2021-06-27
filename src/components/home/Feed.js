@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Button, StyleSheet, Image, Dimensions } from 'react-native';
-import {theme} from '../constants/colors'
+import {theme} from '../../constants/colors'
 
 function Feed(props) {
     const {id, avatar, name, caption, img, event} = props.info;

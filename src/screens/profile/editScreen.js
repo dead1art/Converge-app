@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { FocusAwareStatusBar } from '../components/statusbar'
+import { FocusAwareStatusBar } from '../../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
 import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import main from '../api/main';
-import {AuthContext} from '../context/AuthContext';
+import main from '../../api/main';
+import {AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
