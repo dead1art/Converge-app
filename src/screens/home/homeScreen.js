@@ -56,10 +56,6 @@ const homeScreen = ()=> {
                 }
                 />
 
-                {/* {data.map((data) => (
-                    <Feed key={data.id} info={data}/>
-                ))} */}
-                
             </View>
 
     <FocusAwareStatusBar style="auto" />
@@ -86,13 +82,13 @@ const styles = StyleSheet.create({
         flex:1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor:'#e5e6ed',
+        backgroundColor:theme.lightaccent,
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex:1,
-        paddingTop: 30,
+        paddingTop: 20,
         backgroundColor: theme.lightaccent,
         width: '100%',
         height: '100%',
@@ -103,43 +99,6 @@ const styles = StyleSheet.create({
         marginBottom:60,
     },
 
-    feed:{
-        padding: 20,
-        marginHorizontal: 10,
-        marginBottom:20,
-        borderRadius: 20,
-        backgroundColor: theme.white,
-        borderColor: '#ecf1f5',
-    },
-    avatar:{
-        width: 50,
-        height: 50,
-        borderRadius: 30,
-    },
-    details:{
-        flexDirection: 'row',
-    },
-    name:{
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginTop: 3,
-        marginLeft: 15,
-    },
-    content:{
-        marginTop: 10,
-        paddingVertical: 10,
-    },
-    caption:{
-        width: '100%',
-        color: 'black',
-        marginBottom: 10,
-    },
-    image:{
-        width: 280,
-        height: 180,
-        borderRadius: 5,
-        marginVertical: 10,
-    },
     logo:{
         textAlign: 'center',
         fontSize: 50,
@@ -147,18 +106,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: theme.black,
         paddingBottom: 20,
-    },
-    label:{
-        fontSize: 18,
-        color: '#bab0b0',
-        fontWeight: '700',
-        marginLeft: 20,
-        marginBottom: 20,
-    },
-
-    event: {
-        marginTop: 10,
-        color: 'gray',
     },
 });
 

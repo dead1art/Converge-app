@@ -102,7 +102,6 @@ const SearchScreen = ({ navigation }) => {
                 // console.log(response);
                 dispatch({ type: "fetch_events_success", payload: response.data })
                 setIsloading(false)
-                setRadius()
             }
             catch (err) {
                 setIsloading(false)
