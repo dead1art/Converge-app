@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
 import { Dimensions } from 'react-native';
-import { View, Text, StyleSheet, Modal, Image, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, Modal, Image, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { Button, Avatar } from "react-native-elements"
+import HostedEvent from './HostedEvent'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../constants/colors'
-import { TabView, SceneMap } from 'react-native-tab-view';
 
-// TabView
 
-const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: '#ff4081' }}>
-    <Text> Hello </Text>
-  </View>
-);
+const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: '#673ab7' }}>
-    <Text> Hello World! </Text>
-  </View>
-);
+function Profile({ signout,props, data, nav }) {
 
-function Profile({ signout, data, nav }) {
-
-  const { first_name, last_name, image, bio, dob, email, tags } = data;
+  const { first_name, last_name, image, bio, dob, email, tags, hosted_events } = data;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
+      <ScrollView>
+
+    
 
       {/* Profile Photo */}
 
@@ -37,11 +30,11 @@ function Profile({ signout, data, nav }) {
           size={150}
           source={{
             uri:
-              image == "null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
+              image ? image : noImage,
           }}
         />
         <Text style={styles.name}> {first_name} {last_name} </Text>
-        <Text style={bio == "null" ? styles.nobio : styles.bio}> {bio ? bio : "Edit Your Bio"} </Text>
+        <Text style={bio ? styles.bio : styles.nobio}> {bio ? bio : "Edit Your Bio"} </Text>
 
         <View style={{ flexDirection: 'row' }}>
 
@@ -116,19 +109,37 @@ function Profile({ signout, data, nav }) {
 
           <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Interests</Text>
           
-          {/* <View style={styles.tagsView}>
+          <View style={styles.tagsView}>
 
-          {tags.map((item, index) => (
+          {tags ? tags.map((item, index) => (
             <Text key={index} style={styles.tags}>{item}</Text>
-            ))} 
+            ))
+          : <Text style={{marginVertical:10,marginHorizontal:'25%',color:theme.gray}}>Please add your intrests</Text>
+          } 
 
-          </View> */}
+        </View>
+
+        <View style={styles.hostedEvents}>
+
+          <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Hosted Events</Text>
+
+          <View style={{flexDirection:'row', flexWrap:'wrap', marginTop:10}}>
+
+            {hosted_events && hosted_events.map((item) => (
+              <HostedEvent key={item.id} eventdata={item} press={() => props.navigate("invite", {item} )} />
+            ))}
+
+          </View>
+
+        </View>
 
         </View>
 
       </View>
 
-    </View>
+     </ScrollView>
+
+    </SafeAreaView>
 
   )
 }
@@ -136,7 +147,6 @@ function Profile({ signout, data, nav }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     width: '100%',
     backgroundColor: 'white',
     height: Dimensions.get('screen').height,
@@ -159,6 +169,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     alignItems: 'center',
     paddingHorizontal:20,
+    marginBottom:60,
   },
 
   header__profile: {
@@ -209,6 +220,11 @@ const styles = StyleSheet.create({
   },
 
   interests:{
+    marginVertical:10,
+    width:'100%',
+  },
+
+  hostedEvents:{
     marginVertical:10,
     width:'100%',
   },

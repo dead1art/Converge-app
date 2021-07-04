@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { RefreshControl, View, StyleSheet, Dimensions, StatusBar, FlatList, ActivityIndicator, Modal } from 'react-native';
@@ -15,9 +15,14 @@ import main from '../../api/main';
 import { AuthContext } from '../../context/AuthContext';
 // import Slider from '@react-native-community/slider';
 // import Category from '../components/Category'
+import {
+  useIsFocused,
+} from '@react-navigation/native';
 
 
 const SearchScreen = ({ navigation }) => {
+
+    const isFocused = useIsFocused();
 
     const { state: authState } = useContext(AuthContext);
 
@@ -102,7 +107,6 @@ const SearchScreen = ({ navigation }) => {
                 // console.log(response);
                 dispatch({ type: "fetch_events_success", payload: response.data })
                 setIsloading(false)
-                setRadius()
             }
             catch (err) {
                 setIsloading(false)
@@ -116,7 +120,7 @@ const SearchScreen = ({ navigation }) => {
         return () => {
             abortController.abort()
         }
-    }, [radius]);
+    }, [radius,isFocused]);
 
 
     const Header = () => {
@@ -280,7 +284,8 @@ const SearchScreen = ({ navigation }) => {
                             color={'black'}
                         />
                     }
-                    onPress={() => setIsvisible(false)} />
+                    onPress={() => setIsvisible(false)} /> 
+
 
                 <FlatList
                     data={filteredEvents}
@@ -297,6 +302,7 @@ const SearchScreen = ({ navigation }) => {
                         <Event eventdata={item} press={() => navigation.navigate('event', { item })} />
                     )}
                 />
+
 
             </Modal>
 
@@ -318,6 +324,7 @@ const SearchScreen = ({ navigation }) => {
                         <Event eventdata={item} press={() => navigation.navigate('event', { item })} />
                     )}
                 />
+
             </View>
 
             <FocusAwareStatusBar style="auto" />

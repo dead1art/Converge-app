@@ -242,6 +242,8 @@ const createEvent = ({navigation}) => {
                 labelStyle={styles.chipLabel} 
                 labelOnBlur={{ color: '#666' }} />
 
+            </View> 
+
             {/* {list.map((item, index) => { 
                 return (
                 <Button
@@ -330,8 +332,7 @@ const createEvent = ({navigation}) => {
                     setTimeout(() => { setModalvisible(true) }, 5000)
                 }}
                 />
-
-            </View>  
+ 
 
         </ScrollView>
 

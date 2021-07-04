@@ -1,5 +1,5 @@
 import React, { useContext,useEffect, useState} from 'react';
-import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar, ActivityIndicator } from 'react-native';
+import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar, ActivityIndicator, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 // import {AuthContext} from '../../App';
 import {AuthContext} from '../../context/AuthContext';
@@ -59,11 +59,10 @@ const userScreen = ({navigation}) => {
 
   // LoadingScreen--
 
-  console.log(authState.userToken);
-
   const url = '/api/profile/'
 
   const userInfo = state.users;
+
   useEffect(()=>{
     const abortController = new AbortController()
     const getUser = async() =>{
@@ -75,7 +74,7 @@ const userScreen = ({navigation}) => {
           }         
         });
           dispatch({type:'FETCH_USER_SUCCESS',payload:response.data});
-          console.log(response.data);
+          // console.log(response.data);
           setIsloading(false)
       }
       catch(err){
@@ -96,6 +95,7 @@ const userScreen = ({navigation}) => {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="black" />
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }
@@ -106,6 +106,7 @@ const userScreen = ({navigation}) => {
             <Text style={{ fontSize: 18}}>
             {error}
             </Text>
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }
@@ -113,20 +114,19 @@ const userScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
 
-      <FocusAwareStatusBar style="auto" />
-      <StatusBar barStyle="dark-content" backgroundColor="white"/>
+
         <Profile 
         data={userInfo} 
         signout={authContextValue.signOut} 
         nav={() => navigation.navigate('edit', {userInfo})}
+        props={navigation}
         />
+        
+      <FocusAwareStatusBar style="auto" />
 
-      
     </SafeAreaView>
   );
 };
-
-
 
 
 const styles = StyleSheet.create({
