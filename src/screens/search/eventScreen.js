@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Dimensions } from 'react-native';
-import { View, SafeAreaView, Text, StyleSheet, Image, FlatList } from 'react-native'
+import { View, SafeAreaView, Text, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native'
 import { Button, Avatar } from 'react-native-elements'
 import { FocusAwareStatusBar } from '../../components/statusbar'
 import maptheme from '../../../assets/mapTheme'
@@ -17,27 +17,29 @@ const eventScreen = ({ route, navigation }) => {
 
     const { state: authState } = useContext(AuthContext);
 
-    const { id, title, addr, image, event_date, desc, host_image, host_name, attendees, max_attendees, location, tags } = route.params.item;
+    const { id, title, addr, image, event_date, desc, host_image, host_name, attendees, max_attendees, location, tags, requested } = route.params.item;
 
     const host = route.params.item
 
     console.log(host)
 
+    const [event, setEvent] = useState('')
+
     const [recommended, setRecommended] = useState([])
-    const [full, setFull] = useState(false)
+    const [jointitle, setJointitle] = useState(requested ? "Requested" : "Join Event")
 
     if (attendees.length >= max_attendees) {
-        setFull(true)
+        setJointitle("Full")
     }
 
+    const [isloading, setIsloading] = useState(false)
+    const [error, setError] = useState(null)
 
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    // const monthNames = ["January", "February", "March", "April", "May", "June",
+    //     "July", "August", "September", "October", "November", "December"
+    // ];
 
-    const d = event_date
-
-    // console.log(host)
+    // const d = event_date
 
     //Recommended
 
@@ -59,6 +61,7 @@ const eventScreen = ({ route, navigation }) => {
                         }
                     })
                 setRecommended(response.data)
+                console.log()
             }
             catch (error) {
                 console.log(error)
@@ -73,6 +76,7 @@ const eventScreen = ({ route, navigation }) => {
 
     }, [host])
 
+    //Join Request
 
     const joinHandler = async (id) => {
 
@@ -82,7 +86,7 @@ const eventScreen = ({ route, navigation }) => {
             console.log(authState.userToken)
             const response = await axios.post(url, null, {
                 headers: {
-                    'Authorization': bearer,
+                    'Authorization': `Bearer ${authState.userToken}`,
                 }
             })
                 .catch(err => {
@@ -92,12 +96,31 @@ const eventScreen = ({ route, navigation }) => {
                     throw err;
                 });
             console.log(response.data)
+            setJointitle("Requested")
+            navigation.goBack()
         }
 
-        // console.log(response.data)
         catch (err) {
             console.log(err.message)
         }
+    }
+
+    if (isloading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="black" />
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 18 }}>
+                    Error fetching data... Please check your network connection!
+                </Text>
+            </View>
+        );
     }
 
 
@@ -162,8 +185,9 @@ const eventScreen = ({ route, navigation }) => {
                                 paddingHorizontal: 10,
 
                             }}
-                            title={full ? "Event Full" : "Join Event"}
-                            disabled={full}
+                            title={jointitle}
+                            disabled={requested}
+                            disabledTitleStyle={{color:theme.lightaccent}}
                             onPress={() => joinHandler(id)}
                             titleStyle={{ color: theme.white }}
                         />

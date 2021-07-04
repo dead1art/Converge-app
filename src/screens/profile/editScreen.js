@@ -6,16 +6,22 @@ import { FocusAwareStatusBar } from '../../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
 import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native';
+import ReactChipsInput from 'react-native-chips'
 import * as ImagePicker from 'expo-image-picker';
 import main from '../../api/main';
 import {AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { theme } from '../../constants/colors';
  
 const editScreen = ({route, navigation}) => {
 
       const { state: authState } = React.useContext(AuthContext);
+
+  //ChipInput
+
+  const tagsData = ["sports","health","celebration"]
 
   // location access
   
@@ -164,16 +170,18 @@ axios({
     const {userInfo} = route.params;
 
     const [image, setImage] = useState(userInfo.image)
-    const [fname, setFname] = useState(userInfo.first_name)
-    const [lname, setLname] = useState(userInfo.last_name)
+    const [first_name, setFirst_name] = useState(userInfo.first_name)
+    const [last_name, setLast_name] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)
     const [email, setEmail] = useState(userInfo.email)
+    const [tags,setTags] = useState(userInfo.tags);
 
     // {image && console.log(image)}
+    const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
-    const editProfileHandler = async(bio) => {
+    const editProfileHandler = async(first_name, last_name, bio, email, tags) => {
         try {
-            const response = await main.put("/api/profile/", { bio,location}, {
+            const response = await main.put("/api/profile/", { first_name, last_name, bio, email, tags, location}, {
                  headers: {
             'Authorization': `Bearer ${authState.userToken}` 
             }
@@ -205,14 +213,14 @@ axios({
         size={150}
         source={{
             uri:
-            image=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
+            image ? image : noImage,
         }}
         />
 
     <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
-                backgroundColor: '#2663FF',
+                backgroundColor: theme.blue,
                 marginTop: 40,
                 marginBottom: 20,
                 borderRadius: 10,
@@ -222,43 +230,43 @@ axios({
                 />
                 
             <View style={styles.info}>
-                <Text> First Name </Text>  
+                <Text>   First Name </Text>  
                 <Input 
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderBottomWidth: 0, 
-                    backgroundColor: 'white',
+                    borderWidth: 1, 
+                    backgroundColor: theme.white,
                     borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
-                value={fname} 
-                onChangeText={setFname} /> 
+                value={first_name} 
+                onChangeText={setFirst_name} /> 
             </View>
 
             <View style={styles.info}>
-                <Text> Last Name </Text>  
+                <Text>   Last Name</Text>  
                 <Input 
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderBottomWidth: 0, 
-                    backgroundColor: 'white',
+                    borderWidth: 1, 
+                    backgroundColor: theme.white,
                     borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
-                value={lname} 
-                onChangeText={setLname} /> 
+                value={last_name} 
+                onChangeText={setLast_name} /> 
             </View>
 
             <View style={styles.info}> 
-                 <Text> Bio </Text>
+                 <Text>   Bio</Text>
                 <Input 
                 textAlign="left"
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderBottomWidth: 0, 
-                    backgroundColor: 'white',
+                    borderWidth: 1, 
+                    backgroundColor: theme.white,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -268,20 +276,27 @@ axios({
             </View>
             
             <View style={styles.info}> 
-                <Text> Date Of Birth </Text>
-                {/* <Input 
-                inputContainerStyle={{ 
-                    marginTop:10,
-                    borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:10,
-                    height: 50,
-                }}
-                style={styles.input}
-                value={dob} 
-                onChangeText={setDob} /> */}
-                <Button title="Show Date Picker" onPress={showDatePicker} style={{borderRadius:20,height:50}
-                } />
+                <Text>   Date Of Birth</Text>
+                <Button 
+                // title="Show Date Picker"
+                icon={
+                  <MaterialIcons
+                    name="calendar-today"
+                    size={26}
+                    color={theme.black}
+                  />
+                }
+                type="clear" 
+                onPress={showDatePicker} 
+                containerStyle={{
+                  marginTop:10,
+                  borderRadius:10,
+                  borderColor:theme.gray, 
+                  borderWidth:1,
+                  marginHorizontal:10,
+                }} 
+                titleStyle={{color:theme.black}}
+                />
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
                         mode="date"
@@ -289,15 +304,30 @@ axios({
                         onCancel={hideDatePicker}
                     />
             </View>
+
+            <View style={styles.tags}>
+
+            <Text>   Enter Interests</Text>
+            <ReactChipsInput 
+                label=" " 
+                initialChips={tags} 
+                onChangeChips={(chips) => setTags(chips)} 
+                // alertRequired={true} 
+                chipStyle={styles.chip}     
+                inputStyle={styles.chipInput} 
+                labelStyle={styles.chipLabel} 
+                labelOnBlur={{ color: '#666' }} />
+
+            </View> 
             
             <View style={styles.info}>
-                <Text> Email </Text>
+                <Text>   Email</Text>
                 <Input
                 disabled
                 inputContainerStyle={{ 
-                    marginTop:10,
-                    borderBottomWidth: 0, 
-                    backgroundColor: 'white',
+                     marginTop:10,
+                    borderWidth: 1, 
+                    backgroundColor: theme.white,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -324,7 +354,7 @@ axios({
             />
             }
            onPress={()=>{
-            editProfileHandler(bio)
+            editProfileHandler(first_name, last_name, bio, email, tags)
            }}
             />
 
@@ -346,13 +376,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#E5E8EE',
+        backgroundColor: theme.white,
         height: Dimensions.get('screen').height,
     },
     
     content: {
         width: '100%',
-        borderRadius: 40,
         marginTop: 30,
         flex: 1,
         padding: 20,
@@ -380,17 +409,45 @@ const styles = StyleSheet.create({
     },
 
     info: {
-        borderRadius: 30,
         width: '100%',
         paddingVertical: 10,
     },
 
     input: {
-        borderRadius:30,
+        borderRadius:0,
         paddingHorizontal: 20,
         color: 'black',
-        backgroundColor: 'white',
     },
+
+    tags:{
+      marginTop:20,
+        paddingVertical:10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    
+    chipInput:{
+        width: 330,
+        marginLeft:10,
+        marginTop:-20,
+        marginBottom:20,
+        borderWidth:1,
+        borderRadius:10,
+        paddingHorizontal:20,
+        height:50,
+        borderColor: theme.gray,
+    },
+    
+    chip:{
+        marginTop:10,
+        marginLeft:10,
+        borderRadius:10,
+        paddingHorizontal:10,
+        paddingVertical:10,
+        borderWidth:0,
+        backgroundColor: theme.lightaccent, 
+    },
+
 
 })
 

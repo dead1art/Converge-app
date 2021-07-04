@@ -29,6 +29,7 @@ import chatScreen from './src/screens/chat/chatScreen'
 // Profile
 import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
+import inviteScreen from './src/screens/profile/inviteScreen';
 
 
 
@@ -329,6 +330,7 @@ export default function App({ navigation }) {
             <Stack.Screen name="event" component={eventScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
             <Stack.Screen name="profile" component={profileScreen}/>
+            <Stack.Screen name="invite" component={inviteScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
       </EventProvider>
