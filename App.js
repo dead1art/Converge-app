@@ -1,26 +1,36 @@
-import signinScreen from './src/screens/SigninScreen';
-import registerScreen from './src/screens/RegisterScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import homeScreen from './src/screens/homeScreen';
-import searchScreen from './src/screens/searchScreen';
-import userScreen from './src/screens/userScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import { Button, Text, TextInput, View, StyleSheet} from 'react-native';
 import {  Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
+import {tabBar} from './src/constants/colors'
+import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
-import { Dimensions } from 'react-native';
-import chatScreen from './src/screens/chatScreen'
-import createScreen from './src/screens/createScreen'
-import createPost from './src/screens/create/createPost';
-import createEvent from './src/screens/create/createEvent';
-import editScreen from './src/screens/editScreen'
-import eventScreen from './src/screens/eventScreen'
-import {tabBar} from './src/constants/colors'
 import { Provider as EventProvider } from './src/context/eventContext';
+
+// Autentication
+import signinScreen from './src/screens/authenctication/SigninScreen';
+import registerScreen from './src/screens/authenctication/RegisterScreen';
+// Home
+import homeScreen from './src/screens/home/homeScreen';
+// Search
+import searchScreen from './src/screens/search/searchScreen';
+import eventScreen from './src/screens/search/eventScreen'
+import profileScreen from './src/screens/profile/profileScreen';
+// Create
+import createScreen from './src/screens/create/createScreen'
+import createEvent from './src/screens/create/createEvent';
+import createPost from './src/screens/create/createPost';
+// Chat
+import chatScreen from './src/screens/chat/chatScreen'
+// Profile
+import userScreen from './src/screens/profile/userScreen';
+import editScreen from './src/screens/profile/editScreen'
+import inviteScreen from './src/screens/profile/inviteScreen';
+
 
 
   // const AuthContext = React.createContext();
@@ -319,6 +329,8 @@ export default function App({ navigation }) {
             }
             <Stack.Screen name="event" component={eventScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
+            <Stack.Screen name="profile" component={profileScreen}/>
+            <Stack.Screen name="invite" component={inviteScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
       </EventProvider>

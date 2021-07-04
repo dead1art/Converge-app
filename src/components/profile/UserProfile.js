@@ -3,18 +3,33 @@ import { Dimensions } from 'react-native';
 import { View,Text, StyleSheet, Modal, Image} from 'react-native';
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {theme} from '../../constants/colors'
 
-function Profile({signout, data, nav}) {
+function UserProfile({ data, back }) {
 
   const { first_name, last_name, image, bio, dob, email } = data;
 
   return(
     <View style={styles.container}>
 
-    {/* Profile Photo */}
-
     <View style={styles.header}>
-        {/* <Text style={styles.header__profile}> Profile </Text> */}
+        {/* <Text style={styles.header__UserProfile}> UserProfile </Text> */}
+    <Button
+            type="clear"
+            containerStyle={{
+                position: 'absolute',
+                left: 30,
+                top: 30,
+                borderRadius: 10,
+            }}
+            icon={
+                <MaterialIcons
+                    name="arrow-back"
+                    size={28}
+                    color={'black'}
+                />
+            }
+            onPress={back} />
 
     <Avatar
   rounded
@@ -26,27 +41,7 @@ function Profile({signout, data, nav}) {
 />
         <Text style={styles.name}> {first_name} {last_name} </Text> 
       <Text style={bio=="null" ? styles.nobio : styles.bio}> {bio ? bio : "Edit Your Bio"} </Text>
-    <Button 
-            icon={
-                <Ionicons
-                name="pencil-sharp"
-                size={24}
-                />
-            }
-            titleStyle={{color: "black"}}
-            type="outline"
-            containerStyle={{
-                            marginTop: 20,
-                            borderRadius: 20,
-            }}
-            buttonStyle={{ 
-                borderColor: 'black',
-                borderWidth: 2,
-                borderRadius: 20,
-                paddingHorizontal: 20,}}
-                title="Edit Profile" 
-                onPress={nav}
-                />
+    
         </View>
 
 
@@ -65,29 +60,6 @@ function Profile({signout, data, nav}) {
 
 
     {/* SignOut Button */}
-
-      <Button 
-            icon={
-                <Ionicons
-                name="exit"
-                size={24}
-                />
-            }
-            titleStyle={{color: "black"}}
-            type="outline"
-            containerStyle={{
-                            marginTop: 20,
-                            borderRadius: 20,
-            }}
-            buttonStyle={{ 
-                borderColor: 'black',
-                borderWidth: 2,
-                borderRadius: 20,
-                paddingHorizontal: 20,}}
-                title="Sign Out" 
-                onPress={signout}
-                />
-
     </View>
 
 </View>
@@ -169,4 +141,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Profile;
+export default UserProfile;

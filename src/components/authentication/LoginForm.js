@@ -4,13 +4,12 @@ import { Input, Text, Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
-import {FocusAwareStatusBar} from './statusbar';
-import { DarkTheme } from '@react-navigation/native';
-import {theme} from "../constants/colors"
-import {AuthContext} from '../context/AuthContext';
+import {FocusAwareStatusBar} from '../statusbar';
+import {theme} from "../../constants/colors"
+import {AuthContext} from '../../context/AuthContext';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import main from '../api/main';
+import main from '../../api/main';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -24,10 +23,11 @@ const LoginForm = ({onSubmit,onNavigate}) => {
     const client_secret="z3asQ77QYQRsZkaWYX7R7JpAp0kVPo6ifQeGlQX1mXWaNMrqCfVbsRM4jBN2k2SpiZC28EH2uFGEN9YLNgBB69WA9dpZN3NtBj4pl6fW1ps27VC2glU5Ng9tIysQ7mXv"
 
     WebBrowser.maybeCompleteAuthSession();
+    // 1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         expoClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
-        androidClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
+        androidClientId: '1057006535522-tcrubkaerism29irmamo96jplrg8uckb.apps.googleusercontent.com',
         webClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
       });
 
@@ -137,6 +137,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                          />    
 
                     <Button
+                        disabled={!request}
                         buttonStyle={{
                             borderRadius: 20,
                             marginTop: 25,
