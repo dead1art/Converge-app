@@ -52,6 +52,25 @@ const userScreen = ({navigation}) => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  console.log(authState.streamToken);
+
+  // const getToken =async() =>{
+  //   try
+  //   {
+  //     const streamToken = await AsyncStorage.getItem("stream");
+  //     console.log(streamToken);
+  //   }
+  //   catch(e)
+  //   {
+  //     console.log(e);
+  //   }
+  // }
+
+  // getToken();
+ 
+
+  console.log(authState.user.first_name);
+
   // --LoadingScreen
 
   const [isloading, setIsloading] = useState(false)

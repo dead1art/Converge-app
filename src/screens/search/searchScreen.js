@@ -33,7 +33,7 @@ const SearchScreen = ({ navigation }) => {
 
     const [radius, setRadius] = useState()
 
-    const buttons = [20, 40, 60, 80, 100, 150, 200, 300, 400, 500]
+    const buttons = [20, 40, 60, 80, 100, 150, 200, 300, 400, 500, 2000]
 
     const [disabled, setDisabled] = useState('')
 

@@ -11,6 +11,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import main from '../../api/main';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as AuthSession from 'expo-auth-session';
 
 
 
@@ -25,10 +26,19 @@ const LoginForm = ({onSubmit,onNavigate}) => {
     WebBrowser.maybeCompleteAuthSession();
     // 1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com
 
+    const useProxy = true;
+
+    const redirectUri = AuthSession.makeRedirectUri({
+        useProxy,
+      });
+
+      console.log(redirectUri);
+
     const [request, response, promptAsync] = Google.useAuthRequest({
         expoClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
         androidClientId: '1057006535522-tcrubkaerism29irmamo96jplrg8uckb.apps.googleusercontent.com',
         webClientId: '1057006535522-7gp44kt05jk0i9jlqe0l2rbbti53mijc.apps.googleusercontent.com',
+        redirectUri,
       });
 
       React.useEffect(() => {
@@ -42,7 +52,12 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                 console.log(googleResponse.data);
                 console.log(googleResponse.status);
                 await AsyncStorage.setItem("token", googleResponse.data.access_token);
-                dispatch({type: 'SIGN_IN', token:googleResponse.data.access_token});
+                const userresponse = await main.get('/api/profile/', {
+                    headers: {
+                      'Authorization': `Bearer ${ googleResponse.data.access_token}` 
+                    }         
+                  });
+                dispatch({type: 'SIGN_IN', token:googleResponse.data.access_token,user:userresponse.data});
               }
               catch(err)
               {

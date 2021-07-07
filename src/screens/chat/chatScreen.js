@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext,useState, useCallback, useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import data from "../../../assets/chatroom"
@@ -7,63 +7,77 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { Button } from 'react-native-elements'
 import { theme } from '../../constants/colors'
 import ChatRoom from '../../components/Chat/ChatRoom'
+import { GiftedChat } from 'react-native-gifted-chat'
+import {AuthContext} from '../../context/AuthContext';
 
-const chatScreen = () => {
-    return (
-        <View style={styles.container}>
+const chatScreen = ({navigation}) => {
 
-            <View style={styles.header}>
+    const { state: authState } = useContext(AuthContext);
 
-                <Text style={styles.headerTitle}> Chats </Text>
+   
+    // return (
+    //     <View style={styles.container}>
 
-                <View style={styles.button}>
+    //         <View style={styles.header}>
 
-                <Button
-                type="clear"
-                containerStyle={styles.bellContainer}
-                style={styles.search}
-                icon={
-                    <MaterialIcons
-                    name="notifications"
-                    size={30}
-                    color={theme.blue}
-                    />
-                }
-                />
+    //             <Text style={styles.headerTitle}> Chats </Text>
 
-                <Button
-                type="clear"
-                containerStyle={styles.searchContainer}
-                style={styles.search}
-                icon={
-                    <MaterialIcons
-                    name="search"
-                    size={30}
-                    color={theme.blue}
-                    />
-                }
-                />
+    //             <View style={styles.button}>
 
-                </View>
+    //             <Button
+    //             type="clear"
+    //             containerStyle={styles.bellContainer}
+    //             style={styles.search}
+    //             icon={
+    //                 <MaterialIcons
+    //                 name="notifications"
+    //                 size={30}
+    //                 color={theme.blue}
+    //                 />
+    //             }
+    //             />
 
-            </View>
+    //             <Button
+    //             type="clear"
+    //             containerStyle={styles.searchContainer}
+    //             style={styles.search}
+    //             icon={
+    //                 <MaterialIcons
+    //                 name="search"
+    //                 size={30}
+    //                 color={theme.blue}
+    //                 />
+    //             }
+    //             />
 
-            <View style={styles.section}>
+    //             </View>
 
-                <FlatList
-                    data={data}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => (
-                        <ChatRoom chatData={item} />
-                    )}
-                />
+    //         </View>
 
-            </View>
+    //         <View style={styles.section}>
 
-            <FocusAwareStatusBar style="auto" />
-        </View>
+    //             <FlatList
+    //                 data={data}
+    //                 keyExtractor={item => item.id.toString()}
+    //                 renderItem={({item}) => (
+    //                     <ChatRoom chatData={item} />
+    //                 )}
+    //             />
+
+    //         </View>
+
+    //         <FocusAwareStatusBar style="auto" />
+    //     </View>
+    // )
+    return(
+        <Button
+        style={styles.button}
+        title="Search for any events"
+        onPress={()=>navigation.navigate("room")}
+    />
     )
 }
+
 
 const styles = StyleSheet.create({
     container:{

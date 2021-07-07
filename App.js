@@ -26,6 +26,8 @@ import createEvent from './src/screens/create/createEvent';
 import createPost from './src/screens/create/createPost';
 // Chat
 import chatScreen from './src/screens/chat/chatScreen'
+import room from './src/screens/chat/room'
+import chatStack from './src/screens/chat/chatStack';
 // Profile
 import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
@@ -52,6 +54,8 @@ import inviteScreen from './src/screens/profile/inviteScreen';
   }
   return true;
 };
+
+
 
   const homeStack = ()=>{
     return (
@@ -126,6 +130,7 @@ import inviteScreen from './src/screens/profile/inviteScreen';
     )
   }
 
+
   const rootStack = () => {
     return (
       <login.Navigator >
@@ -193,6 +198,8 @@ const initialState = {
   isLoading: true,
   isSignout: false,
   userToken: null,
+  user:[],
+  streamToken:null
 }
 
 const reducer = (state, action) => {
@@ -201,6 +208,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         userToken: action.token,
+        user: action.user,
         isLoading: false,
       };
     case 'SIGN_IN':
@@ -208,6 +216,8 @@ const reducer = (state, action) => {
         ...state,
         isSignout: false,
         userToken: action.token,
+        user: action.user,
+        streamToken: action.stream
       };
     case 'SIGN_OUT':
       return {
@@ -239,13 +249,14 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       let userToken;
+      let userresponse;
 
       try {
         userToken = await AsyncStorage.getItem("token");
       } catch (e) {
         console.log(e);
       }
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken});
     };
 
     bootstrapAsync();
@@ -259,10 +270,17 @@ export default function App({ navigation }) {
           const response = await main.post("/api/convert-token/",{ token, backend: "google-oauth2", client_id, client_secret, grant_type: "convert_token" });
           console.log(response);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({type: 'SIGN_IN', token:response.data.access_token})
+          const userresponse = await main.get('/api/profile/', {
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }         
+          });
+          await AsyncStorage.setItem("user", response.data.access_token);
+          dispatch({type: 'SIGN_IN', token:response.data.access_token, user:userresponse.data})
         }
         catch(err)
         {
+          alert("Something went wrong");
           console.log(err);
         }
       },
@@ -273,11 +291,23 @@ export default function App({ navigation }) {
           const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
           console.log( response.data);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token  });
+          const userresponse = await main.get('/api/profile/', {
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }         
+          });
+          const streamresponse = await main.get('/api/chat/token',{
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }
+          });
+          await AsyncStorage.setItem("stream", streamresponse.data.token);
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token, user:userresponse.data, stream:streamresponse.data.token });
          }
       catch(err)
         {
           console.log(err);
+          alert("Wrong password or email");
          }
         
       },
@@ -288,7 +318,13 @@ export default function App({ navigation }) {
           const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
           console.log( response.data.access);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token});  
+          const streamresponse = await main.get('/api/chat/token',{
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }
+          });
+          await AsyncStorage.setItem("stream", streamresponse.data.token);
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream: streamresponse.data.token});  
         } catch (err) {
             console.log(err);
         }
@@ -296,6 +332,7 @@ export default function App({ navigation }) {
       },
       signOut: async () => {
         await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("stream");
         dispatch({ type: 'SIGN_OUT'});
       },
     }),
@@ -331,6 +368,7 @@ export default function App({ navigation }) {
             <Stack.Screen name="edit" component={editScreen}/>
             <Stack.Screen name="profile" component={profileScreen}/>
             <Stack.Screen name="invite" component={inviteScreen}/>
+            <Stack.Screen name="room" component={chatStack} />
         </Stack.Navigator>
       </NavigationContainer>
       </EventProvider>
