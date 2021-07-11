@@ -33,6 +33,7 @@ const ChannelScreen = ({ navigation }) => {
     
     return (
         <SafeAreaView>
+        <OverlayProvider>
         <Chat client={chatClient}>
           <Channel channel={channel} keyboardVerticalOffset={headerHeight} >
             <View style={StyleSheet.absoluteFill}>
@@ -41,6 +42,7 @@ const ChannelScreen = ({ navigation }) => {
             </View>
           </Channel>
         </Chat>
+        </OverlayProvider>
       </SafeAreaView>
     )
 }
