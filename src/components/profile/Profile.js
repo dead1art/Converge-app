@@ -5,14 +5,21 @@ import { Button, Avatar } from "react-native-elements"
 import HostedEvent from './HostedEvent'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../constants/colors'
+import {AgeFromDateString, AgeFromDate} from 'age-calculator'
 
 
-const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
-
-function Profile({ signout,props, data, nav }) {
-
+function Profile({ signout, data, nav }) {
+  
   const { first_name, last_name, image, bio, dob, email, tags, hosted_events } = data;
+  
+  const date = dob.toString()
+  console.log(date)
+  
+  const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
+  let ageFromString = new AgeFromDateString(dob).age;
+    console.log("value from ageFromString", ageFromString);
+  
   return (
     <SafeAreaView style={styles.container}>
 
@@ -83,12 +90,9 @@ function Profile({ signout,props, data, nav }) {
           />
 
         </View>
-      </View>
 
 
       {/* Content */}
-
-      <View style={styles.content}>
 
         <View style={styles.info}>
           <Text style={{fontWeight:'bold'}}> {dob} </Text>
@@ -102,10 +106,11 @@ function Profile({ signout,props, data, nav }) {
           <MaterialIcons
             name="email"
             size={24}
-          />
+            />
         </View>
 
-        <View style={styles.interests}>
+        </View>
+        {/* <View style={styles.interests}>
 
           <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Interests</Text>
           
@@ -119,7 +124,8 @@ function Profile({ signout,props, data, nav }) {
 
         </View>
 
-        <View style={styles.hostedEvents}>
+        </View> */}
+        {/* <View style={styles.hostedEvents}>
 
           <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Hosted Events</Text>
 
@@ -129,13 +135,9 @@ function Profile({ signout,props, data, nav }) {
               <HostedEvent key={item.id} eventdata={item} press={() => props.navigate("invite", {item} )} />
             ))}
 
-          </View>
+          </View> 
 
-        </View>
-
-        </View>
-
-      </View>
+        </View> */}
 
      </ScrollView>
 
@@ -148,29 +150,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: 'white',
-    height: Dimensions.get('screen').height,
   },
 
   header: {
-    flex: 2,
     alignItems: 'center',
     marginTop: 20,
     width: '100%',
-    paddingTop: 60,
-    paddingBottom: 20,
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingHorizontal:20,
     // borderBottomWidth: 1,
     // borderColor: theme.lightaccent,
   },
 
-  content: {
-    width: '100%',
-    flex: 2,
-    borderRadius:20,
-    alignItems: 'center',
-    paddingHorizontal:20,
-    marginBottom:60,
-  },
+  // content: {
+  //   width: '100%',
+  //   flex: 2,
+  //   borderRadius:20,
+  //   alignItems: 'center',
+  //   paddingHorizontal:20,
+  // },
 
   header__profile: {
     position: 'absolute',
@@ -216,7 +217,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     width: '100%',
     padding: 20,
-    marginBottom:10,
+    marginTop:30,
+
   },
 
   interests:{

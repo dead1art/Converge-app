@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         marginVertical:10,
         padding:10,
         borderRadius:20,
-        backgroundColor:theme.white,
+        backgroundColor:theme.lightaccent,
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',

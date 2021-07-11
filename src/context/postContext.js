@@ -6,58 +6,56 @@ import axios from 'axios';
 
 
 const initialState = {
-    events:[],
+    posts:[],
     errorMessage:false,
     isFetching:false,
-    isEventSubmitted:false,
-    submissionError:false,
-    status:null,
+    isPostSubmitted:false,
+    submissionError:false
 }
 
-const eventReducer = (state, action) =>{
+const postReducer = (state, action) =>{
     switch(action.type)
     {
-        case "fetch_events_request":
+        case "fetch_posts_request":
         return{
             ...state,
             isFetching: true,
             errorMessage:false
         };
-        case "fetch_events_success":
+        case "fetch_posts_success":
             return{
                 ...state,
                 events:action.payload,
                 errorMessage:false,
                 isFetching:false
             };
-        case "fetch_events_failure":
+        case "fetch_posts_failure":
             return{
                 ...state,
                 errorMessage:true,
                 isFetching:false
             };
-        case "add_event_request":
+        case "add_posts_request":
             return{
                 ...state,
                 submissionError:false,
-                isEventSubmitted:false
+                isPostSubmitted:false
             };
-        case "add_events_success":
+        case "add_posts_success":
             return{
                 ...state,
-                status:action.data,
+
             };
-        case "add_events_failure":
+        case "add_posts_failure":
             return{
                 ...state,
-                status:action.data,
             };
         default:
             return state;
     }
 }
 
-const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,location,tags,title,token}) => {
+const addPost = (dispatch) => async({image,caption,tags,token}) => {
 
 
     console.log(tags);
@@ -71,6 +69,7 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
     let formData = new FormData();
 
     formData.append('image', { uri: localUri, name: filename, type });
+    formData.append('caption', )
     // formData.append('addr',addr);
     // formData.append('max_attendees',max_attendees);
     // formData.append('desc',desc);
@@ -80,9 +79,6 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
     // formData.append('title',title);
 
     console.log(formData);
-
-    console.log(event_date);
-
 
     // axios({
     //     method: "post",
@@ -99,17 +95,16 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
     //     .catch(function (response) {
     //       //handle error
     //       console.log(response);
-    
     //     });
 
         try{
-            const event_response = await main.post('/api/event//',{addr,max_attendees,desc,event_date,location,tags,title}, {
+            const post_response = await main.post('/api/post/',{image,caption,tags}, {
                 headers: {
            'Authorization': `Bearer ${token}` 
            }});
-           console.log(event_response.data);
+           console.log(post_response.data);
 
-           const path_url = "https://converge-project.herokuapp.com/api/event/"+ event_response.data.id+"/";
+           const path_url = "https://converge-project.herokuapp.com/api/post/"+ post_response.data.id+"/";
            console.log(path_url);
 
            axios({
@@ -124,24 +119,23 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
             .then(function (response) {
               //handle success
               console.log(response);
-              dispatch({type:'add_events_success',data:response.status});
             })
             .catch(function (response) {
               //handle error
               console.log(response);
-              dispatch({type:'add_events_failure',data:response.status});
+        
             });
+
         }
         catch(error)
         {
             console.log(error);
         }
-        
-    
+           
 }
 
 export const {Provider, Context } = createDataContext(
-    eventReducer,
-    {addEvent},
+    postReducer,
+    {addPost},
     initialState
 )

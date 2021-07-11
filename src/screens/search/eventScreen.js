@@ -11,17 +11,19 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { theme } from '../../constants/colors'
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
+import { useScrollToTop } from '@react-navigation/native'
 import axios from 'axios';
 
 const eventScreen = ({ route, navigation }) => {
 
     const { state: authState } = useContext(AuthContext);
 
-    const { id, title, addr, image, event_date, desc, host_image, host_name, attendees, max_attendees, location, tags, requested } = route.params.item;
+    const { id, title, addr, image, event_date, desc, host, host_image, host_name, attendees, max_attendees, location, tags, requested } = route.params.item;
 
-    const host = route.params.item
+    const item = route.params.item
+    // const host = route.params.item
 
-    console.log(host)
+    // console.log(host)
 
     const [event, setEvent] = useState('')
 
@@ -40,6 +42,10 @@ const eventScreen = ({ route, navigation }) => {
     // ];
 
     // const d = event_date
+
+    const ref= React.useRef(null)
+
+    useScrollToTop(ref);
 
     //Recommended
 
@@ -61,7 +67,6 @@ const eventScreen = ({ route, navigation }) => {
                         }
                     })
                 setRecommended(response.data)
-                console.log()
             }
             catch (error) {
                 console.log(error)
@@ -95,7 +100,7 @@ const eventScreen = ({ route, navigation }) => {
                     }
                     throw err;
                 });
-            console.log(response.data)
+            // console.log(response.data)
             setJointitle("Requested")
             navigation.goBack()
         }
@@ -127,7 +132,7 @@ const eventScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
 
-            <ScrollView>
+            <ScrollView ref={ref}>
 
                 <View style={styles.header}>
 
@@ -168,7 +173,7 @@ const eventScreen = ({ route, navigation }) => {
                                 source={{
                                     uri: host_image,
                                 }}
-                                onPress={() => navigation.navigate('profile', { host })}
+                                onPress={() => navigation.navigate('profile', { item })}
                             />
 
                             <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginLeft: 10 }}>
@@ -200,14 +205,14 @@ const eventScreen = ({ route, navigation }) => {
                         <Button
                             type="clear"
                             containerStyle={{
-                                backgroundColor: 'white',
+                                backgroundColor: theme.lightaccent,
                                 borderRadius: 10,
                             }}
                             icon={
                                 <MaterialIcons
                                     name="calendar-today"
                                     size={26}
-                                    color={theme.blue}
+                                    color={theme.black}
                                 />
                             }
                         />
@@ -218,14 +223,14 @@ const eventScreen = ({ route, navigation }) => {
                         <Button
                             type="clear"
                             containerStyle={{
-                                backgroundColor: 'white',
+                                backgroundColor: theme.lightaccent,
                                 borderRadius: 10,
                             }}
                             icon={
                                 <MaterialIcons
                                     name="location-pin"
                                     size={26}
-                                    color={theme.blue}
+                                    color={theme.black}
                                 />
                             }
                         />
@@ -236,14 +241,14 @@ const eventScreen = ({ route, navigation }) => {
                         <Button
                             type="clear"
                             containerStyle={{
-                                backgroundColor: 'white',
+                                backgroundColor: theme.lightaccent,
                                 borderRadius: 10,
                             }}
                             icon={
                                 <MaterialIcons
                                     name="person"
                                     size={26}
-                                    color={theme.blue}
+                                    color={theme.black}
                                 />
                             }
                         />

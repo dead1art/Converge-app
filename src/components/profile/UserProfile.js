@@ -1,16 +1,21 @@
 import React, { useState} from 'react';
 import { Dimensions } from 'react-native';
-import { View,Text, StyleSheet, Modal, Image} from 'react-native';
+import { View,Text, StyleSheet, Modal, Image, SafeAreaView, ScrollView} from 'react-native';
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import {theme} from '../../constants/colors'
+import HostedEvent from './HostedEvent'
 
 function UserProfile({ data, back }) {
 
-  const { first_name, last_name, image, bio, dob, email } = data;
+  const { first_name, last_name, image, bio, dob, tags, hosted_events } = data;
+
+  const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
   return(
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
+    <ScrollView>
 
     <View style={styles.header}>
         {/* <Text style={styles.header__UserProfile}> UserProfile </Text> */}
@@ -36,7 +41,7 @@ function UserProfile({ data, back }) {
   size={150}
   source={{
     uri:
-      image=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
+      image ? image : noImage,
   }}
 />
         <Text style={styles.name}> {first_name} {last_name} </Text> 
@@ -47,98 +52,156 @@ function UserProfile({ data, back }) {
 
     {/* Content */}
 
-    <View style={styles.content}>
+      <View style={styles.content}>
 
-            <View style={styles.info}>  
-                <Text> Date Of Birth </Text>
-                <Text> {dob} </Text>
-            </View>
-            <View style={styles.info}>
-                <Text> Email </Text>
-                <Text> {email} </Text> 
-            </View>          
+        <View style={styles.info}>
+          <Text style={{fontWeight:'bold'}}> {dob} </Text>
+          <MaterialIcons
+            name="calendar-today"
+            size={24}
+          />
+        </View>
 
+        <View style={styles.interests}>
 
-    {/* SignOut Button */}
-    </View>
+          <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Interests</Text>
+          
+          <View style={styles.tagsView}>
 
-</View>
+          {tags ? tags.map((item, index) => (
+            <Text key={index} style={styles.tags}>{item}</Text>
+            ))
+          : <Text style={{marginVertical:10,marginHorizontal:'25%',color:theme.gray}}>Please add your intrests</Text>
+          } 
+
+        </View>
+
+        <View style={styles.hostedEvents}>
+
+          <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Hosted Events</Text>
+
+          <View style={{flexDirection:'row', flexWrap:'wrap', marginTop:10}}>
+
+            {hosted_events && hosted_events.map((item) => (
+              <HostedEvent key={item.id} eventdata={item} />
+            ))}
+
+          </View>
+
+        </View>
+
+        </View>
+
+      </View>
+
+     </ScrollView>
+
+    </SafeAreaView>
 
   )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        width: '100%',
-        height: Dimensions.get('screen').height,
+  container: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'white',
+    height: Dimensions.get('screen').height,
+  },
+
+  header: {
+    flex: 2,
+    alignItems: 'center',
+    marginTop: 20,
+    width: '100%',
+    paddingTop: 60,
+    paddingBottom: 20,
+    // borderBottomWidth: 1,
+    // borderColor: theme.lightaccent,
+  },
+
+  content: {
+    width: '100%',
+    flex: 2,
+    borderRadius:20,
+    alignItems: 'center',
+    paddingHorizontal:20,
+    marginBottom:60,
+  },
+
+  header__profile: {
+    position: 'absolute',
+    color: '#2663FF',
+    fontWeight: 'bold',
+    fontSize: 30,
+    textAlign: 'center',
+  },
+
+  image: {
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    width: '100%',
+    height: '100%',
+  },
+
+  name: {
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+    color: 'black',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+
+  bio: {
+    color: 'gray',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+
+  nobio: {
+    color: 'gray',
+    marginVertical: 10,
+  },
+
+
+  info: {
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    backgroundColor: theme.lightaccent,
+    borderRadius: 20,
+    alignItems:'center',
+    width: '100%',
+    padding: 20,
+    marginBottom:10,
+  },
+
+  interests:{
+    marginVertical:10,
+    width:'100%',
+  },
+
+  hostedEvents:{
+    marginVertical:10,
+    width:'100%',
+  },
+
+  tagsView:{
+        marginVertical:10,
+        marginHorizontal:0,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
 
-    header: {
-        flex: 2,
-        alignItems: 'center',
-        marginTop: 20,
-        width: '100%',
-        paddingTop:60,
-        backgroundColor: 'white',
-        paddingBottom: 60,
+  tags:{
+        marginTop:10,
+        marginRight:10,
+        backgroundColor: theme.lightaccent,
+        paddingVertical:10,
+        paddingHorizontal:20,
+        borderRadius:20,
     },
     
-    content: {
-        borderTopRightRadius: 60,
-        borderTopLeftRadius: 60,
-        backgroundColor: 'white',
-        width: '100%',
-        borderRadius: 40,
-        flex: 2,
-        padding: 20,
-        alignItems: 'center',
-    },
-
-    header__profile: {
-        position: 'absolute',
-        color:'#2663FF',
-        fontWeight: 'bold',
-        fontSize: 30,
-        textAlign: 'center',
-    },
-
-    image: {
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        width: '100%',
-        height: '100%',
-    },
-
-    name :{
-        textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 10,
-        color:'black',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-
-    bio: {
-        color: 'gray',
-        marginTop: 10,
-        marginBottom: 10,
-    },
-
-    nobio: {
-        color: 'gray',
-        marginVertical: 10,
-    },
-
-
-    info: {
-        backgroundColor: 'white',
-        borderRadius: 30,
-        width: '100%',
-        paddingVertical: 10,
-    },
-
 })
 
 export default UserProfile;

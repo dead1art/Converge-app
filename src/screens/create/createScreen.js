@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native'
 import { Button } from 'react-native-elements';
 import { FocusAwareStatusBar } from '../../components/statusbar'
+import { MaterialIcons } from "@expo/vector-icons"
+import { theme } from '../../constants/colors';
 
 const createScreen = ({navigation}) => {
 
@@ -10,37 +12,54 @@ const createScreen = ({navigation}) => {
 
             <View style={styles.header}>
 
-                    <Button 
-                    title="Create An Event"
-                    type="clear"
-                    titleStyle={{color:'black', fontWeight: 'bold',}}
-                    buttonStyle={{
-                        marginTop: '50%',
-                        alignSelf: 'center',
-                        backgroundColor: '#E5E8EE',
-                        width:'60%',
-                        padding:20,
-                        borderRadius: 20,
-                    }}
-                    onPress={() => navigation.navigate('createEvent')}
+                        <Button 
+                        title="Create An Event"
+                        type="clear"
+                        icon={
+                            <MaterialIcons
+                                name="event"
+                                color={theme.white}
+                                size={28}
+                                style={{marginRight:20}}
+                            />
+                        }
+                        titleStyle={{color:theme.white, fontWeight: 'bold',}}
+                        buttonStyle={{
+                            marginTop: '80%',
+                            alignSelf:'center',
+                            backgroundColor: theme.blue,
+                            width:'60%',
+                            padding:20,
+                            borderRadius: 20,
+                        }}
+                        onPress={() => navigation.navigate('createEvent')}
                     />
-                    
+
             </View>
 
             <View style={styles.footer}>
 
-                    <Button 
-                    title="Create A Post"
-                    titleStyle={{color:'black', fontWeight: 'bold',}}
-                    buttonStyle={{
-                        marginTop: '40%',
-                        alignSelf: 'center',
-                        backgroundColor: '#E5E8EE',
-                        width: '60%',
-                        padding:20,
-                        borderRadius: 20,
-                    }}
-                    onPress={() => navigation.navigate('createPost')}
+                        <Button 
+                        title="Create A Post"
+                        type="clear"
+                        icon={
+                            <MaterialIcons
+                                name="post-add"
+                                color={theme.white}
+                                size={28}
+                                style={{marginRight:20}}
+                            />
+                        }
+                        titleStyle={{color:theme.white, fontWeight: 'bold',}}
+                        buttonStyle={{
+                            marginTop: '10%',
+                            alignSelf: 'center',
+                            backgroundColor: theme.blue,
+                            width:'60%',
+                            padding:20,
+                            borderRadius: 20,
+                        }}
+                        onPress={() => navigation.navigate('createPost')}
                     />
 
             </View>
@@ -57,25 +76,18 @@ const styles= StyleSheet.create({
         width: '100%',
         alignItems:'center',
         height: Dimensions.get('screen').height,
-        marginBottom: 50,
     },
 
     header:{
         flex:1,
-        width: '90%',
-        marginBottom: 20,
+        width: '100%',
         backgroundColor: 'white',
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
     },
 
     footer:{
         flex:1,
         backgroundColor: 'white',
-        borderRadius: 30,
-        width: '90%',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        width: '100%',
     },
 
     image:{

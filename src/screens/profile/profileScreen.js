@@ -45,9 +45,9 @@ const reducer = (state, action) => {
 
 const profileScreen = ({navigation, route }) => {
 
-  const { host } = route.params.host;
+  const { host } = route.params.item;
 
-//   console.log(host)
+  // console.log(host)
 
   const isFocused = useIsFocused();
 
@@ -66,8 +66,6 @@ const profileScreen = ({navigation, route }) => {
 
   const url = "https://converge-project.herokuapp.com/api/profile/" + host + "/";
 
-  console.log(url);
-
   const userInfo = state.users;
 
   useEffect(()=> {
@@ -76,6 +74,7 @@ const profileScreen = ({navigation, route }) => {
         dispatch({type:'FETCH_USER_REQUEST'});
         setIsloading(true)
         const response= await axios.get(url,{
+
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
           }

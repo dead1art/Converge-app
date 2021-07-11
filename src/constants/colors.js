@@ -12,9 +12,10 @@ const tabBar = {
 }
 
 const theme = {
-    white: '#f9f9fa',
+    white: '#ffffff',
     blue: '#006aff',
     lightaccent: '#e5e6ed',
     gray: '#798693',
     black: '#25211e',
+    background: '#f1f4fa',
 }

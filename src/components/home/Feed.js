@@ -1,9 +1,10 @@
 import React from 'react'
 import { View, Text, Button, StyleSheet, Image, Dimensions } from 'react-native';
 import {theme} from '../../constants/colors'
+import { Avatar } from 'react-native-elements'
 
-function Feed(props) {
-    const {id, avatar, name, caption, img, event} = props.info;
+function Feed({info, profileNavigate}) {
+    const {user_image, name, caption, image} = info;
     
     return(
 
@@ -12,24 +13,34 @@ function Feed(props) {
 
             <View style={styles.details}> 
 
-            <Image source={{ uri : avatar}}
-                   style={styles.avatar}
-                   />
+            {/* Avatar */}
+            <Avatar
+                avatarStyle={{ borderRadius: 30 }}
+                size={32}
+                source={{
+                    uri: user_image,
+                }}
+                onPress={profileNavigate}
+            />
 
 
+            <Text style={styles.name}>{name}</Text>
+            
             </View>
 
             <View style={styles.content}>
 
-            <Text style={styles.name}>{name}</Text>
-            
-            <Text style={styles.caption}>{caption}</Text>
-
-            {img!=null && <Image source={{ uri : img}}
+            {image!=null && <Image source={{ uri : image}}
                    style={styles.image}
                    /> }
-            <Text style={styles.event}> #{event} </Text>
+            {/* <Text style={styles.event}> #{event} </Text> */}
             
+            </View>
+
+            <View style={styles.footer}>
+
+                <Text style={styles.caption}>{caption}</Text>
+
             </View>
 
         
@@ -43,41 +54,47 @@ function Feed(props) {
 
 const styles= StyleSheet.create({
     feed:{
-        padding: 20,
-        borderTopWidth:1,
+        flex:1,
+        width:'100%',
+        borderBottomWidth:1,
         borderColor: theme.lightaccent,
         backgroundColor: theme.white,
-        flexDirection:'row',
+        // elevation:10,
+        // marginHorizontal:5,
+        // marginBottom:5,       
     },
-    avatar:{
-        width: 50,
-        height: 50,
-        borderRadius: 30,
-    },
+
     details:{
+        flex:1,
+        padding:15,
         flexDirection: 'row',
+        alignItems: 'center',      
     },
+
     content:{
-        marginHorizontal:10,
-        width: '80%',
-        height:'100%',
+        flex:2,
+        width:'100%',
+    },
+
+    footer:{
+        flex:1,
+        padding:15,
     },
 
     name:{
+        marginLeft:10,
         fontSize: 16,
         fontWeight: 'bold',
     },
     caption:{
-        flex:1,
         width: '100%',
         color: 'black',
+        flexWrap:'wrap',
         marginVertical: 5,
     },
     image:{
-        width: 280,
-        height: 180,
-        borderRadius: 15,
-        marginVertical: 10,
+        width: '100%',
+        height: 300,
     },
     event: {
         marginTop: 10,

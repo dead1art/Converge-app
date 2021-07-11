@@ -1,5 +1,5 @@
 import React,{useContext,useEffect,useState} from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, Image } from 'react-native'
 import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
 import InviteCard from '../../components/profile/InviteCard'
@@ -11,7 +11,9 @@ import { theme } from '../../constants/colors';
 
 const inviteScreen = ({route, navigation}) => {
 
-    const { id, title } = route.params.item;
+    const { id, title, image } = route.params.item;
+
+    console.log(route.params.item)
 
     const [isloading, setIsloading] = useState(false)
     const [error, setError] = useState(null)
@@ -104,9 +106,6 @@ const inviteScreen = ({route, navigation}) => {
                 <Button
                         type="clear"
                         containerStyle={{
-                            position: 'absolute',
-                            left: 20,
-                            top: 34,
                             // backgroundColor: 'rgba(0,0,0,0.25)',
                             borderRadius: 10,
                         }}
@@ -119,7 +118,14 @@ const inviteScreen = ({route, navigation}) => {
                         }
                         onPress={() => navigation.goBack()} />
 
-                <Text style={{fontWeight:'bold', fontSize:24}}> {title} </Text>
+
+                <Text style={{fontWeight:'bold', fontSize:24,}}> {title} </Text>
+
+                <Image
+                    source={{uri: image}}
+                    style={{width: 50, height: 50, borderRadius:20,}}
+                />
+
             </View>
 
             
@@ -128,10 +134,10 @@ const inviteScreen = ({route, navigation}) => {
             <FlatList
                 data={invites}
                 keyExtractor={item => item.userid.toString()}
+                ListEmptyComponent={<Text style={{marginTop:0}}> No invites for u </Text>}
                 renderItem={({item}) => (
                      <InviteCard cardData={item} accept={() => acceptHandler(item.userid)}/>
                      )}
-                ListEmptyComponent={<Text> No invites for u </Text>}
                      />
 
             </View>
@@ -148,21 +154,22 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width:'100%',
+        backgroundColor:theme.white,
         height: Dimensions.get('screen').height,
     },
 
     header:{
-        flex:0.2,
+        flex:1,
+        flexDirection:'row',
         alignItems:'center',
-        paddingVertical:'10%',
-        borderBottomWidth:2,
+        justifyContent:'space-between',
+        paddingTop:20,
         borderColor:theme.lightaccent,
-        width:'100%',
+        marginHorizontal:20,
     },
 
     content:{
-        flex:4.8,
-        paddingVertical:'10%',
+        flex:7,
         width:'100%',
         alignItems:'center',
     }

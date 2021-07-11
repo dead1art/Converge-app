@@ -10,6 +10,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
 import { Provider as EventProvider } from './src/context/eventContext';
+import FlashMessage from "react-native-flash-message";
+import Toast from 'react-native-toast-message';
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
@@ -30,6 +32,7 @@ import chatScreen from './src/screens/chat/chatScreen'
 import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
 import inviteScreen from './src/screens/profile/inviteScreen';
+
 
 
 
@@ -166,7 +169,7 @@ import inviteScreen from './src/screens/profile/inviteScreen';
 
   const createStack = () => {
     return (
-      <create.Navigator initialRouteName="createEvent" screenOptions={{headerShown: false}}>
+      <create.Navigator initialRouteName="create" screenOptions={{headerShown: false}}>
 
         <create.Screen 
         name="create"
@@ -335,6 +338,8 @@ export default function App({ navigation }) {
       </NavigationContainer>
       </EventProvider>
     </AuthContext.Provider>
+
+            <FlashMessage position="top" />
             </View>
   );
 }
