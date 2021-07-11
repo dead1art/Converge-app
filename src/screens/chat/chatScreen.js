@@ -9,66 +9,44 @@ import { theme } from '../../constants/colors'
 import ChatRoom from '../../components/Chat/ChatRoom'
 import { GiftedChat } from 'react-native-gifted-chat'
 import {AuthContext} from '../../context/AuthContext';
+import main from '../../api/main';
 
 const chatScreen = ({navigation}) => {
 
     const { state: authState } = useContext(AuthContext);
 
-   
-    // return (
-    //     <View style={styles.container}>
+    const [user, setUser] = useState([]);
 
-    //         <View style={styles.header}>
+    // useEffect(()=>{
+    //     const abortController = new AbortController()
+    //     const getUser = async() =>{
+    //         try{
+    //             // setIsloading(true)
+    //             const response = await main.get('/api/profile/', {
+    //               headers: {
+    //                 'Authorization': `Bearer ${authState.userToken}` 
+    //               }         
+    //             });
+    //             console.log(response.data.id);
+    //             setUser(response.data);
+    //             //   setIsloading(false)
+    //           }
+    //           catch(err){
+    //             //   setIsloading(false)
+    //               console.log(err);
+    //             //   setError(err)
+    //           }
+    //     }
 
-    //             <Text style={styles.headerTitle}> Chats </Text>
+    //     getUser();
 
-    //             <View style={styles.button}>
+    //     return () => {
+    //         abortController.abort()
+    //     }
+    // },[])
 
-    //             <Button
-    //             type="clear"
-    //             containerStyle={styles.bellContainer}
-    //             style={styles.search}
-    //             icon={
-    //                 <MaterialIcons
-    //                 name="notifications"
-    //                 size={30}
-    //                 color={theme.blue}
-    //                 />
-    //             }
-    //             />
+    // console.log(user);
 
-    //             <Button
-    //             type="clear"
-    //             containerStyle={styles.searchContainer}
-    //             style={styles.search}
-    //             icon={
-    //                 <MaterialIcons
-    //                 name="search"
-    //                 size={30}
-    //                 color={theme.blue}
-    //                 />
-    //             }
-    //             />
-
-    //             </View>
-
-    //         </View>
-
-    //         <View style={styles.section}>
-
-    //             <FlatList
-    //                 data={data}
-    //                 keyExtractor={item => item.id.toString()}
-    //                 renderItem={({item}) => (
-    //                     <ChatRoom chatData={item} />
-    //                 )}
-    //             />
-
-    //         </View>
-
-    //         <FocusAwareStatusBar style="auto" />
-    //     </View>
-    // )
     return(
         <Button
         style={styles.button}

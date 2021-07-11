@@ -15,10 +15,12 @@ import {
     OverlayProvider,
     useAttachmentPickerContext,
   } from 'stream-chat-expo';
+import {AuthContext} from '../../context/AuthContext';
+import { StreamChat } from 'stream-chat';
 
 const chat = createStackNavigator();
 
-const chatStack = () => {
+const chatStack = ({navigation}) => {
 
     const { state: authState } = useContext(AuthContext);
 
@@ -26,27 +28,30 @@ const chatStack = () => {
         const userToken = authState.streamToken;
         console.log(userToken);
     
-    const user = { id: authState.user.id };
+    const user = { id: '3' };
 
     const { bottom } = useSafeAreaInsets();
 
     const [channel, setChannel] = useState();
     const [clientReady, setClientReady] = useState(false);
 
+
     useEffect(() => {
-        const setupClient = async () => {
-          await chatClient.connectUser(user, userToken);
-    
-          setClientReady(true);
-        };
-    
-        setupClient();
-      }, []);
+      const setupClient = async () => {
+        await chatClient.connectUser(user, userToken);
+  
+        setClientReady(true);
+      };
+  
+      setupClient();
+
+      return async()=>{
+        await chatClient.disconnectUser();
+      }
+    }, []);
 
     return (
-        <appContext.Provider value={{channel,setChannel}}>
-            <OverlayProvider bottomInset={bottom}>
-            {clientReady && (
+        <appContext.Provider value={{channel,setChannel,setClientReady,clientReady}}>
               <chat.Navigator initialRouteName='ChannelList'  screenOptions={{
                 headerTitleStyle: { alignSelf: 'center', fontWeight: 'bold' },
               }}>  
@@ -59,11 +64,9 @@ const chatStack = () => {
                   headerTitle: channel?.data?.name,
                 })}/>
                 <chat.Screen 
-                  component={ChannelListScreen} name='ChannelList' options={{ headerTitle: 'Channel List' }}
+                  component={ChannelListScreen} name='ChannelList' options={{ headerTitle: 'Events' }}
                 />
               </chat.Navigator>
-              )}
-              </OverlayProvider>
               </appContext.Provider>
             )
 }

@@ -41,6 +41,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
         redirectUri,
       });
 
+
       React.useEffect(() => {
         if (response?.type === 'success') {
           const { authentication } = response;
@@ -52,12 +53,13 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                 console.log(googleResponse.data);
                 console.log(googleResponse.status);
                 await AsyncStorage.setItem("token", googleResponse.data.access_token);
-                const userresponse = await main.get('/api/profile/', {
+                  const streamresponse = await main.get('/api/chat/token',{
                     headers: {
-                      'Authorization': `Bearer ${ googleResponse.data.access_token}` 
-                    }         
+                      'Authorization': `Bearer ${googleResponse.data.access_token}` 
+                    }
                   });
-                dispatch({type: 'SIGN_IN', token:googleResponse.data.access_token,user:userresponse.data});
+                  await AsyncStorage.setItem("stream", streamresponse.data.token);
+                dispatch({type: 'SIGN_IN', token:googleResponse.data.access_token, stream:streamresponse.data.token});
               }
               catch(err)
               {
@@ -171,6 +173,9 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                         />  
                      
             </View>
+            {/* () => {
+                            promptAsync();
+                            } */}
 
             <View style={styles.footer}>
 

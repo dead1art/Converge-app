@@ -1,77 +1,120 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import {Text} from 'react-native'
-import { Channel as ChannelType, StreamChat } from 'stream-chat'; 
-import { ChannelList, Chat, MessageType, OverlayProvider } from 'stream-chat-expo';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { LogBox, SafeAreaView, StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, useHeaderHeight } from '@react-navigation/stack';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StreamChat } from 'stream-chat';
+import {
+  Channel,
+  ChannelList,
+  Chat,
+  MessageInput,
+  MessageList,
+  OverlayProvider,
+  useAttachmentPickerContext,
+} from 'stream-chat-expo';
+import {AuthContext} from '../../context/AuthContext';
 
+LogBox.ignoreAllLogs(true);
 
-function room({navigation}) {
+// const { state: authState } = useContext(AuthContext);
+const chatClient = StreamChat.getInstance('gxz6ahcuv6p5');
+const userToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSJ9.0IValLW5VmiBV8waUOTkRy8BNWrsEtseoIVKypqM3Jc';
+const user = { id: '1' };
 
-  const client = StreamChat.getInstance('92wpnfcj44nq');
+const filters = {
+  members: { $in: ['1'] },
+  type: 'messaging',
+};
 
+const sort = { last_message_at: -1 };
+
+const ChannelListScreen = ({ navigation }) => {
+   useEffect(() => {
+      const setupClient = async () => {
+        await chatClient.connectUser(user, userToken);
   
+        setClientReady(true);
+      };
+  
+      setupClient();
+    }, []);
+  
+  const { setChannel } = useContext(AppContext);
+
+  const memoizedFilters = useMemo(() => filters, []);
+
+  return (
+    <Chat client={chatClient}>
+      <View style={StyleSheet.absoluteFill}>
+        <ChannelList
+          filters={memoizedFilters}
+          onSelect={(channel) => {
+            setChannel(channel);
+            navigation.navigate('Channel');
+          }}
+          sort={sort}
+        />
+      </View>
+    </Chat>
+  );
+};
+
+const ChannelScreen = ({ navigation }) => {
+  const { channel } = useContext(AppContext);
+  const headerHeight = useHeaderHeight();
+  const { setTopInset } = useAttachmentPickerContext();
+
+  useEffect(() => {
+    setTopInset(headerHeight);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [headerHeight]);
+
+  return (
+    <SafeAreaView>
+      <Chat client={chatClient}>
+        <Channel channel={channel} keyboardVerticalOffset={headerHeight}>
+          <View style={StyleSheet.absoluteFill}>
+            <MessageList />
+            <MessageInput />
+          </View>
+        </Channel>
+      </Chat>
+    </SafeAreaView>
+  );
+};
+
+const log = createStackNavigator();
+
+const AppContext = React.createContext();
+
+const room = () => {
+  const { bottom } = useSafeAreaInsets();
+
   const [channel, setChannel] = useState();
   const [clientReady, setClientReady] = useState(false);
-  const [thread, setThread] = useState();
 
-  useEffect(() => {   
-     const setupClient = async () => {      
-       try {        
-         await client.connectUser(         
-            {             
-              id: 'jlahey',             
-              name: 'Jim Lahey',            
-               image: 'https://i.imgur.com/fR9Jz14.png',           
-              },           
-              'user_token',       
-               );         
-               setClientReady(true);     
-               }
-                catch (e) 
-                {       
-                   console.log(e);     
-                   }    
-                };
-
-    setupClient();  
-  }, []);
-
-  const onBackPress = () => {   
-     if (thread) {      
-       setThread(undefined);    
-      } else if (channel)
-       {      
-        setChannel(undefined);   
-       }  
-      };
-
-      if (!clientReady) return null;
-
-      return (    
-      <OverlayProvider topInset={60}>      
-      <TouchableOpacity onPress={onBackPress} disabled={!channel}>       
-       <View style={{ height: 60, paddingLeft: 16, paddingTop: 40 }}>       
-          {channel && <Text>Back</Text>}    
-              </View>     
-               </TouchableOpacity>      
-               <View style={{ flex: 1 }}>     
-                  <Chat client={client}>        
-                    {channel ? (          
-                        <Channel channel={channel} keyboardVerticalOffset={60} thread={thread}>   
-                                   {thread ? (         
-                                            <Thread />     
-                                                     ) : (         
-                                                              <>          
-                                                                      <MessageList onThreadSelect={setThread} />     
-                                                                                   <MessageInput />   
-                                                                                                </>      
-                                                                                                        )} 
-                         </Channel>          ) : (          
-                             <ChannelList onSelect={setChannel} />       
-                                )}      
-                    </Chat>      
-                   </View>    
-                 </OverlayProvider> 
-                 );
-              };
+  return (
+      <AppContext.Provider value={{ channel, setChannel }}>
+            <log.Navigator
+              initialRouteName='ChannelList'
+              screenOptions={{
+                headerTitleStyle: { alignSelf: 'center', fontWeight: 'bold' },
+              }}
+            >
+              <log.Screen
+                component={ChannelScreen}
+                name='Channel'
+                options={() => ({
+                  headerBackTitle: 'Back',
+                  headerRight: () => <></>,
+                  headerTitle: channel?.data?.name,
+                })}
+              />
+              <log.Screen component={ChannelListScreen} name='ChannelList' options={{ headerTitle: 'Channel List' }} />
+            </log.Navigator>
+      </AppContext.Provider>
+  );
+};
 
 export default room

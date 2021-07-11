@@ -13,7 +13,7 @@ const signinScreen = ({navigation})=> {
         <KeyboardAvoidingView>
         <LoginForm 
             onSubmit={authContextValue.signIn}
-            onNavigate={() => navigation.navigate('register')}
+            onNavigate={() => navigation.navigate('registerStack')}
         />
         </KeyboardAvoidingView>
         </View>

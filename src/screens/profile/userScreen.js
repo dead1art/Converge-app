@@ -52,7 +52,6 @@ const userScreen = ({navigation}) => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  console.log(authState.streamToken);
 
   // const getToken =async() =>{
   //   try
@@ -68,8 +67,6 @@ const userScreen = ({navigation}) => {
 
   // getToken();
  
-
-  console.log(authState.user.first_name);
 
   // --LoadingScreen
 

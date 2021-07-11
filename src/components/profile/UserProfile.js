@@ -9,6 +9,7 @@ function UserProfile({ data, back }) {
 
   const { first_name, last_name, image, bio, dob, email } = data;
 
+
   return(
     <View style={styles.container}>
 
