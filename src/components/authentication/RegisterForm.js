@@ -5,7 +5,7 @@ import { Input, Text, Button } from 'react-native-elements';
 import {FocusAwareStatusBar} from '../statusbar';
 
 
-const RegisterForm = ({onSubmit,onNavigation})=> {
+const RegisterForm = ({onSubmit})=> {
     const [first_name, setFname] = useState('');
     const [last_name, setLname] = useState('');
     const [email, setEmail] = useState('');
@@ -63,7 +63,9 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
             borderRadius: 20,
             width:110,}}
             title="Sign-Up" 
-            onPress={() => onSubmit({ email, password, first_name, last_name })}/>
+            onPress={() => {onSubmit({ email, password, first_name, last_name })
+                navigation.navigate()
+            }}/>
 
         </View>
 
