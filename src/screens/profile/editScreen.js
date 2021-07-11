@@ -232,10 +232,11 @@ axios({
             <View style={styles.info}>
                 <Text>   First Name </Text>  
                 <Input 
+                disabled
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -246,11 +247,12 @@ axios({
 
             <View style={styles.info}>
                 <Text>   Last Name</Text>  
-                <Input 
+                <Input
+                disabled 
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -265,8 +267,8 @@ axios({
                 textAlign="left"
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -291,8 +293,8 @@ axios({
                 containerStyle={{
                   marginTop:10,
                   borderRadius:10,
-                  borderColor:theme.gray, 
-                  borderWidth:1,
+                  borderBottomWidth: 0, 
+                  backgroundColor: theme.lightaccent,
                   marginHorizontal:10,
                 }} 
                 titleStyle={{color:theme.black}}
@@ -326,8 +328,8 @@ axios({
                 disabled
                 inputContainerStyle={{ 
                      marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -416,11 +418,11 @@ const styles = StyleSheet.create({
     input: {
         borderRadius:0,
         paddingHorizontal: 20,
-        color: 'black',
+        color: 'gray',
     },
 
     tags:{
-      marginTop:20,
+        marginTop:20,
         paddingVertical:10,
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -431,7 +433,9 @@ const styles = StyleSheet.create({
         marginLeft:10,
         marginTop:-20,
         marginBottom:20,
-        borderWidth:1,
+        borderBottomWidth: 0, 
+        color:'gray',
+        backgroundColor: theme.lightaccent,
         borderRadius:10,
         paddingHorizontal:20,
         height:50,

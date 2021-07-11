@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
   header: {
     flex: 2,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
     width: '100%',
-    paddingTop: 60,
+    paddingTop: 40,
     paddingBottom: 20,
     // borderBottomWidth: 1,
     // borderColor: theme.lightaccent,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     alignItems: 'center',
     paddingHorizontal:20,
-    marginBottom:60,
+    marginBottom:0,
   },
 
   header__profile: {
@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
   },
 
   interests:{
-    marginVertical:10,
+    marginVertical:20,
     width:'100%',
   },
 
   hostedEvents:{
-    marginVertical:10,
+    marginVertical:20,
     width:'100%',
   },
 

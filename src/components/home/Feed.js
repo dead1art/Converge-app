@@ -28,6 +28,11 @@ function Feed({info, profileNavigate}) {
             
             </View>
 
+            <View style={styles.footer}>
+
+                <Text style={styles.caption}>{caption}</Text>
+
+            </View>
             <View style={styles.content}>
 
             {image!=null && <Image source={{ uri : image}}
@@ -37,11 +42,6 @@ function Feed({info, profileNavigate}) {
             
             </View>
 
-            <View style={styles.footer}>
-
-                <Text style={styles.caption}>{caption}</Text>
-
-            </View>
 
         
 
@@ -57,18 +57,19 @@ const styles= StyleSheet.create({
         flex:1,
         width:'100%',
         borderBottomWidth:1,
+        borderRadius:20,
         borderColor: theme.lightaccent,
         backgroundColor: theme.white,
-        // elevation:10,
         // marginHorizontal:5,
-        // marginBottom:5,       
+        marginBottom:20,       
     },
 
     details:{
         flex:1,
-        padding:15,
+        padding:10,
+        paddingHorizontal:15,
         flexDirection: 'row',
-        alignItems: 'center',      
+        alignItems: 'center', 
     },
 
     content:{
@@ -78,22 +79,22 @@ const styles= StyleSheet.create({
 
     footer:{
         flex:1,
-        padding:15,
+        paddingVertical:10,
+        paddingHorizontal:15,
     },
 
     name:{
         marginLeft:10,
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
     },
     caption:{
         width: '100%',
-        color: 'black',
-        flexWrap:'wrap',
-        marginVertical: 5,
+        color: theme.gray,
     },
     image:{
-        width: '100%',
+        width:'100%',
+        borderBottomLeftRadius:20,
+        borderBottomRightRadius:20,
         height: 300,
     },
     event: {

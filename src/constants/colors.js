@@ -17,5 +17,5 @@ const theme = {
     lightaccent: '#e5e6ed',
     gray: '#798693',
     black: '#25211e',
-    background: '#f1f4fa',
+    background: '#e1e5eb',
 }

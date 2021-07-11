@@ -170,13 +170,13 @@ const userScreen = ({navigation}) => {
           
           <View style={styles.tagsView}>
 
-          {tags ? tags.map((item, index) => (
+          {tags && tags.map((item, index) => (
             <Text key={index} style={styles.tags}>{item}</Text>
-            ))
-          : <Text style={{marginVertical:10,marginHorizontal:'25%',color:theme.gray}}>Please add your intrests</Text>
-          } 
+            ))}
 
           </View>
+
+          {!tags &&  <Text style={{textAlign:'center',color:theme.gray}}>Please add your intrests</Text>}
 
         </View>
 
@@ -193,6 +193,8 @@ const userScreen = ({navigation}) => {
             ))}
 
           </View>
+
+            {!hosted_events && <Text style={{textAlign:'center', marginBottom:'20%', marginTop:10, color: theme.gray}}> You have not hosted any events </Text>}
 
         </View>
 
@@ -221,16 +223,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     paddingHorizontal:20,
-    marginBottom:30,
+    marginBottom:0,
   },
 
   interests:{
-    marginVertical:10,
+    marginVertical:20,
     width:'100%',
   },
 
   hostedEvents:{
-    marginVertical:10,
+    marginVertical:20,
     width:'100%',
   },
 

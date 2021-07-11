@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width:'100%',
-        backgroundColor:theme.white,
+        backgroundColor:theme.background,
         height: Dimensions.get('screen').height,
     },
 
@@ -164,13 +164,15 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
         paddingTop:20,
+        marginHorizontal:10,
         borderColor:theme.lightaccent,
-        marginHorizontal:20,
+
     },
 
     content:{
         flex:7,
         width:'100%',
+        paddingHorizontal:10,
         alignItems:'center',
     }
 })

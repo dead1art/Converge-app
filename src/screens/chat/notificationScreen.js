@@ -11,7 +11,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import {AuthContext} from '../../context/AuthContext';
 import main from '../../api/main';
 
-const chatScreen = ({navigation}) => {
+const NotificationScreen = ({navigation}) => {
 
     const { state: authState } = useContext(AuthContext);
 
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default chatScreen
+export default NotificationScreen

@@ -18,7 +18,7 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 
-const eventScreen = ({ route, navigation }) => {
+const recommendedScreen = ({ route, navigation }) => {
 
     const isFocused = useIsFocused();
 
@@ -70,39 +70,39 @@ const eventScreen = ({ route, navigation }) => {
 
     //Recommended
 
-    useEffect(() => {
-        const abortController = new AbortController()
-        let url = "/api/event/recommended"
+    // useEffect(() => {
+    //     const abortController = new AbortController()
+    //     let url = "/api/event/recommended"
 
-        const getRecommended = async () => {
-            try {
-                setIsloading(true)
-                const response = await main.get(
-                    url,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${authState.userToken}`
-                        },
-                        params: {
-                            event: id,
-                        }
-                    })
-                setRecommended(response.data)
-                setIsloading(false)
-            }
-            catch (error) {
-                console.log(error)
-                setIsloading(false)
-            }
-        }
+    //     const getRecommended = async () => {
+    //         try {
+    //             setIsloading(true)
+    //             const response = await main.get(
+    //                 url,
+    //                 {
+    //                     headers: {
+    //                         'Authorization': `Bearer ${authState.userToken}`
+    //                     },
+    //                     params: {
+    //                         event: id,
+    //                     }
+    //                 })
+    //             setRecommended(response.data)
+    //             setIsloading(false)
+    //         }
+    //         catch (error) {
+    //             console.log(error)
+    //             setIsloading(false)
+    //         }
+    //     }
 
-        getRecommended()
+    //     getRecommended()
 
-        return () => {
-            abortController.abort()
-        }
+    //     return () => {
+    //         abortController.abort()
+    //     }
 
-    }, [isFocused])
+    // }, [isFocused])
 
     //Join Request
 
@@ -329,7 +329,7 @@ const eventScreen = ({ route, navigation }) => {
 
                     </View>
 
-                    <View style={{ marginBottom: 10 }}>
+                    {/* <View style={{ marginBottom: 10 }}>
 
                         <Text style={{ marginLeft: 20, fontWeight: 'bold', marginBottom: 20, fontSize: 18 }}>Recommended Events</Text>
 
@@ -342,7 +342,7 @@ const eventScreen = ({ route, navigation }) => {
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => (
                                     <Recommended eventdata={item} press={() => {
-                                        navigation.navigate('recommend', { item })
+                                        navigation.navigate('event', { item })
                                     }} />
                                 )}
                             />
@@ -352,7 +352,7 @@ const eventScreen = ({ route, navigation }) => {
 
                         }
 
-                    </View>
+                    </View> */}
 
                 </View>
 
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
 
 })
 
-export default eventScreen;
+export default recommendedScreen;
 
 
 

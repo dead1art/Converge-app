@@ -11,7 +11,6 @@ import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
 import { Provider as EventProvider } from './src/context/eventContext';
 import FlashMessage from "react-native-flash-message";
-import Toast from 'react-native-toast-message';
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
@@ -28,7 +27,7 @@ import createScreen from './src/screens/create/createScreen'
 import createEvent from './src/screens/create/createEvent';
 import createPost from './src/screens/create/createPost';
 // Chat
-import chatScreen from './src/screens/chat/chatScreen'
+import notificationScreen from './src/screens/chat/notificationScreen'
 import room from './src/screens/chat/room'
 import chatStack from './src/screens/chat/chatStack';
 // Profile
@@ -36,6 +35,7 @@ import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
 import inviteScreen from './src/screens/profile/inviteScreen';
 import ChannelListScreen from './src/screens/chat/ChannelListScreen';
+import recommendedScreen from './src/screens/search/recommendedScreen';
 
 
 
@@ -116,10 +116,10 @@ import ChannelListScreen from './src/screens/chat/ChannelListScreen';
 
         <Tab.Screen 
         name="chat" 
-        component={chatScreen}
+        component={notificationScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "chatbox" : "chatbox-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "notifications" : "notifications-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -389,6 +389,7 @@ export default function App({ navigation }) {
             )
             }
             <Stack.Screen name="event" component={eventScreen}/>
+            <Stack.Screen name="recommend" component={recommendedScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
             <Stack.Screen name="profile" component={profileScreen}/>
             <Stack.Screen name="invite" component={inviteScreen}/>

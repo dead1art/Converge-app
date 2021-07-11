@@ -120,6 +120,7 @@ const homeScreen = ({navigation})=> {
                     containerStyle={{
                         marginTop:20,
                     }}
+                    onPress={()=>navigation.navigate("room")}
                 />
             
             </View>
@@ -155,26 +156,6 @@ const homeScreen = ({navigation})=> {
 
         <SafeAreaView style={styles.container}> 
 
-            <View style={styles.header}>
-
-                <Text style={styles.logo}> Converge </Text> 
-
-                <Button
-                    type="clear"
-                    icon={
-                        <MaterialIcons
-                            name="chat"
-                            size={26}
-                            color={theme.black}
-                        />
-                    }
-                    containerStyle={{
-                        marginTop:20,
-                    }}
-                />
-            
-            </View>  
-
             <View style={styles.section}> 
                 
                 {/* <Text style={styles.label}> Latest blogs </Text> */}
@@ -185,7 +166,7 @@ const homeScreen = ({navigation})=> {
                 renderItem={({item}) => (
                     <Feed info={item} profileNavigate={() => navigation.navigate('profile', { item })}/>
                     )}
-                // ListHeaderComponent={header}
+                ListHeaderComponent={header}
                 snapToAlignment={"start"}
                 showsVerticalScrollIndicator={false} 
                 refreshControl={
@@ -211,7 +192,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width: '100%',
-        backgroundColor:theme.white,
+        backgroundColor:theme.background,
         height: Dimensions.get('screen').height,
     },
 
@@ -223,14 +204,16 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         borderColor:theme.lightaccent,
         paddingTop: 20,
+        paddingBottom:10,
         paddingHorizontal:10,
-        backgroundColor: theme.white,
+        backgroundColor: theme.background,
         width: '100%',
     },
 
     section: {
-        flex: 7,
+        flex: 9,
         marginBottom:60,
+        marginHorizontal:10,
     },
 
     logo:{
