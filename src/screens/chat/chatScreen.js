@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext,useState, useCallback, useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import data from "../../../assets/chatroom"
@@ -7,63 +7,55 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { Button } from 'react-native-elements'
 import { theme } from '../../constants/colors'
 import ChatRoom from '../../components/Chat/ChatRoom'
+import { GiftedChat } from 'react-native-gifted-chat'
+import {AuthContext} from '../../context/AuthContext';
+import main from '../../api/main';
 
-const chatScreen = () => {
-    return (
-        <View style={styles.container}>
+const chatScreen = ({navigation}) => {
 
-            <View style={styles.header}>
+    const { state: authState } = useContext(AuthContext);
 
-                <Text style={styles.headerTitle}> Chats </Text>
+    const [user, setUser] = useState([]);
 
-                <View style={styles.button}>
+    // useEffect(()=>{
+    //     const abortController = new AbortController()
+    //     const getUser = async() =>{
+    //         try{
+    //             // setIsloading(true)
+    //             const response = await main.get('/api/profile/', {
+    //               headers: {
+    //                 'Authorization': `Bearer ${authState.userToken}` 
+    //               }         
+    //             });
+    //             console.log(response.data.id);
+    //             setUser(response.data);
+    //             //   setIsloading(false)
+    //           }
+    //           catch(err){
+    //             //   setIsloading(false)
+    //               console.log(err);
+    //             //   setError(err)
+    //           }
+    //     }
 
-                <Button
-                type="clear"
-                containerStyle={styles.bellContainer}
-                style={styles.search}
-                icon={
-                    <MaterialIcons
-                    name="notifications"
-                    size={30}
-                    color={theme.blue}
-                    />
-                }
-                />
+    //     getUser();
 
-                <Button
-                type="clear"
-                containerStyle={styles.searchContainer}
-                style={styles.search}
-                icon={
-                    <MaterialIcons
-                    name="search"
-                    size={30}
-                    color={theme.blue}
-                    />
-                }
-                />
+    //     return () => {
+    //         abortController.abort()
+    //     }
+    // },[])
 
-                </View>
+    // console.log(user);
 
-            </View>
-
-            <View style={styles.section}>
-
-                <FlatList
-                    data={data}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => (
-                        <ChatRoom chatData={item} />
-                    )}
-                />
-
-            </View>
-
-            <FocusAwareStatusBar style="auto" />
-        </View>
+    return(
+        <Button
+        style={styles.button}
+        title="Search for any events"
+        onPress={()=>navigation.navigate("room")}
+    />
     )
 }
+
 
 const styles = StyleSheet.create({
     container:{

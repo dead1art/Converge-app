@@ -16,6 +16,7 @@ import Toast from 'react-native-toast-message';
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
 import registerScreen from './src/screens/authenctication/RegisterScreen';
+import otpScreen from './src/screens/authenctication/otpScreen';
 // Home
 import homeScreen from './src/screens/home/homeScreen';
 // Search
@@ -28,10 +29,13 @@ import createEvent from './src/screens/create/createEvent';
 import createPost from './src/screens/create/createPost';
 // Chat
 import chatScreen from './src/screens/chat/chatScreen'
+import room from './src/screens/chat/room'
+import chatStack from './src/screens/chat/chatStack';
 // Profile
 import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
 import inviteScreen from './src/screens/profile/inviteScreen';
+import ChannelListScreen from './src/screens/chat/ChannelListScreen';
 
 
 
@@ -39,6 +43,8 @@ import inviteScreen from './src/screens/profile/inviteScreen';
   // const AuthContext = React.createContext();
 
   const login = createStackNavigator(); 
+
+  const reg = createStackNavigator();
 
   const user = createStackNavigator();
 
@@ -55,6 +61,8 @@ import inviteScreen from './src/screens/profile/inviteScreen';
   }
   return true;
 };
+
+
 
   const homeStack = ()=>{
     return (
@@ -129,6 +137,28 @@ import inviteScreen from './src/screens/profile/inviteScreen';
     )
   }
 
+  const registerStack = () =>{
+    return (
+      <reg.Navigator initialRouteName="register">
+      <reg.Screen 
+        name= "register"
+        component={registerScreen}
+        options={{
+          headerShown:false 
+        }}
+      />
+      <reg.Screen 
+        name="otp"
+        component={otpScreen}
+        options={{
+          headerShown:false 
+        }}
+      />
+      </reg.Navigator>
+  )
+  }
+
+
   const rootStack = () => {
     return (
       <login.Navigator >
@@ -140,8 +170,8 @@ import inviteScreen from './src/screens/profile/inviteScreen';
               }
               }/>
         <login.Screen 
-              name="register" 
-              component={registerScreen}
+              name="registerStack" 
+              component={registerStack}
               options={{
                 headerShown:false 
               }}/>
@@ -196,6 +226,9 @@ const initialState = {
   isLoading: true,
   isSignout: false,
   userToken: null,
+  streamToken:null,
+  registerEmail:null,
+  haserror:false,
 }
 
 const reducer = (state, action) => {
@@ -204,6 +237,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         userToken: action.token,
+        streamToken:action.stream,
         isLoading: false,
       };
     case 'SIGN_IN':
@@ -211,13 +245,27 @@ const reducer = (state, action) => {
         ...state,
         isSignout: false,
         userToken: action.token,
+        streamToken: action.stream,
       };
     case 'SIGN_OUT':
       return {
         ...state,
         isSignout: true,
         userToken: null,
+        streamToken: null
       };
+    case 'REGISTER':
+      return {
+        ...state,
+        registerEmail:action.email,
+        haserror:false
+      };
+    case 'Error':
+      return {
+        ...state,
+        haserror:action.error
+      }
+
   }
 }
 
@@ -242,13 +290,15 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       let userToken;
+      let streamToken;
 
       try {
         userToken = await AsyncStorage.getItem("token");
+        streamToken = await AsyncStorage.getItem("stream");
       } catch (e) {
         console.log(e);
       }
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken, stream: streamToken});
     };
 
     bootstrapAsync();
@@ -262,10 +312,11 @@ export default function App({ navigation }) {
           const response = await main.post("/api/convert-token/",{ token, backend: "google-oauth2", client_id, client_secret, grant_type: "convert_token" });
           console.log(response);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({type: 'SIGN_IN', token:response.data.access_token})
+          dispatch({type: 'SIGN_IN', token:response.data.access_token, userid:userresponse.data.id})
         }
         catch(err)
         {
+          alert("Something went wrong");
           console.log(err);
         }
       },
@@ -276,29 +327,36 @@ export default function App({ navigation }) {
           const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
           console.log( response.data);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token  });
+          const streamresponse = await main.get('/api/chat/token',{
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }
+          });
+          await AsyncStorage.setItem("stream", streamresponse.data.token);
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream:streamresponse.data.token });
          }
       catch(err)
         {
           console.log(err);
+          alert("Wrong password or email");
          }
         
       },
       register:async({email, password, first_name, last_name})=>{
         try {
-          const username=email;
-          await main.post("/api/register/", { email, password, first_name, last_name });
-          const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
-          console.log( response.data.access);
-          await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token});  
+          const response = await main.post("/api/register/", { email, password, first_name, last_name });
+          dispatch({ type: 'REGISTER', email:response.data.email, error:false });
+
         } catch (err) {
-            console.log(err);
+            alert("Something is missing");
+            console.log(err.body);
+          dispatch({type:'Error',error:true })
         }
 
       },
       signOut: async () => {
         await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("stream");
         dispatch({ type: 'SIGN_OUT'});
       },
     }),
@@ -334,6 +392,7 @@ export default function App({ navigation }) {
             <Stack.Screen name="edit" component={editScreen}/>
             <Stack.Screen name="profile" component={profileScreen}/>
             <Stack.Screen name="invite" component={inviteScreen}/>
+            <Stack.Screen name="room" component={chatStack} />
         </Stack.Navigator>
       </NavigationContainer>
       </EventProvider>

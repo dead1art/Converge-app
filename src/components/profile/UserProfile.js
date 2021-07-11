@@ -12,6 +12,7 @@ function UserProfile({ data, back }) {
 
   const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
+
   return(
     <SafeAreaView style={styles.container}>
 

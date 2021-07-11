@@ -40,17 +40,18 @@ const eventReducer = (state, action) =>{
             return{
                 ...state,
                 submissionError:false,
-                isEventSubmitted:false
+                isEventSubmitted:false,
             };
         case "add_events_success":
             return{
                 ...state,
-                status:action.data,
+                isEventSubmitted:true,
+                submissionError:false
             };
         case "add_events_failure":
             return{
                 ...state,
-                status:action.data,
+                submissionError:true
             };
         default:
             return state;
@@ -103,7 +104,8 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
     //     });
 
         try{
-            const event_response = await main.post('/api/event//',{addr,max_attendees,desc,event_date,location,tags,title}, {
+            dispatch({type:"add_event_request"})
+            const event_response = await main.post('/api/event/',{addr,max_attendees,desc,event_date,location,tags,title}, {
                 headers: {
            'Authorization': `Bearer ${token}` 
            }});
@@ -131,10 +133,12 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
               console.log(response);
               dispatch({type:'add_events_failure',data:response.status});
             });
+            dispatch({type:"add_events_success"});
         }
         catch(error)
         {
             console.log(error);
+            dispatch({type:"add_events_failure"});
         }
         
     
@@ -143,5 +147,5 @@ const addEvent = (dispatch) => async({addr,max_attendees,desc,event_date,image,l
 export const {Provider, Context } = createDataContext(
     eventReducer,
     {addEvent},
-    initialState
+    initialState 
 )

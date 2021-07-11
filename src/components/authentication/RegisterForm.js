@@ -6,7 +6,7 @@ import { theme } from '../../constants/colors';
 import {FocusAwareStatusBar} from '../statusbar';
 
 
-const RegisterForm = ({onSubmit,onNavigation})=> {
+const RegisterForm = ({onSubmit})=> {
     const [first_name, setFname] = useState('');
     const [last_name, setLname] = useState('');
     const [email, setEmail] = useState('');
