@@ -64,7 +64,7 @@ const createPost = ({navigation}) => {
 
     formData.append('image', { uri: localUri, name: filename, type });
     formData.append('caption',caption);
-    // formData.append('tags',tags);
+    formData.append('tags',tags);
    
     // formData.append('max_attendees',max_attendees);
     // formData.append('event_date',event_date);

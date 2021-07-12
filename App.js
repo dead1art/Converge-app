@@ -11,6 +11,7 @@ import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
 import { Provider as EventProvider } from './src/context/eventContext';
 import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
@@ -223,6 +224,7 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
 
 
 const initialState = {
+  user: [],
   isLoading: true,
   isSignout: false,
   userToken: null,
@@ -246,6 +248,7 @@ const reducer = (state, action) => {
         isSignout: false,
         userToken: action.token,
         streamToken: action.stream,
+        user: action.user,
       };
     case 'SIGN_OUT':
       return {
@@ -258,12 +261,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         registerEmail:action.email,
-        haserror:false
+        haserror:false,
       };
     case 'Error':
       return {
         ...state,
-        haserror:action.error
+        haserror:true,
       }
 
   }
@@ -281,6 +284,7 @@ const Stack = createStackNavigator();
 
 
 export default function App({ navigation }) {
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const client_id="7G9ugODJhtBbJee4EURnmJFILJUpAFJ2COPKjqCz";
@@ -333,24 +337,42 @@ export default function App({ navigation }) {
             }
           });
           await AsyncStorage.setItem("stream", streamresponse.data.token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream:streamresponse.data.token });
+          const userResponse = await main.get('/api/profile/', {
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }         
+          })
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream:streamresponse.data.token, user: userResponse.data });
          }
       catch(err)
         {
           console.log(err);
-          alert("Wrong password or email");
+          showMessage({
+                          message:"Invalid Credentials!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
          }
         
       },
       register:async({email, password, first_name, last_name})=>{
         try {
           const response = await main.post("/api/register/", { email, password, first_name, last_name });
-          dispatch({ type: 'REGISTER', email:response.data.email, error:false });
-
-        } catch (err) {
-            alert("Something is missing");
-            console.log(err.body);
-          dispatch({type:'Error',error:true })
+          dispatch({ type: 'REGISTER', email:response.data.email });
+        } catch (error) {
+            console.log(error);
+            showMessage({
+                          message:"Error creating your account!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                   
+                        });  
+            dispatch({type:'Error', })
         }
 
       },

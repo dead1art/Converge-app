@@ -24,11 +24,19 @@ const chatStack = ({navigation}) => {
 
     const { state: authState } = useContext(AuthContext);
 
+    const user_firstName = authState.user.first_name
+    const user_lastName = authState.user.last_name
+    
+    const user_id = authState.user.id
+    const user_image = authState.user.image
+    const user_name = user_firstName + user_lastName
+  
+
         const chatClient = StreamChat.getInstance('gxz6ahcuv6p5');
         const userToken = authState.streamToken;
         console.log(userToken);
     
-    const user = { id: '3' };
+    const user = { id: `${user_id}`, name: `${user_name}`, image: `${user_image}` };
 
     const { bottom } = useSafeAreaInsets();
 

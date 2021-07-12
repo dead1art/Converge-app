@@ -23,6 +23,8 @@ const ChannelListScreen = ({navigation}) => {
 
         const userToken = authState.streamToken;
 
+        const user_id = authState.user.id
+
         // console.log(userToken);
 
         const { setChannel,setClientReady,clientReady } = useContext(appContext);
@@ -34,7 +36,7 @@ const ChannelListScreen = ({navigation}) => {
 
 
         const filters = {
-          members: { $in: ['3'] },
+          members: { $in: [`${user_id}`] },
           type: 'messaging',
         };
 

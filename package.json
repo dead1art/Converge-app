@@ -67,7 +67,9 @@
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^3.0.1",
     "react-native-web": "~0.13.12",
-    "stream-chat-expo": "^3.6.0"
+    "stream-chat-expo": "^3.6.0",
+    "expo-notifications": "~0.8.2",
+    "expo-constants": "~9.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
