@@ -1,16 +1,20 @@
 import React, {useState} from 'react'
-import { View,  StyleSheet, Dimensions } from 'react-native'
+import { View,  StyleSheet, Dimensions, ImageBackground, KeyboardAvoidingView } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import main from '../../api/main';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import {AuthContext} from '../../context/AuthContext';
-import { TextInput } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
+import {FocusAwareStatusBar} from "../../components/statusbar"
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { theme } from '../../constants/colors'
 
 const otpScreen = ({navigation}) => {
 
     const {state:authState} = React.useContext(AuthContext);
     const regemail= authState.registerEmail;
+
+    
     
     const setupOtp = async() =>{
         try{
@@ -42,66 +46,113 @@ const otpScreen = ({navigation}) => {
         }
     }
 
+
+    const imageUrl = "https://images.unsplash.com/photo-1558038033-2645449ec092?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTB8fHRyYXZlbGVyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"  
+
     const [otp,setOtp] = React.useState();
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior="padding"style={styles.container}>
+
+        <View style={styles.header}>
+                <ImageBackground
+                    source={{uri : imageUrl}}
+                    style={{width: '100%', height: '100%'}}
+                >
+
+                </ImageBackground>
+
+            </View>
 
         <View style={styles.content}>
-          <Input 
-          value={otp}
-          onChangeText={setOtp} 
-          placeholder='Enter otp'
+
+          <Text style={styles.title}> Enter Your OTP </Text>  
+
+          <Input
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
+            }}
+            rightIcon={
+                <MaterialIcons
+                    name="phone"
+                    size={20}
+                    color={theme.black}
+                />
+            }
+            inputStyle={styles.input}
+            value={otp}
+            onChangeText={setOtp}
+            placeholder='OTP' 
+            placeholderTextColor={theme.black}
           />
-        </View>
+
+          <View style={{
+                marginBottom:30, 
+                marginHorizontal:20}}>
+                <Text style={{color: 'rgba(0,0,0,0.5)'}}>OTP has been sent to your registered email address</Text>
+            </View>
+        
 
         <Button 
-        buttonStyle={{ backgroundColor: '#1e5eff', 
-        alignSelf:'center',
-        padding:10,
-        marginTop: 30,
-        borderRadius: 20,
-        width:110,}}
-        title="Verify"
-        onPress={()=>{
-          setupOtp();
-        }}
-        />
-      </View>
+                titleStyle={{ 
+                    color: 'white',
+                }}  
+                buttonStyle={{
+                    backgroundColor: theme.blue,
+                    padding:15,
+                    borderRadius: 10,
+                    marginHorizontal: 10,
+                }}
+                title="Verify" 
+                type="clear"
+                onPress={() => setupOtp()}
+            />
+
+        </View>
+
+        <FocusAwareStatusBar style="auto"/>
+
+      </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
-    contaner:{
-      width: '100%',
-      alignItems:'center',
-      height: Dimensions.get('screen').height,  
+    container:{
+        display:'flex',
+        width: '100%',
+        height: Dimensions.get('screen').height,
+        backgroundColor:theme.white,
+    },
+
+    header: {
+        flex:2,
     },
 
     content:{
-      marginHorizontal:20,
-      marginTop:'30%',
+        flex: 1,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        backgroundColor: theme.white,
+        paddingHorizontal:10,
+        paddingTop:10,
+        marginTop:-20,
     },
 
-    borderStyleBase: {
-      width: 30,
-      height: 45
+    title:{
+        color:theme.gray, 
+        marginLeft:20, 
+        marginVertical:20,
     },
-   
-    borderStyleHighLighted: {
-      borderColor: "#03DAC6",
+
+    input: {
+        paddingHorizontal: 5,
+        color: 'black',
+        fontSize:16,
     },
-   
-    underlineStyleBase: {
-      width: 30,
-      height: 45,
-      borderWidth: 0,
-      borderBottomWidth: 1,
-    },
-   
-    underlineStyleHighLighted: {
-      borderColor: "#03DAC6",
-    },
-  });
+
+})
 
 export default otpScreen

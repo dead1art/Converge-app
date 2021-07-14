@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ConvergeApp",
-    "slug": "convergeapp",
+    "name": "Converge_android",
+    "slug": "converge",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "Notifications yo"
+    "description": "forgot pass hmmm\n"
   }
 }

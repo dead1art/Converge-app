@@ -56,6 +56,8 @@ const userScreen = ({navigation}) => {
 
   const { state: authState } = useContext(AuthContext);
 
+  // console.log(authState.expoToken)
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
 

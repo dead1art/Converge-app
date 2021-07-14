@@ -69,7 +69,8 @@
     "react-native-web": "~0.13.12",
     "stream-chat-expo": "^3.6.0",
     "expo-notifications": "~0.8.2",
-    "expo-constants": "~9.3.3"
+    "expo-constants": "~9.3.3",
+    "react-native-webview": "11.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

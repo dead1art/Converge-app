@@ -291,7 +291,7 @@ const SearchScreen = ({ navigation }) => {
                     data={filteredEvents}
                     keyExtractor={item => item.id.toString()}
                     numColumns={1}
-                    ListfooterComponent={<View style={{ height: 40 }}> Footer </View>}
+                    ListEmptyComponent={<Text> No Events </Text>}
                     refreshControl={
                         <RefreshControl
                             refreshing={refreshing}
@@ -313,7 +313,7 @@ const SearchScreen = ({ navigation }) => {
                     ListHeaderComponent={Header}
                     keyExtractor={item => item.id.toString()}
                     numColumns={2}
-                    ListfooterComponent={<View style={{ height: 40 }}> Footer </View>}
+                    ListEmptyComponent={<Text> No Events </Text>}
                     //   refreshControl={
                     //         <RefreshControl
                     //             refreshing={refreshing}

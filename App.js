@@ -15,6 +15,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
+import forgotPassword from './src/screens/authenctication/forgotPassword'
 import registerScreen from './src/screens/authenctication/RegisterScreen';
 import otpScreen from './src/screens/authenctication/otpScreen';
 // Home
@@ -171,6 +172,13 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
               }
               }/>
         <login.Screen 
+              name="forgot" 
+              component={forgotPassword}
+              options={{
+                headerShown:false 
+              }
+              }/>
+        <login.Screen 
               name="registerStack" 
               component={registerStack}
               options={{
@@ -231,6 +239,7 @@ const initialState = {
   streamToken:null,
   registerEmail:null,
   haserror:false,
+  expoToken:null,
 }
 
 const reducer = (state, action) => {
@@ -255,7 +264,8 @@ const reducer = (state, action) => {
         ...state,
         isSignout: true,
         userToken: null,
-        streamToken: null
+        streamToken: null,
+        expoToken:null,
       };
     case 'REGISTER':
       return {
@@ -267,8 +277,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         haserror:true,
-      }
-
+      };
+    case 'ExpoToken':
+      return{
+        ...state,
+        expoToken:action.expo,
+      };
   }
 }
 
@@ -377,6 +391,21 @@ export default function App({ navigation }) {
 
       },
       signOut: async () => {
+        try{
+          const response = await main.post('/api/del-expotoken/', 
+            { 
+              token:state.expoToken 
+            },
+            {
+             headers: {
+              'Authorization': `Bearer ${state.userToken}` 
+              }
+            })
+            console.log(response)
+          }
+        catch (err){
+          console.log(err)
+        }
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("stream");
         dispatch({ type: 'SIGN_OUT'});

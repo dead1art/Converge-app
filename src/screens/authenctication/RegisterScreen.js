@@ -1,6 +1,7 @@
 import React, {useContext,useState, useEffect} from 'react'
-import { View, StyleSheet,SafeAreaView, Dimensions} from 'react-native';
+import { View, StyleSheet,KeyboardAvoidingView, Dimensions, ImageBackground} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import RegisterForm from '../../components/authentication/RegisterForm';
 // import {AuthContext} from '../../App';
 import {AuthContext} from '../../context/AuthContext';
@@ -19,6 +20,7 @@ const registerScreen = ({navigation})=> {
 
     // const error = authState.haserror;
     // console.log(error);
+    const imageUrl = "https://images.unsplash.com/photo-1558038033-2645449ec092?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTB8fHRyYXZlbGVyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"  
 
     const [first_name, setFname] = useState('');
     const [last_name, setLname] = useState('');
@@ -57,114 +59,171 @@ const registerScreen = ({navigation})=> {
     },[password])
 
     return(
-        <SafeAreaView style={styles.container}> 
+        <KeyboardAvoidingView behavior="padding" style={styles.container}> 
 
         <View style={styles.header}>
+                <ImageBackground
+                    source={{uri : imageUrl}}
+                    style={{width: '100%', height: '100%'}}
+                >
 
-            <Text style={styles.title}> Create Your Account </Text>
+                </ImageBackground>
 
-        </View>
+            </View>
 
-        <View style={styles.content}> 
+        <View style={styles.content}>
+
+            <Text style={styles.title}> Create Your Account</Text>  
                 
             <Input 
-            inputStyle={styles.input} 
-            inputContainerStyle={{borderBottomWidth:0}}
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
+            }}
+            rightIcon={
+                <MaterialIcons
+                    name="person"
+                    size={20}
+                    color={theme.black}
+                />
+            }
+            inputStyle={styles.input}
+            placeholderTextColor={theme.black}
+            placeholder='First Name' 
             value={first_name}
             onChangeText={setFname} 
-            placeholder='First Name' />
+            /> 
 
             <Input 
-            inputStyle={styles.input} 
-            inputContainerStyle={{borderBottomWidth:0}}
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
+            }}
+            rightIcon={
+                <MaterialIcons
+                    name="person"
+                    size={20}
+                    color={theme.black}
+                />
+            }
+            inputStyle={styles.input}
+            placeholderTextColor={theme.black}
+            placeholder='Last Name' 
             value={last_name}
             onChangeText={setLname} 
-            placeholder='Last Name' />
+            /> 
 
             <Input 
-            inputStyle={styles.input} 
-            inputContainerStyle={{borderBottomWidth:0}}
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
+            }}
+            rightIcon={
+                <MaterialIcons
+                    name="email"
+                    size={20}
+                    color={theme.black}
+                />
+            }
+            inputStyle={styles.input}
+            placeholderTextColor={theme.black}
+            placeholder='Email' 
             value={email}
             onChangeText={setEmail} 
-            placeholder='Email' />
+            /> 
 
             <Input 
-            inputStyle={styles.input} 
-            inputContainerStyle={{borderBottomWidth:0}}
-            value={password}
-            secureTextEntry
-            onChangeText={setPassword} 
-            placeholder='Password' /> 
-
-            <Text 
-            style={passError === "weak" ? styles.weakError : styles.goodError}>
-                {passError}
-                </Text>
-
-            <Button
-            type="clear" 
-            containerStyle={{ 
-                backgroundColor: '#1e5eff', 
-                paddingVertical:5,
-                paddingHorizontal:10,
-                marginTop: 30,
-                borderRadius: 10,
-                
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
             }}
-            titleStyle={{color: theme.white}}
-            title="Sign-Up" 
-            onPress={() => {
-                register()
-                // {!error && navigation.navigate("otp")}
+            rightIcon={
+                <MaterialIcons
+                    name="lock"
+                    size={20}
+                    color={theme.black}
+                />
             }
-            }/>
-             
+            inputStyle={styles.input}
+            placeholderTextColor={theme.black}
+            placeholder='Password' 
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry 
+            /> 
+
+            <View style={{
+                flexDirection:'row', 
+                alignItems:'center', 
+                marginBottom:30, 
+                marginHorizontal:20}}>
+                <MaterialIcons name="warning" size={16} color={'rgba(0,0,0,0.5)'} />
+                <Text style={{color: 'rgba(0,0,0,0.5)'}}> Minimum password length must be of 8 characters!</Text>
+            </View>
+
+            <Button 
+                titleStyle={{ 
+                    color: 'white',
+                }}  
+                buttonStyle={{
+                    backgroundColor: theme.blue,
+                    padding:15,
+                    borderRadius: 10,
+                    marginHorizontal: 10,
+                }}
+                title="Register" 
+                type="clear"
+                onPress={() => register()}
+            />             
         
         </View>    
-
-        <View style={styles.footer}>
-
-            
-        </View>
-
+        
         <FocusAwareStatusBar style="auto"/>
 
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        backgroundColor: theme.white,
+    container:{
+        display:'flex',
         width: '100%',
         height: Dimensions.get('screen').height,
+        backgroundColor:theme.white,
     },
 
-    header:{
-        flex:1,
-        // alignItems: 'center',
-        marginTop:50,
+    header: {
+        flex:2,
     },
 
     content:{
-        flex:11,
-        marginHorizontal:20,
-        alignItems: 'center',
+        flex: 3,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        backgroundColor: theme.white,
+        paddingHorizontal:10,
+        paddingTop:10,
+        marginTop:-20,
     },
 
     title:{
-        fontSize: 30,
-        fontWeight: "700",
-        color: "black",
-        marginBottom: 40,
+        color:theme.gray, 
+        marginLeft:20, 
+        marginVertical:20,
     },
-    input:{
-        padding: 15,
-        paddingHorizontal: 20,
+
+    input: {
+        paddingHorizontal: 5,
         color: 'black',
-        borderRadius: 20,
-        backgroundColor: theme.lightaccent,
+        fontSize:16,
     },
 
     weakError:{

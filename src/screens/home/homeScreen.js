@@ -30,6 +30,8 @@ Notifications.setNotificationHandler({
 
 const homeScreen = ({navigation})=> {
 
+    const {dispatch} = useContext(AuthContext);
+
     //Notifications 
 
     const [expoPushToken, setExpoPushToken] = useState('');
@@ -51,7 +53,7 @@ const homeScreen = ({navigation})=> {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    
+    dispatch({type: 'ExpoToken', expo:token})
     const tokenUrl = "https://converge-project.herokuapp.com/api/expotoken/"
 
     await axios({

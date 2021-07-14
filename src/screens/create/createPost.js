@@ -64,7 +64,6 @@ const createPost = ({navigation}) => {
 
     formData.append('image', { uri: localUri, name: filename, type });
     formData.append('caption',caption);
-    formData.append('tags',tags);
    
     // formData.append('max_attendees',max_attendees);
     // formData.append('event_date',event_date);
@@ -248,7 +247,7 @@ const createPost = ({navigation}) => {
     
             {/* Chips */}
 
-            <View style={styles.tags}>
+            {/* <View style={styles.tags}>
 
             <Text>   Enter Tags</Text>
             <ReactChipsInput 
@@ -260,15 +259,15 @@ const createPost = ({navigation}) => {
                 labelStyle={styles.chipLabel} 
                 labelOnBlur={{ color: '#666' }} />
 
-            </View> 
+            </View>  */}
 
             
             <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
                 backgroundColor: theme.blue,
-                marginTop:100,
-                marginLeft:20,
+                marginTop:20,
+                marginLeft:10,
                 width:120,
                 marginBottom: 80,
                 borderRadius: 10,

@@ -1,5 +1,5 @@
-import React, { useState,useContext } from 'react';
-import { View, StyleSheet, Image, Dimensions, ImageBackground} from 'react-native';
+import React, { useState,useContext, useEffect, useRef } from 'react';
+import { View, StyleSheet, Image, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
@@ -15,8 +15,7 @@ import * as AuthSession from 'expo-auth-session';
 
 
 
-
-const LoginForm = ({onSubmit,onNavigate}) => {
+const LoginForm = ({onSubmit,onNavigate, onForgot}) => {
 
     const {dispatch} = useContext(AuthContext);
 
@@ -41,8 +40,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
         redirectUri,
       });
 
-
-      React.useEffect(() => {
+      useEffect(() => {
         if (response?.type === 'success') {
           const { authentication } = response;
           const token = authentication.accessToken;
@@ -92,7 +90,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
 
     return (
 
-        <View style={styles.container}>      
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>      
 
             <View style={styles.header}>
                 <ImageBackground
@@ -113,7 +111,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
 
                 <Input
                     inputContainerStyle={{ 
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 1,
                         borderColor:'#a0a2a7',
                         height: 50,
                         marginHorizontal:10,
@@ -135,7 +133,7 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                     
                 <Input 
                     inputContainerStyle={{
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 1,
                         borderColor:'#a0a2a7',
                         height: 50,
                         marginHorizontal:10,
@@ -203,20 +201,36 @@ const LoginForm = ({onSubmit,onNavigate}) => {
                         }
                         />  
                     
+
+                    <Button 
+                        titleStyle={{ 
+                            color: theme.black,
+                        }}  
+                        buttonStyle={{
+                            marginTop:20,
+                            padding:15,
+                            borderRadius: 10,
+                            borderColor:theme.black,
+                            borderWidth:2,
+                            marginHorizontal: 10,
+                        }}
+                         title="Register" type="clear"
+                         onPress={() => onNavigate()}
+                         />   
+                     
                     <Button
-                        containerStyle={{marginTop:25}}
-                        title="New to Converge ? Register now"
+                        containerStyle={{marginTop:5}}
+                        title="Forgot Password"
                         type="clear"
                         titleStyle={{color: theme.gray}}
-                        onPress={()=> onNavigate()}
+                        onPress={()=> onForgot()}
             
                     />
-                     
             </View>
 
             <FocusAwareStatusBar style="auto"/>
 
-        </View>
+        </KeyboardAvoidingView>
     )
 
 
@@ -228,6 +242,7 @@ const styles = StyleSheet.create ({
         display:'flex',
         width: '100%',
         height: Dimensions.get('screen').height,
+        backgroundColor:theme.white,
     },
 
     header: {
@@ -235,8 +250,7 @@ const styles = StyleSheet.create ({
     },
 
     content:{
-        flex: 2.5,
-        elevation:10,
+        flex: 3,
         borderTopLeftRadius:20,
         borderTopRightRadius:20,
         backgroundColor: theme.white,

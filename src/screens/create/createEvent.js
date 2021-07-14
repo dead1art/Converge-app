@@ -129,7 +129,7 @@ const createEvent = ({navigation}) => {
               console.log(response);
               setIsloading(false)
               showMessage({
-                          message:"You have successfully created an event!" ,
+                          message:"Image has not been posted!" ,
                           type:"success",
                           floating: true,
                           duration:5000,
@@ -140,6 +140,15 @@ const createEvent = ({navigation}) => {
             .catch(function (response) {
               //handle error
               console.log(response);
+              setIsloading(false)
+              showMessage({
+                          message:"There was an error creating your event!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
             });
         }
         catch(error)
@@ -427,6 +436,7 @@ const createEvent = ({navigation}) => {
                 disabled={!image || !title || !addr}
                 onPress={() => {
                     addEvent(addr,max_attendees,desc,event_date,image,location,tags,title,token)
+                    setImage(stockImage)
                     setTitle('')
                     setAddr('')
                     setDesc('')

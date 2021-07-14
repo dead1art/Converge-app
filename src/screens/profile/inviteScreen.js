@@ -28,7 +28,9 @@ const inviteScreen = ({route, navigation}) => {
 
     const getUrl = `https://converge-project.herokuapp.com/api/event/${id}/`
 
-    const postUrl = `https://converge-project.herokuapp.com/api/event/accept/${id}/`
+    const acceptUrl = `https://converge-project.herokuapp.com/api/event/accept/${id}/`
+
+    const rejectUrl = `https://converge-project.herokuapp.com/api/event/reject/${id}/`
 
     useEffect(()=>{
     const abortController = new AbortController()
@@ -62,7 +64,7 @@ const inviteScreen = ({route, navigation}) => {
 
     const acceptHandler = async(userid) => {
         try{
-            const invite_response = await axios.post(postUrl,
+            const invite_response = await axios.post(acceptUrl,
                 {userid}, 
                 {
                 headers: {
@@ -77,6 +79,22 @@ const inviteScreen = ({route, navigation}) => {
         }
     }
 
+    const rejectHandler = async(userid) => {
+        try{
+            const invite_response = await axios.post(rejectUrl,
+                {userid}, 
+                {
+                headers: {
+                    'Authorization': `Bearer ${authState.userToken}` 
+            }});
+            setAccepted(userid)
+            console.log(invite_response.data);
+        }
+        catch(err){
+            console.log(err);
+            setError(err)
+        }
+    }
 
     if (isloading) {
         return (
@@ -136,7 +154,7 @@ const inviteScreen = ({route, navigation}) => {
                 keyExtractor={item => item.userid.toString()}
                 ListEmptyComponent={<Text style={{marginTop:0}}> No invites for u </Text>}
                 renderItem={({item}) => (
-                     <InviteCard cardData={item} accept={() => acceptHandler(item.userid)}/>
+                     <InviteCard cardData={item} accept={() => acceptHandler(item.userid)} reject={() => rejectHandler(item.userid)}/>
                      )}
                      />
 
