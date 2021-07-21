@@ -110,7 +110,7 @@ const createEvent = ({navigation}) => {
                 headers: {
            'Authorization': `Bearer ${token}` 
            }});
-           console.log(event_response.data);
+        //    console.log(event_response.data);
 
            const path_url = "https://converge-project.herokuapp.com/api/event/"+ event_response.data.id+"/";
            console.log(path_url);
@@ -126,23 +126,24 @@ const createEvent = ({navigation}) => {
           })
             .then(function (response) {
               //handle success
-              console.log(response);
+            //   console.log(response);
               setIsloading(false)
               showMessage({
-                          message:"Image has not been posted!" ,
+                          message:"Event has been created Successfully!" ,
                           type:"success",
                           floating: true,
                           duration:5000,
                           icon: {icon:"success" , position: "left"},
                           style: {paddingVertical: 20, paddingHorizontal:20}
                         });  
+                navigation.goBack()
             })
             .catch(function (response) {
               //handle error
-              console.log(response);
+              console.log(response.response.data);
               setIsloading(false)
               showMessage({
-                          message:"There was an error creating your event!" ,
+                          message:"There was an error validating your image!" ,
                           type:"danger",
                           floating: true,
                           duration:5000,
@@ -199,7 +200,7 @@ const createEvent = ({navigation}) => {
                         containerStyle={{
                             position: 'absolute',
                             left: 15,
-                            top: 35,
+                            top: 43,
                             borderRadius: 10,
                         }}
                         icon={
@@ -257,7 +258,8 @@ const createEvent = ({navigation}) => {
 
             <View style={styles.address}>
             <Text style={{fontWeight:'bold'}}>   Event Address </Text>
-            <Input 
+            <Input
+                maxLength={40} 
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
                 value={addr}
@@ -301,6 +303,7 @@ const createEvent = ({navigation}) => {
             <View style={{flexDirection:'column',width:'50%', justifyContent:'space-between'}}>
                 <Text style={{fontWeight:'bold'}}>   Max Attendees </Text>
             <Input 
+                keyboardType="number-pad"
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
                 value={max_attendees}
@@ -315,6 +318,7 @@ const createEvent = ({navigation}) => {
             <View style={styles.description}>
             <Text style={{fontWeight:'bold'}}>   Description</Text>
             <Input 
+                maxLength={100}
                 multiline={true}
                 // numberOfLines={3}
                 inputContainerStyle={styles.inputContainer}
@@ -418,6 +422,7 @@ const createEvent = ({navigation}) => {
                         setLocation([coords.longitude,coords.latitude]);
                     }}
                     />
+                    
             </MapView>
 
             </View>
@@ -425,11 +430,11 @@ const createEvent = ({navigation}) => {
             <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
-                backgroundColor: theme.blue,
+                backgroundColor: theme.black,
                 marginTop:10,
                 // marginLeft:20,
                 width:120,
-                marginBottom: 80,
+                marginBottom: 40,
                 borderRadius: 10,
                 paddingHorizontal: 10,}}
                 title='Create Event'
@@ -468,8 +473,8 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'white',
         alignItems: 'center',
-        paddingTop:40,
-        borderBottomWidth:1,
+        paddingTop:50,
+        // borderBottomWidth:1,
         borderColor:theme.lightaccent,
     },
 

@@ -125,6 +125,27 @@ const userScreen = ({navigation}) => {
     // wait(2000).then(() => setRefreshing(false)); 
   }, []);
 
+  //SignOut 
+
+  const signOutUser = async() => {
+    try{
+          const response = await main.post('/api/del-expotoken/', 
+            { 
+              token:authState.expoToken 
+            },
+            {
+             headers: {
+              'Authorization': `Bearer ${authState.userToken}` 
+              }
+            })
+            console.log(response)
+          }
+        catch (err){
+          console.log(err)
+        }
+        authContextValue.signOut()
+  }
+
   if (isloading) {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -157,7 +178,7 @@ const userScreen = ({navigation}) => {
 
         <Profile 
         data={userInfo} 
-        signout={authContextValue.signOut} 
+        signout={signOutUser} 
         nav={() => navigation.navigate('edit', {userInfo})}
         // props={navigation}
         />
@@ -225,7 +246,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     paddingHorizontal:20,
-    marginBottom:0,
   },
 
   interests:{
@@ -234,7 +254,7 @@ const styles = StyleSheet.create({
   },
 
   hostedEvents:{
-    marginVertical:20,
+    marginTop:10,
     width:'100%',
   },
 

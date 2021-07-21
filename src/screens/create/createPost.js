@@ -120,7 +120,8 @@ const createPost = ({navigation}) => {
                           duration:5000,
                           icon: {icon:"success" , position: "left"},
                           style: {paddingVertical: 20, paddingHorizontal:20}                   
-                        });  
+                        });
+                navigation.goBack()  
             })
             .catch(function (response) {
               //handle error
@@ -187,7 +188,7 @@ const createPost = ({navigation}) => {
                         containerStyle={{
                             position: 'absolute',
                             left: 15,
-                            top: 35,
+                            top: 43,
                             borderRadius: 10,
                         }}
                         icon={
@@ -234,9 +235,10 @@ const createPost = ({navigation}) => {
             {/* Description */}
 
             <View style={styles.description}>
-            <Text>   caption</Text>
+            <Text style={{fontWeight:'bold'}}>   Caption</Text>
             <Input 
                 multiline={true}
+                maxLength={60}
                 // numberOfLines={3}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
@@ -265,7 +267,7 @@ const createPost = ({navigation}) => {
             <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
-                backgroundColor: theme.blue,
+                backgroundColor: theme.black,
                 marginTop:20,
                 marginLeft:10,
                 width:120,
@@ -273,6 +275,7 @@ const createPost = ({navigation}) => {
                 borderRadius: 10,
                 paddingHorizontal: 10,}}
                 title='Create Post'
+                disabled={!image || !caption}
                 onPress={() => addPost(image,caption,tags,token)}
                 />
  
@@ -300,7 +303,7 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'white',
         alignItems: 'center',
-        paddingTop:40,
+        paddingTop:50,
         // borderBottomWidth:1,
         borderColor:theme.lightaccent,
     },

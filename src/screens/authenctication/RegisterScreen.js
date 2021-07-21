@@ -26,8 +26,9 @@ const registerScreen = ({navigation})=> {
     const [last_name, setLname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [cpassword, setCpassword] = useState('')
 
-    const [passError, setPassError] = useState('weak')
+    const [passError, setPassError] = useState(false)
 
     const register = async() => {
         try {
@@ -43,23 +44,23 @@ const registerScreen = ({navigation})=> {
                           duration:5000,
                           icon: {icon:"danger" , position: "left"},
                           style: {paddingVertical: 20, paddingHorizontal:20}                   
-                        });  
+                        }); 
+            navigation.navigate('register')
             dispatch({type:'Error', })
         }
     }
 
-    useEffect(() => {
-    if(password.length >= 8 )
-    {
-        setPassError("good")
+    useEffect(()=>{
+    if(password !== cpassword){
+        setPassError(true)
     }
     else{
-        setPassError("weak")
+        setPassError(false)
     }
-    },[password])
+    })
 
     return(
-        <KeyboardAvoidingView behavior="padding" style={styles.container}> 
+        <KeyboardAvoidingView behavior="height" style={styles.container}> 
 
         <View style={styles.header}>
                 <ImageBackground
@@ -158,16 +159,52 @@ const registerScreen = ({navigation})=> {
             value={password}
             onChangeText={setPassword}
             secureTextEntry 
-            /> 
+            />
 
+            {password.length > 0 && password.length < 8 &&
+            <View style={{
+                flexDirection:'row', 
+                alignItems:'center', 
+                marginTop:-20,
+                marginBottom:10, 
+                marginHorizontal:20}}>
+                <MaterialIcons name="warning" size={14} color={'rgba(0,0,0,0.5)'} />
+                <Text style={{fontSize:12,color: 'rgba(0,0,0,0.5)'}}> Minimum password length must be of 8 characters!</Text>
+            </View>
+            }
+
+            <Input 
+            inputContainerStyle={{ 
+                borderBottomWidth: 1,
+                borderColor:'#a0a2a7',
+                height: 50,
+                marginHorizontal:10,
+            }}
+            rightIcon={
+                <MaterialIcons
+                    name="lock"
+                    size={20}
+                    color={theme.black}
+                />
+            }
+            inputStyle={styles.input}
+            placeholderTextColor={theme.black}
+            placeholder='Confirm Password' 
+            value={cpassword}
+            onChangeText={setCpassword}
+            secureTextEntry 
+            /> 
+            
+            {passError &&
             <View style={{
                 flexDirection:'row', 
                 alignItems:'center', 
                 marginBottom:30, 
                 marginHorizontal:20}}>
                 <MaterialIcons name="warning" size={16} color={'rgba(0,0,0,0.5)'} />
-                <Text style={{color: 'rgba(0,0,0,0.5)'}}> Minimum password length must be of 8 characters!</Text>
+                <Text style={{fontSize:12,color: 'rgba(0,0,0,0.5)'}}> Password's don't match!</Text>
             </View>
+            } 
 
             <Button 
                 titleStyle={{ 
@@ -178,8 +215,10 @@ const registerScreen = ({navigation})=> {
                     padding:15,
                     borderRadius: 10,
                     marginHorizontal: 10,
+                    marginTop:'10%',
                 }}
-                title="Register" 
+                title="Register"
+                disabled={!first_name || !last_name || !email || !password || passError} 
                 type="clear"
                 onPress={() => register()}
             />             
@@ -201,7 +240,7 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        flex:2,
+        flex:1,
     },
 
     content:{

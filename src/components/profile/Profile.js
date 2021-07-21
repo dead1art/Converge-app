@@ -74,7 +74,7 @@ function Profile({ signout, data, nav }) {
             type="clear"
             containerStyle={{
               marginTop: 20,
-              backgroundColor: theme.lightaccent,
+              backgroundColor: theme.white,
               borderRadius: 10,
               paddingHorizontal: 10,
             }}
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     width: '100%',
-    paddingTop: 50,
+    paddingTop: 60,
     paddingBottom: 10,
     paddingHorizontal:20,
     // borderBottomWidth: 1,

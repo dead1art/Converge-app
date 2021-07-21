@@ -134,7 +134,7 @@ const LoginForm = ({onSubmit,onNavigate, onForgot}) => {
                 <Input 
                     inputContainerStyle={{
                         borderBottomWidth: 1,
-                        borderColor:'#a0a2a7',
+                        borderColor:password.length > 0 && password.length < 8 ? 'red' : '#a0a2a7',
                         height: 50,
                         marginHorizontal:10,
                     }}
@@ -201,31 +201,37 @@ const LoginForm = ({onSubmit,onNavigate, onForgot}) => {
                         }
                         />  
                     
+                    <View style={{ flexDirection: 'row',marginTop:10}}>
+
+                    <Button
+                        containerStyle={{
+                            width:'50%',
+                        }}
+                        title="Forgot Password ?"
+                        type="clear"
+                        titleStyle={{
+                            color: theme.gray,
+                            fontWeight:'100'
+                        }}
+                        onPress={()=> onForgot()}
+            
+                    />
 
                     <Button 
                         titleStyle={{ 
                             color: theme.black,
+                            textDecorationLine:'underline',
                         }}  
-                        buttonStyle={{
-                            marginTop:20,
-                            padding:15,
-                            borderRadius: 10,
+                        containerStyle={{
+                            width: '50%',
                             borderColor:theme.black,
-                            borderWidth:2,
-                            marginHorizontal: 10,
                         }}
-                         title="Register" type="clear"
+                         title="Create Account" type="clear"
                          onPress={() => onNavigate()}
                          />   
                      
-                    <Button
-                        containerStyle={{marginTop:5}}
-                        title="Forgot Password"
-                        type="clear"
-                        titleStyle={{color: theme.gray}}
-                        onPress={()=> onForgot()}
-            
-                    />
+
+                    </View>
             </View>
 
             <FocusAwareStatusBar style="auto"/>

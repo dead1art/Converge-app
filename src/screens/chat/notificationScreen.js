@@ -81,7 +81,7 @@ const notificationScreen = ({navigation}) => {
             
             <View style={styles.header}>
 
-                <Text style={{fontWeight:'bold', fontSize:24,}}> Notifications </Text>
+                <Text style={{fontWeight:'bold', fontSize:28,}}> Activity </Text>
 
             </View>
 
@@ -91,7 +91,7 @@ const notificationScreen = ({navigation}) => {
             <FlatList
                 data={notifications}
                 keyExtractor={item => item.id.toString()}
-                ListEmptyComponent={<Text style={{marginTop:0}}> There are no notifications </Text>}
+                ListEmptyComponent={<Text style={{marginTop:10}}> There are no recent activities for you </Text>}
                 renderItem={({item}) => (
                      <NotificationCard cardData={item} />
                      )}
@@ -121,9 +121,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
         paddingTop:20,
-        marginHorizontal:10,
+        marginHorizontal:20,
         borderColor:theme.lightaccent,
-
     },
 
     content:{

@@ -12,7 +12,6 @@ function UserProfile({ data, back }) {
 
   const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
-
   return(
     <SafeAreaView style={styles.container}>
 
@@ -24,8 +23,8 @@ function UserProfile({ data, back }) {
             type="clear"
             containerStyle={{
                 position: 'absolute',
-                left: 30,
-                top: 30,
+                left: 20,
+                top: 40,
                 borderRadius: 10,
             }}
             icon={
@@ -46,7 +45,7 @@ function UserProfile({ data, back }) {
   }}
 />
         <Text style={styles.name}> {first_name} {last_name} </Text> 
-      <Text style={bio=="null" ? styles.nobio : styles.bio}> {bio ? bio : "Edit Your Bio"} </Text>
+      <Text style={bio=="null" ? styles.nobio : styles.bio}> {bio ? bio : "Bio not updated"} </Text>
     
         </View>
 
@@ -69,11 +68,13 @@ function UserProfile({ data, back }) {
           
           <View style={styles.tagsView}>
 
-          {tags ? tags.map((item, index) => (
+          {tags && tags.map((item, index) => (
             <Text key={index} style={styles.tags}>{item}</Text>
-            ))
-          : <Text style={{marginVertical:10,marginHorizontal:'25%',color:theme.gray}}>Please add your intrests</Text>
-          } 
+            ))}
+
+          </View>
+
+          {!tags &&  <Text style={{textAlign:'center',color:theme.gray}}>Doesn't have any interests</Text>}
 
         </View>
 
@@ -84,12 +85,12 @@ function UserProfile({ data, back }) {
           <View style={{flexDirection:'row', flexWrap:'wrap', marginTop:10}}>
 
             {hosted_events && hosted_events.map((item) => (
-              <HostedEvent key={item.id} eventdata={item} />
+              <HostedEvent key={item.id} eventdata={item} press={() => navigation.navigate("invite", {item} )} />
             ))}
 
           </View>
 
-        </View>
+            {!hosted_events && <Text style={{textAlign:'center', marginBottom:'20%', marginTop:10, color: theme.gray}}>Not hosted any events</Text>}
 
         </View>
 
@@ -178,12 +179,13 @@ const styles = StyleSheet.create({
   },
 
   interests:{
-    marginVertical:20,
+    marginTop:20,
+    marginBottom:10,
     width:'100%',
   },
 
   hostedEvents:{
-    marginVertical:20,
+    marginVertical:10,
     width:'100%',
   },
 

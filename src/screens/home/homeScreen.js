@@ -5,8 +5,10 @@ import { Button } from 'react-native-elements'
 import AppLoading from 'expo-app-loading';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico'
 import data from '../../../assets/data';
+import main from '../../api/main';
 import {AuthContext} from '../../context/AuthContext';
 import {theme} from '../../constants/colors'
+import * as Location from 'expo-location';
 import { FocusAwareStatusBar } from '../../components/statusbar'
 import Feed from '../../components/home/Feed'
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -31,6 +33,50 @@ Notifications.setNotificationHandler({
 const homeScreen = ({navigation})=> {
 
     const {dispatch} = useContext(AuthContext);
+
+    const { state: authState } = useContext(AuthContext);
+
+    // location access
+  
+  const [current,setCurrent] = useState(null); 
+  const [location, setLocation] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(()=>{
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        alert("Location is not turned on")
+        return;
+      }
+
+      let current = await Location.getCurrentPositionAsync({});
+      let log = current.coords.longitude;
+      var lat = current.coords.latitude;
+      setLocation([log,lat]);
+      setCurrent(current);
+      console.log(lat,log)
+
+    })
+    ();
+  },[])
+
+  useEffect(() => {
+    (async() =>{
+    try {
+      const response = await main.put('/api/profile/', {location},{
+                 headers: {
+            'Authorization': `Bearer ${authState.userToken}` 
+            }
+            })
+            console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+    })
+    ();
+  },[])
 
     //Notifications 
 
@@ -108,16 +154,13 @@ const homeScreen = ({navigation})=> {
 
     //Notifications
 
-    const { state: authState } = useContext(AuthContext);
-
     let [fontsLoaded] = useFonts({
     Pacifico_400Regular,
   });
 
-    const isFocused = useIsFocused();
+    // const isFocused = useIsFocused();
 
     const [post, setPost] = useState([])
-    const [newPost, setNewPost] = useState([])
 
     // --LoadingScreen
 
@@ -149,7 +192,7 @@ const homeScreen = ({navigation})=> {
     }
 
     getUser();
-  },[isFocused]);
+  },[]);
 
     const [refreshing, setRefreshing] = React.useState(false);
 
@@ -161,25 +204,17 @@ const homeScreen = ({navigation})=> {
                         'Authorization': `Bearer ${authState.userToken}`
                     },
                 })
-            setNewPost(response.data)
-            
-            if(newPost.length !== post.length)
-            {
                 setPost(response.data)         
                 setRefreshing(false)
-            }
-            else
-            {
-                setRefreshing(false)
                 showMessage({
-                          message:"These are the latest Posts!" ,
+                          message:"Posts Updated!" ,
                           type:"success",
                           floating: true,
                           duration:5000,
                           icon: {icon:"info" , position: "left"},
                           style: {paddingVertical: 20, paddingHorizontal:20}                          
                         });  
-            }
+            
       } catch (error) {
           console.log(error)
           setRefreshing(false)
@@ -203,7 +238,9 @@ const homeScreen = ({navigation})=> {
                         />
                     }
                     containerStyle={{
-                        marginTop:20,
+                        position:'absolute',
+                        right:10,
+                        top:45,
                     }}
                     onPress={()=>navigation.navigate("room")}
                 />
@@ -277,33 +314,31 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width: '100%',
-        backgroundColor:theme.background,
+        backgroundColor:theme.white,
         height: Dimensions.get('screen').height,
     },
 
     header: {
         flex:1,
         flexDirection: 'row',
-        alignItems:'flex-start',
-        justifyContent:'space-between',
-        borderBottomWidth:1,
+        alignItems:'center',
+        justifyContent:'center',
+        // borderBottomWidth:1,
         borderColor:theme.lightaccent,
-        paddingTop: 20,
-        paddingBottom:10,
-        paddingHorizontal:10,
-        backgroundColor: theme.background,
+        paddingTop: 25,
+        paddingBottom:20,
+        backgroundColor: theme.white,
         width: '100%',
     },
 
     section: {
         flex: 9,
-        marginBottom:60,
         marginHorizontal:10,
     },
 
     logo:{
         textAlign: 'center',
-        fontSize: 34,
+        fontSize: 38,
         fontFamily: 'Pacifico_400Regular',
         color: theme.black,
     },

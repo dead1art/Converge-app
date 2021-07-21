@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { View,  StyleSheet, Dimensions, ImageBackground, KeyboardAvoidingView } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import main from '../../api/main';
@@ -12,10 +12,46 @@ import { theme } from '../../constants/colors'
 const otpScreen = ({navigation}) => {
 
     const {state:authState} = React.useContext(AuthContext);
+    const [otp,setOtp] = React.useState();
     const regemail= authState.registerEmail;
 
+    //OTP Timer
+
+    const RESEND_OTP_TIME_LIMIT = 60; // 30 secs
+    const AUTO_SUBMIT_OTP_TIME_LIMIT = 4; // 4 secs
+
+    let resendOtpTimerInterval;
+    let autoSubmitOtpTimerInterval;
+
+    const [resendButtonDisabledTime, setResendButtonDisabledTime] =  useState(RESEND_OTP_TIME_LIMIT);
+
+    const startResendOtpTimer = () => {
+    if (resendOtpTimerInterval) {
+      clearInterval(resendOtpTimerInterval);
+    }
+
+    resendOtpTimerInterval = setInterval(() => {
+      if (resendButtonDisabledTime <= 0) {
+        clearInterval(resendOtpTimerInterval);
+      } else {
+        setResendButtonDisabledTime(resendButtonDisabledTime - 1);
+      }
+    }, 1000);
+  };
     
+    useEffect(() => {
+    startResendOtpTimer();
+
+    return () => {
+      if (resendOtpTimerInterval) {
+        clearInterval(resendOtpTimerInterval);
+      }
+    };
+  }, [resendButtonDisabledTime]);
+
+    // OTP Timer
     
+
     const setupOtp = async() =>{
         try{
           console.log(regemail);
@@ -27,7 +63,7 @@ const otpScreen = ({navigation}) => {
                           type:"success",
                           floating: true,
                           duration:5000,
-                          icon: {icon:"danger" , position: "left"},
+                          icon: {icon:"success" , position: "left"},
                           style: {paddingVertical: 20, paddingHorizontal:20}                          
                         });
           navigation.navigate("signin")  
@@ -46,10 +82,40 @@ const otpScreen = ({navigation}) => {
         }
     }
 
+    const resendOtp = async() =>{
+        try{
+          const response = await main.get('/api/resend-otp/',{
+              params:{
+                  email: regemail,
+              }
+            })
+          console.log(response);
+          showMessage({
+                          message:"OTP will be sent to your mail!" ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"success" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
+        }
+        catch(err)
+        {
+          showMessage({
+                          message:"There was a problem in sending your otp!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
+          console.log(err);
+        }
+    }
+
 
     const imageUrl = "https://images.unsplash.com/photo-1558038033-2645449ec092?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTB8fHRyYXZlbGVyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"  
 
-    const [otp,setOtp] = React.useState();
 
     return (
       <KeyboardAvoidingView behavior="padding"style={styles.container}>
@@ -77,25 +143,49 @@ const otpScreen = ({navigation}) => {
             }}
             rightIcon={
                 <MaterialIcons
-                    name="phone"
+                    name="phone-android"
                     size={20}
                     color={theme.black}
                 />
             }
             inputStyle={styles.input}
+            autoFocus
             value={otp}
+            keyboardType="number-pad"
             onChangeText={setOtp}
-            placeholder='OTP' 
+            placeholder='' 
             placeholderTextColor={theme.black}
           />
 
-          <View style={{
+            <View style={{
                 marginBottom:30, 
+                marginTop:-10,
                 marginHorizontal:20}}>
                 <Text style={{color: 'rgba(0,0,0,0.5)'}}>OTP has been sent to your registered email address</Text>
             </View>
-        
 
+            { resendButtonDisabledTime > 0 ? (
+                <Text style={{textAlign:'center',marginVertical:10,marginHorizontal:10,color: theme.gray}}> Resend OTP in {resendButtonDisabledTime}s </Text> 
+            ) : (
+            <Button 
+                titleStyle={{ 
+                    color: theme.black,
+                }}  
+                buttonStyle={{
+                    borderRadius: 10,
+                    marginHorizontal: 10,
+                }}
+                title="Resend OTP" 
+                type="cleat"
+                onPress={() => {
+                    resendOtp()
+                    setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
+                    startResendOtpTimer();
+                }}
+            />
+            )
+            }
+        
         <Button 
                 titleStyle={{ 
                     color: 'white',
@@ -105,6 +195,7 @@ const otpScreen = ({navigation}) => {
                     padding:15,
                     borderRadius: 10,
                     marginHorizontal: 10,
+                    marginTop:'30%',
                 }}
                 title="Verify" 
                 type="clear"
@@ -132,7 +223,7 @@ const styles = StyleSheet.create({
     },
 
     content:{
-        flex: 1,
+        flex: 2,
         borderTopLeftRadius:20,
         borderTopRightRadius:20,
         backgroundColor: theme.white,

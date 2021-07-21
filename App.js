@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import { Button, Text, TextInput, View, StyleSheet} from 'react-native';
 import {  Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
-import {tabBar} from './src/constants/colors'
+import {tabBar, theme} from './src/constants/colors'
 import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,6 +12,7 @@ import {AuthContext} from './src/context/AuthContext';
 import { Provider as EventProvider } from './src/context/eventContext';
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
@@ -30,7 +31,6 @@ import createEvent from './src/screens/create/createEvent';
 import createPost from './src/screens/create/createPost';
 // Chat
 import notificationScreen from './src/screens/chat/notificationScreen'
-import room from './src/screens/chat/room'
 import chatStack from './src/screens/chat/chatStack';
 // Profile
 import userScreen from './src/screens/profile/userScreen';
@@ -52,7 +52,7 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
 
   const create = createStackNavigator();
 
-  const Tab = createBottomTabNavigator();
+  const Tab = AnimatedTabBarNavigator();
 
   const getTabBarVisible = (route) => {
   const params = route.params;
@@ -69,9 +69,11 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
   const homeStack = ()=>{
     return (
       <Tab.Navigator
-      initialRouteName="home"
-      backBehavior="initialRoute"
+      initialRouteName="Home"
+      // backBehavior="initialRoute"
       tabBarOptions={{  
+        activeBackgroundColor: theme.blue,
+        activeTintColor: theme.white,
         keyboardHidesTabBar: true,
         showLabel: false,
         style: {
@@ -88,50 +90,50 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
       
       >
         <Tab.Screen 
-            name="home" 
+            name="Home" 
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "home" : "home-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "home" : "home-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
         <Tab.Screen 
-        name="search" 
+        name="Search" 
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "search" : "search-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "search" : "search-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="create" 
+        name="Create" 
         component={createStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="add-circle-sharp" size={34} color={focused? tabBar.focused : tabBar.active}/>
+                <Ionicons name="add-circle-sharp" size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.active}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="chat" 
+        name="Activity" 
         component={notificationScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "notifications" : "notifications-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "notifications" : "notifications-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="userStack" 
+        name="Profile" 
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "person" : "person-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "person" : "person-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
@@ -213,16 +215,6 @@ import recommendedScreen from './src/screens/search/recommendedScreen';
         <create.Screen 
         name="create"
         component={createScreen}
-        />
-
-        <create.Screen 
-        name="createEvent"
-        component={createEvent}
-        />
-
-        <create.Screen 
-        name="createPost"
-        component={createPost}
         />
 
       </create.Navigator>
@@ -356,6 +348,14 @@ export default function App({ navigation }) {
               'Authorization': `Bearer ${response.data.access_token}` 
             }         
           })
+          showMessage({
+                          message:`Signed in as ${username}` ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"success" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
           dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream:streamresponse.data.token, user: userResponse.data });
          }
       catch(err)
@@ -378,34 +378,27 @@ export default function App({ navigation }) {
           dispatch({ type: 'REGISTER', email:response.data.email });
         } catch (error) {
             console.log(error);
-            showMessage({
-                          message:"Error creating your account!" ,
-                          type:"danger",
-                          floating: true,
-                          duration:5000,
-                          icon: {icon:"danger" , position: "left"},
-                          style: {paddingVertical: 20, paddingHorizontal:20}                   
-                        });  
             dispatch({type:'Error', })
         }
 
       },
       signOut: async () => {
-        try{
-          const response = await main.post('/api/del-expotoken/', 
-            { 
-              token:state.expoToken 
-            },
-            {
-             headers: {
-              'Authorization': `Bearer ${state.userToken}` 
-              }
-            })
-            console.log(response)
-          }
-        catch (err){
-          console.log(err)
-        }
+        // try{
+        //   const response = await main.post('https://httpbin.org/post', 
+        //     { 
+        //       token:state.expoToken 
+        //     },
+        //     {
+        //      headers: {
+        //       'Authorization': `Bearer ${state.userToken}` 
+        //       }
+        //     })
+        //     console.log(response)
+        //     console.log(state.userToken)
+        //   }
+        // catch (err){
+        //   console.log(err)
+        // }
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("stream");
         dispatch({ type: 'SIGN_OUT'});
@@ -442,6 +435,10 @@ export default function App({ navigation }) {
             <Stack.Screen name="event" component={eventScreen}/>
             <Stack.Screen name="recommend" component={recommendedScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
+
+            <Stack.Screen name="createEvent" component={createEvent}/>
+            <Stack.Screen name="createPost" component={createPost}/>
+
             <Stack.Screen name="profile" component={profileScreen}/>
             <Stack.Screen name="invite" component={inviteScreen}/>
             <Stack.Screen name="room" component={chatStack} />

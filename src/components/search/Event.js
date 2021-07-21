@@ -10,8 +10,13 @@ function Event({eventdata, press}) {
     
     const { id, title, image, addr, event_date } = eventdata;
 
-    let d = new Date(event_date)
-    let dateString = d.toDateString().slice(4,10); 
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+    const d = new Date(event_date)
+    const month = monthNames[d.getMonth()]
+    const date = d.getDate()
 
     // console.log(dateString)
 
@@ -26,13 +31,18 @@ function Event({eventdata, press}) {
                     style={styles.image}
                     source={{uri : image}}
                     >
+
+                        <View style={styles.content__date}>
+                            <Text style={{fontWeight:'bold', fontSize: 16, }}>{date}</Text>
+                            <Text style={{color:theme.gray}}>{month}</Text>
+                        </View>
+
                     </ImageBackground>
                
 
                     <View style={styles.content__details}>
                         <Text style={styles.content__name}>{title}</Text> 
                         <Text style={styles.content__location}>{addr}</Text>
-                        <Text style={styles.content__date}>{dateString}</Text>
                     </View>
 
         
@@ -48,11 +58,11 @@ const styles = StyleSheet.create({
         marginVertical:10,
         backgroundColor: theme.white,
         borderColor: '#eff7fc',
-        borderRadius: 20,
+        borderRadius:20,
     },
     
     image:{
-        flex:3.5,
+        flex:3,
         width: '100%',
         height: '100%',
     },
@@ -71,33 +81,37 @@ const styles = StyleSheet.create({
 
     content__details:{
         flex:2,
-        paddingLeft:20,
+        paddingLeft:10,
         paddingTop: 10,
         // marginHorizontal:10,
         borderBottomLeftRadius:20,
         borderBottomRightRadius:20,
-        height: 60,
         textAlign: 'justify',
     },
 
     content__name:{
-        flex:1,
+        flex:0.5,
         fontWeight:'bold',
         fontSize: 20,
         color:'black',
     },
 
     content__location:{
-        flex:2,
+        flex:1,
         justifyContent: 'center',
         color: 'gray',
-        maxWidth:150,
-        maxHeight: 50,
+        maxWidth:'100%',
     },
 
     content__date:{
-        flex:1,
-        justifyContent: 'flex-end',
+        position: 'absolute',
+        alignItems: 'center',
+        right:10,
+        top:10,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        borderRadius:10,
+        backgroundColor:theme.white,
         fontSize:14,
         color:'gray',
     }

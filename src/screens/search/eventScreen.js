@@ -58,11 +58,14 @@ const eventScreen = ({ route, navigation }) => {
     const [isloading, setIsloading] = useState(false)
     const [error, setError] = useState(null)
 
-    // const monthNames = ["January", "February", "March", "April", "May", "June",
-    //     "July", "August", "September", "October", "November", "December"
-    // ];
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
 
-    // const d = event_date
+    const d = new Date(event_date)
+    const month = monthNames[d.getMonth()]
+    const date = d.getDate()
+    const year = d.getFullYear()
 
     const ref= React.useRef(null)
 
@@ -239,7 +242,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__dateTitle}> {event_date} </Text>
+                        <Text style={styles.event__dateTitle}> {date} {month} {year} </Text>
                     </View>
 
                     <View style={styles.event__place}>
@@ -329,11 +332,13 @@ const eventScreen = ({ route, navigation }) => {
 
                     </View>
 
+                     {recommended &&
+
                     <View style={{ marginBottom: 10 }}>
 
                         <Text style={{ marginLeft: 20, fontWeight: 'bold', marginBottom: 20, fontSize: 18 }}>Recommended Events</Text>
 
-                        {recommended != null ?
+                       
 
                             <FlatList
                                 data={recommended}
@@ -345,14 +350,11 @@ const eventScreen = ({ route, navigation }) => {
                                         navigation.navigate('recommend', { item })
                                     }} />
                                 )}
-                            />
-
-                            :
-                            <Text> Sorry! No recommendations for you </Text>
-
-                        }
+                            />    
 
                     </View>
+
+                        }
 
                 </View>
 

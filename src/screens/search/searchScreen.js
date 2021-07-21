@@ -3,10 +3,10 @@ import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { RefreshControl, View, StyleSheet, Dimensions, StatusBar, FlatList, ActivityIndicator, Modal } from 'react-native';
 import { SearchBar, ButtonGroup } from 'react-native-elements';
-import { MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { DarkTheme } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '../../components/statusbar'
-
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Event from '../../components/search/Event'
 import { theme, tabBar } from '../../../src/constants/colors'
 import { createFilter } from 'react-native-search-filter';
@@ -22,7 +22,7 @@ import {
 
 const SearchScreen = ({ navigation }) => {
 
-    const isFocused = useIsFocused();
+    // const isFocused = useIsFocused();
 
     const { state: authState } = useContext(AuthContext);
 
@@ -120,7 +120,7 @@ const SearchScreen = ({ navigation }) => {
         return () => {
             abortController.abort()
         }
-    }, [radius,isFocused]);
+    }, [radius]);
 
 
     const Header = () => {
@@ -128,7 +128,25 @@ const SearchScreen = ({ navigation }) => {
         return (
             <View style={styles.header}>
 
-                <Text style={styles.header__title}>Discover the most amazing events</Text>
+                <View style={{flexDirection: 'row', justifyContent:'space-between',marginTop:40}}>
+
+                    <Text style={styles.header__title}>Discover the most amazing events</Text>
+
+                    <Button
+                        type="clear"
+                        icon={
+                            <Ionicons
+                                name="compass-outline"
+                                size={24}
+                            />
+                        } 
+                        containerStyle={{ 
+                            width:'50%',
+                            marginRight:20,
+                        }}   
+                    />
+
+                </View>
 
                 <Button
                     type="clear"
@@ -162,7 +180,7 @@ const SearchScreen = ({ navigation }) => {
                     style={{
                         backgroundColor: theme.blue,
                         color: theme.white,
-                        top: 136,
+                        top: 123,
                         padding: 7,
                         borderRadius: 20,
                         right: 10,
@@ -173,7 +191,36 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* ButtonGroup */}
 
+                <View style={{flexDirection: 'row'}}>
+
                 <Text style={styles.eventsRadiusTitle}> Filter by Distance </Text>
+                <Button
+                type="clear"
+                containerStyle={{
+                    position: 'absolute',
+                    left:170,
+                    top:16,
+                }}
+                icon={
+                    <MaterialIcons
+                    name="info"
+                    size={18}
+                    color={theme.blue}
+                    />
+                }
+                onPress={() => {
+                    showMessage({
+                          message:"You can only use this feature if you have your location turned on" ,
+                          type:"warning",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"warning" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
+                } }
+                />
+
+                </View>
 
                 <View style={styles.buttonGroup}>
 
@@ -353,12 +400,11 @@ const styles = StyleSheet.create({
     },
 
     header__title: {
-        // width:'80%',
+        width:'60%',
         textAlign: 'left',
         fontWeight: 'bold',
-        fontSize: 30,
-        marginTop: 40,
-        marginHorizontal: 20,
+        fontSize: 25,
+        marginLeft: 20,
     },
 
     input: {
@@ -392,7 +438,6 @@ const styles = StyleSheet.create({
 
     events: {
         flex: 3,
-        marginBottom: 50,
     },
 
     category: {
