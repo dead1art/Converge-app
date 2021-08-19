@@ -7,11 +7,13 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../constants/colors'
 
 
-const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
+function Profile({ signout, data, nav }) {
+  
+  const { first_name, last_name, image, bio, dob, email, tags, hosted_events, location } = data;
+  
+  const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
-function Profile({ signout,props, data, nav }) {
-
-  const { first_name, last_name, image, bio, dob, email, tags, hosted_events } = data;
+  console.log(location)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,9 +36,9 @@ function Profile({ signout,props, data, nav }) {
           }}
         />
         <Text style={styles.name}> {first_name} {last_name} </Text>
-        <Text style={bio ? styles.bio : styles.nobio}> {bio ? bio : "Edit Your Bio"} </Text>
+        <Text style={bio ? styles.bio : styles.nobio}>{bio ? bio : "Edit Your Bio"}</Text>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', marginBottom:10 }}>
 
           {/* Edit Profile */}
 
@@ -74,7 +76,7 @@ function Profile({ signout,props, data, nav }) {
             type="clear"
             containerStyle={{
               marginTop: 20,
-              backgroundColor: theme.lightaccent,
+              backgroundColor: theme.white,
               borderRadius: 10,
               paddingHorizontal: 10,
             }}
@@ -83,15 +85,12 @@ function Profile({ signout,props, data, nav }) {
           />
 
         </View>
-      </View>
 
 
       {/* Content */}
 
-      <View style={styles.content}>
-
         <View style={styles.info}>
-          <Text style={{fontWeight:'bold'}}> {dob} </Text>
+          <Text style={{fontWeight:'bold'}}> {dob ? dob : "Date not provided"} </Text>
           <MaterialIcons
             name="calendar-today"
             size={24}
@@ -102,10 +101,11 @@ function Profile({ signout,props, data, nav }) {
           <MaterialIcons
             name="email"
             size={24}
-          />
+            />
         </View>
 
-        <View style={styles.interests}>
+        </View>
+        {/* <View style={styles.interests}>
 
           <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Interests</Text>
           
@@ -119,7 +119,8 @@ function Profile({ signout,props, data, nav }) {
 
         </View>
 
-        <View style={styles.hostedEvents}>
+        </View> */}
+        {/* <View style={styles.hostedEvents}>
 
           <Text style={{textAlign:'center', fontWeight:'bold', fontSize: 24, }}>Hosted Events</Text>
 
@@ -129,13 +130,9 @@ function Profile({ signout,props, data, nav }) {
               <HostedEvent key={item.id} eventdata={item} press={() => props.navigate("invite", {item} )} />
             ))}
 
-          </View>
+          </View> 
 
-        </View>
-
-        </View>
-
-      </View>
+        </View> */}
 
      </ScrollView>
 
@@ -148,29 +145,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: 'white',
-    height: Dimensions.get('screen').height,
   },
 
   header: {
-    flex: 2,
     alignItems: 'center',
-    marginTop: 20,
     width: '100%',
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 10,
+    paddingHorizontal:20,
     // borderBottomWidth: 1,
     // borderColor: theme.lightaccent,
   },
 
-  content: {
-    width: '100%',
-    flex: 2,
-    borderRadius:20,
-    alignItems: 'center',
-    paddingHorizontal:20,
-    marginBottom:60,
-  },
+  // content: {
+  //   width: '100%',
+  //   flex: 2,
+  //   borderRadius:20,
+  //   alignItems: 'center',
+  //   paddingHorizontal:20,
+  // },
 
   header__profile: {
     position: 'absolute',
@@ -189,7 +184,7 @@ const styles = StyleSheet.create({
 
   name: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
     color: 'black',
     fontSize: 30,
@@ -197,9 +192,10 @@ const styles = StyleSheet.create({
   },
 
   bio: {
+    marginHorizontal:10,
     color: 'gray',
-    marginTop: 10,
-    marginBottom: 10,
+    textAlign:'justify',
+    marginVertical: 10,
   },
 
   nobio: {
@@ -216,7 +212,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     width: '100%',
     padding: 20,
-    marginBottom:10,
+    marginTop:20,
+
   },
 
   interests:{

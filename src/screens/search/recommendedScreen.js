@@ -12,14 +12,13 @@ import { theme } from '../../constants/colors'
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { useScrollToTop } from '@react-navigation/native'
-import { showMessage, hideMessage } from "react-native-flash-message";
 import axios from 'axios';
 import {
   NavigationContainer,
   useIsFocused,
 } from '@react-navigation/native';
 
-const eventScreen = ({ route, navigation }) => {
+const recommendedScreen = ({ route, navigation }) => {
 
     const isFocused = useIsFocused();
 
@@ -30,10 +29,7 @@ const eventScreen = ({ route, navigation }) => {
     const item = route.params.item
     // const host = route.params.item
 
-    // console.log(item)
-
-    //Disable Button
-    // const [buttonDisable, setButtonDisable] = useState(false)
+    // console.log(host)
 
     // const [event, setEvent] = useState(route.params.item)
 
@@ -62,14 +58,11 @@ const eventScreen = ({ route, navigation }) => {
     const [isloading, setIsloading] = useState(false)
     const [error, setError] = useState(null)
 
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
+    // const monthNames = ["January", "February", "March", "April", "May", "June",
+    //     "July", "August", "September", "October", "November", "December"
+    // ];
 
-    const d = new Date(event_date)
-    const month = monthNames[d.getMonth()]
-    const date = d.getDate()
-    const year = d.getFullYear()
+    // const d = event_date
 
     const ref= React.useRef(null)
 
@@ -130,18 +123,9 @@ const eventScreen = ({ route, navigation }) => {
                     }
                     throw err;
                 });
-            console.log(response.data)
+            // console.log(response.data)
             setJointitle("Requested")
-            showMessage({
-                          message:"Invite has been sent!" ,
-                          type:"success",
-                          floating: true,
-                          duration:5000,
-                          icon: {icon:"info" , position: "left"},
-                          style: {paddingVertical: 20, paddingHorizontal:20}                          
-                        });  
-            // setButtonDisable(true)
-            navigation.goBack()
+            navigation.navigate("search")
         }
 
         catch (err) {
@@ -222,7 +206,7 @@ const eventScreen = ({ route, navigation }) => {
                         </View>
 
                         <Button
-                            type="clear"
+                            type={requested ? "clear" : "outline"}
                             containerStyle={{
                                 backgroundColor: theme.blue,
                                 borderRadius: 20,
@@ -255,7 +239,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__dateTitle}>{date} {month} {year}</Text>
+                        <Text style={styles.event__dateTitle}> {event_date} </Text>
                     </View>
 
                     <View style={styles.event__place}>
@@ -273,7 +257,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__placeTitle}>{addr}</Text>
+                        <Text style={styles.event__placeTitle}> {addr} </Text>
                     </View>
 
                     <View style={styles.event__attendees}>
@@ -291,7 +275,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__placeTitle}>Max Members: {max_attendees}</Text>
+                        <Text style={styles.event__placeTitle}> Max Members: {max_attendees} </Text>
                     </View>
 
                     <View style={styles.description}>
@@ -345,13 +329,11 @@ const eventScreen = ({ route, navigation }) => {
 
                     </View>
 
-                     {/* {recommended &&
-
-                    <View style={{ marginBottom: 10 }}>
+                    {/* <View style={{ marginBottom: 10 }}>
 
                         <Text style={{ marginLeft: 20, fontWeight: 'bold', marginBottom: 20, fontSize: 18 }}>Recommended Events</Text>
 
-                       
+                        {recommended != null ?
 
                             <FlatList
                                 data={recommended}
@@ -360,14 +342,17 @@ const eventScreen = ({ route, navigation }) => {
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => (
                                     <Recommended eventdata={item} press={() => {
-                                        navigation.navigate('recommend', { item })
+                                        navigation.navigate('event', { item })
                                     }} />
                                 )}
-                            />    
+                            />
 
-                    </View>
+                            :
+                            <Text> Sorry! No recommendations for you </Text>
 
-                        } */}
+                        }
+
+                    </View> */}
 
                 </View>
 
@@ -384,7 +369,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: Dimensions.get('screen').height,
-        backgroundColor: theme.white,
+        backgroundColor: 'white',
     },
 
     header: {
@@ -401,7 +386,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         elevation: 15,
         marginTop: -30,
-        backgroundColor: theme.white,
+        backgroundColor: 'white',
     },
 
     image: {
@@ -410,7 +395,7 @@ const styles = StyleSheet.create({
     },
 
     event__name: {
-        fontSize: 32,
+        fontSize: 34,
         fontWeight: 'bold',
         padding: 10,
         marginVertical: 10,
@@ -439,14 +424,12 @@ const styles = StyleSheet.create({
 
     event__dateTitle: {
         marginLeft: 20,
-        fontSize: 14,
+        fontSize: 15,
     },
 
     event__placeTitle: {
         marginLeft: 20,
-        width:300,
-        textAlign:'left',
-        fontSize: 14,
+        fontSize: 15,
     },
 
     description: {
@@ -497,7 +480,7 @@ const styles = StyleSheet.create({
 
 })
 
-export default eventScreen;
+export default recommendedScreen;
 
 
 

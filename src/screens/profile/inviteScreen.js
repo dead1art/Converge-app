@@ -1,5 +1,5 @@
 import React,{useContext,useEffect,useState} from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, Image } from 'react-native'
 import axios from 'axios'
 import {AuthContext} from '../../context/AuthContext';
 import InviteCard from '../../components/profile/InviteCard'
@@ -11,7 +11,9 @@ import { theme } from '../../constants/colors';
 
 const inviteScreen = ({route, navigation}) => {
 
-    const { id, title } = route.params.item;
+    const { id, title, image } = route.params.item;
+
+    console.log(route.params.item)
 
     const [isloading, setIsloading] = useState(false)
     const [error, setError] = useState(null)
@@ -26,7 +28,9 @@ const inviteScreen = ({route, navigation}) => {
 
     const getUrl = `https://converge-project.herokuapp.com/api/event/${id}/`
 
-    const postUrl = `https://converge-project.herokuapp.com/api/event/accept/${id}/`
+    const acceptUrl = `https://converge-project.herokuapp.com/api/event/accept/${id}/`
+
+    const rejectUrl = `https://converge-project.herokuapp.com/api/event/reject/${id}/`
 
     useEffect(()=>{
     const abortController = new AbortController()
@@ -60,7 +64,7 @@ const inviteScreen = ({route, navigation}) => {
 
     const acceptHandler = async(userid) => {
         try{
-            const invite_response = await axios.post(postUrl,
+            const invite_response = await axios.post(acceptUrl,
                 {userid}, 
                 {
                 headers: {
@@ -75,6 +79,22 @@ const inviteScreen = ({route, navigation}) => {
         }
     }
 
+    const rejectHandler = async(userid) => {
+        try{
+            const invite_response = await axios.post(rejectUrl,
+                {userid}, 
+                {
+                headers: {
+                    'Authorization': `Bearer ${authState.userToken}` 
+            }});
+            setAccepted(userid)
+            console.log(invite_response.data);
+        }
+        catch(err){
+            console.log(err);
+            setError(err)
+        }
+    }
 
     if (isloading) {
         return (
@@ -104,9 +124,6 @@ const inviteScreen = ({route, navigation}) => {
                 <Button
                         type="clear"
                         containerStyle={{
-                            position: 'absolute',
-                            left: 20,
-                            top: 34,
                             // backgroundColor: 'rgba(0,0,0,0.25)',
                             borderRadius: 10,
                         }}
@@ -119,7 +136,14 @@ const inviteScreen = ({route, navigation}) => {
                         }
                         onPress={() => navigation.goBack()} />
 
-                <Text style={{fontWeight:'bold', fontSize:24}}> {title} </Text>
+
+                <Text style={{fontWeight:'bold', fontSize:24,}}> {title} </Text>
+
+                <Image
+                    source={{uri: image}}
+                    style={{width: 50, height: 50, borderRadius:20,}}
+                />
+
             </View>
 
             
@@ -128,10 +152,10 @@ const inviteScreen = ({route, navigation}) => {
             <FlatList
                 data={invites}
                 keyExtractor={item => item.userid.toString()}
+                ListEmptyComponent={<Text style={{marginTop:0}}> No invites for u </Text>}
                 renderItem={({item}) => (
-                     <InviteCard cardData={item} accept={() => acceptHandler(item.userid)}/>
+                     <InviteCard cardData={item} accept={() => acceptHandler(item.userid)} reject={() => rejectHandler(item.userid)}/>
                      )}
-                ListEmptyComponent={<Text> No invites for u </Text>}
                      />
 
             </View>
@@ -148,22 +172,25 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         width:'100%',
+        backgroundColor:theme.background,
         height: Dimensions.get('screen').height,
     },
 
     header:{
-        flex:0.2,
+        flex:1,
+        flexDirection:'row',
         alignItems:'center',
-        paddingVertical:'10%',
-        borderBottomWidth:2,
+        justifyContent:'space-between',
+        paddingTop:20,
+        marginHorizontal:10,
         borderColor:theme.lightaccent,
-        width:'100%',
+
     },
 
     content:{
-        flex:4.8,
-        paddingVertical:'10%',
+        flex:7,
         width:'100%',
+        paddingHorizontal:10,
         alignItems:'center',
     }
 })

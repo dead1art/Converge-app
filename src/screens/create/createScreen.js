@@ -2,86 +2,116 @@ import React from 'react'
 import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native'
 import { Button } from 'react-native-elements';
 import { FocusAwareStatusBar } from '../../components/statusbar'
+import { MaterialIcons } from "@expo/vector-icons"
+import { theme } from '../../constants/colors';
 
 const createScreen = ({navigation}) => {
 
-    return (
-        <View style={styles.container}>
+    const imageUrl = "https://images.unsplash.com/photo-1592388748465-8c4dca8dd703?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsbGluZ3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"  
 
-            <View style={styles.header}>
+    return(
+        <View behavior="padding" style={styles.container}> 
 
-                    <Button 
-                    title="Create An Event"
-                    type="clear"
-                    titleStyle={{color:'black', fontWeight: 'bold',}}
-                    buttonStyle={{
-                        marginTop: '50%',
-                        alignSelf: 'center',
-                        backgroundColor: '#E5E8EE',
-                        width:'60%',
-                        padding:20,
-                        borderRadius: 20,
-                    }}
-                    onPress={() => navigation.navigate('createEvent')}
-                    />
-                    
-            </View>
+        <View style={styles.header}>
+                <ImageBackground
+                    source={require('../../../assets/images/createBackground.jpg')}
+                    // source={{uri: imageUrl}}
+                    style={{width: '100%', height: '100%'}}
+                >
 
-            <View style={styles.footer}>
-
-                    <Button 
-                    title="Create A Post"
-                    titleStyle={{color:'black', fontWeight: 'bold',}}
-                    buttonStyle={{
-                        marginTop: '40%',
-                        alignSelf: 'center',
-                        backgroundColor: '#E5E8EE',
-                        width: '60%',
-                        padding:20,
-                        borderRadius: 20,
-                    }}
-                    onPress={() => navigation.navigate('createPost')}
-                    />
+                </ImageBackground>
 
             </View>
 
-            <FocusAwareStatusBar style="auto" />
+        <View style={styles.content}>
+
+            <Button 
+        title="Create An Event"
+        type="clear"
+        icon={
+            <MaterialIcons
+                name="event"
+                color={theme.white}
+                size={28}
+                style={{marginRight:20}}
+            />
+        }
+        titleStyle={{color:theme.white, fontWeight: 'bold',}}
+        containerStyle={{
+            marginTop:20,
+            alignSelf:'center',
+            backgroundColor: theme.black,
+            width:'60%',
+            padding:10,
+            borderRadius: 20,
+        }}
+        onPress={() => navigation.navigate('createEvent')}
+    />       
+
+        <Button 
+        title="Create A Post"
+        type="clear"
+        icon={
+            <MaterialIcons
+                name="post-add"
+                color={theme.white}
+                size={28}
+                style={{marginRight:20}}
+            />
+        }
+        titleStyle={{color:theme.white, fontWeight: 'bold',}}
+        containerStyle={{
+            marginTop:20,
+            alignSelf: 'center',
+            backgroundColor: theme.black,
+            width:'60%',
+            padding:10,
+            borderRadius: 20,
+        }}
+        onPress={() => navigation.navigate('createPost')}
+    />      
+        
+        </View>    
+
+        <FocusAwareStatusBar style="light"/>
+
         </View>
-    )
-}
+    );
+};
 
-
-const styles= StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
-        flex:1,
+        display:'flex',
         width: '100%',
-        alignItems:'center',
         height: Dimensions.get('screen').height,
-        marginBottom: 50,
+        backgroundColor:theme.white,
     },
 
-    header:{
-        flex:1,
-        width: '90%',
-        marginBottom: 20,
-        backgroundColor: 'white',
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
+    header: {
+        flex:2,
     },
 
-    footer:{
-        flex:1,
-        backgroundColor: 'white',
-        borderRadius: 30,
-        width: '90%',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+    content:{
+        flex: 1,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        backgroundColor: theme.white,
+        paddingTop:10,
+        marginTop:-20,
     },
 
-    image:{
-        width:'100%',
-        height:'100%',
+    title:{
+        color:theme.gray, 
+        marginLeft:20, 
+        marginVertical:20,
     },
+
+    input: {
+        paddingHorizontal: 5,
+        color: 'black',
+        fontSize:16,
+    },
+
 })
 
-export default createScreen
+export default createScreen;

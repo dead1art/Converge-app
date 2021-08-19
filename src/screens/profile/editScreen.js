@@ -8,6 +8,7 @@ import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native';
 import ReactChipsInput from 'react-native-chips'
 import * as ImagePicker from 'expo-image-picker';
+import { showMessage, hideMessage } from "react-native-flash-message";
 import main from '../../api/main';
 import {AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
@@ -134,13 +135,13 @@ axios({
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
+    // console.warn("A date has been picked: ", date);
     hideDatePicker();
     // console.log(date);
     
     const date_str = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
-
-    console.log(date_str);
+    setDob(date_str)
+    // console.log(date_str);
 
     let formData = new FormData();
 
@@ -161,7 +162,7 @@ axios({
         .catch(function (response) {
           //handle error
           console.log(response);
-    
+          alert("Please pick a valid date!")
         });
     
   };
@@ -173,6 +174,7 @@ axios({
     const [first_name, setFirst_name] = useState(userInfo.first_name)
     const [last_name, setLast_name] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)
+    const [dob, setDob] = useState(userInfo.dob)
     const [email, setEmail] = useState(userInfo.email)
     const [tags,setTags] = useState(userInfo.tags);
 
@@ -188,8 +190,24 @@ axios({
             });
             console.log(response.data)
             navigation.goBack();
+            showMessage({
+                          message:"Profile Updated Successfully!" ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
         } catch (error) {
             console.error(error);
+            showMessage({
+                          message:"There was an error updating your profile!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
         }
     }
 
@@ -232,10 +250,11 @@ axios({
             <View style={styles.info}>
                 <Text>   First Name </Text>  
                 <Input 
+                disabled
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -246,11 +265,12 @@ axios({
 
             <View style={styles.info}>
                 <Text>   Last Name</Text>  
-                <Input 
+                <Input
+                disabled 
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -265,8 +285,8 @@ axios({
                 textAlign="left"
                 inputContainerStyle={{ 
                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -277,26 +297,28 @@ axios({
             
             <View style={styles.info}> 
                 <Text>   Date Of Birth</Text>
-                <Button 
-                // title="Show Date Picker"
-                icon={
+                <Input 
+                textAlign="left"
+                rightIcon={
                   <MaterialIcons
                     name="calendar-today"
                     size={26}
                     color={theme.black}
+                    onPress={showDatePicker}
                   />
                 }
-                type="clear" 
-                onPress={showDatePicker} 
-                containerStyle={{
-                  marginTop:10,
-                  borderRadius:10,
-                  borderColor:theme.gray, 
-                  borderWidth:1,
-                  marginHorizontal:10,
-                }} 
-                titleStyle={{color:theme.black}}
-                />
+                inputContainerStyle={{ 
+                    marginTop:10,
+                    paddingRight:20,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
+                    height: 50,
+                }}
+                style={styles.input}
+                value={dob} 
+                disabled />
+                
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
                         mode="date"
@@ -325,9 +347,9 @@ axios({
                 <Input
                 disabled
                 inputContainerStyle={{ 
-                     marginTop:10,
-                    borderWidth: 1, 
-                    backgroundColor: theme.white,
+                    marginTop:10,
+                    borderBottomWidth: 0, 
+                    backgroundColor: theme.lightaccent,
                     borderRadius:10,
                     height: 50,
                 }}
@@ -416,11 +438,10 @@ const styles = StyleSheet.create({
     input: {
         borderRadius:0,
         paddingHorizontal: 20,
-        color: 'black',
+        color: theme.black,
     },
 
     tags:{
-      marginTop:20,
         paddingVertical:10,
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -431,7 +452,9 @@ const styles = StyleSheet.create({
         marginLeft:10,
         marginTop:-20,
         marginBottom:20,
-        borderWidth:1,
+        borderBottomWidth: 0, 
+        color:theme.black,
+        backgroundColor: theme.lightaccent,
         borderRadius:10,
         paddingHorizontal:20,
         height:50,

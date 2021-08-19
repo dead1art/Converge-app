@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import { View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
+import { theme } from '../../constants/colors';
 import {FocusAwareStatusBar} from '../statusbar';
 
 
-const RegisterForm = ({onSubmit,onNavigation})=> {
+const RegisterForm = ({onSubmit})=> {
     const [first_name, setFname] = useState('');
     const [last_name, setLname] = useState('');
     const [email, setEmail] = useState('');
@@ -49,22 +50,28 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
             value={password}
             secureTextEntry
             onChangeText={setPassword} 
-            placeholder='Password' />            
-        
+            placeholder='Password' /> 
+
+            <Button
+            type="clear" 
+            containerStyle={{ 
+                backgroundColor: '#1e5eff', 
+                paddingVertical:5,
+                paddingHorizontal:10,
+                marginTop: 30,
+                borderRadius: 10,
+                
+            }}
+            titleStyle={{color: theme.white}}
+            title="Sign-Up" 
+            onPress={() => onSubmit({ email, password, first_name, last_name })}/>
+             
         
         </View>    
 
         <View style={styles.footer}>
 
-            <Button 
-            buttonStyle={{ backgroundColor: '#1e5eff', 
-            padding:10,
-            marginTop: 30,
-            borderRadius: 20,
-            width:110,}}
-            title="Sign-Up" 
-            onPress={() => onSubmit({ email, password, first_name, last_name })}/>
-
+            
         </View>
 
         <FocusAwareStatusBar style="auto"/>
@@ -76,26 +83,20 @@ const RegisterForm = ({onSubmit,onNavigation})=> {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        padding: 20,
-        backgroundColor: '#f1f4fa',
+        backgroundColor: theme.white,
         width: '100%',
         height: Dimensions.get('screen').height,
     },
 
     header:{
-        flex:0.8,
-        alignItems: 'center',
-        marginTop:'20%',
+        flex:1,
+        // alignItems: 'center',
+        marginTop:50,
     },
 
     content:{
-        flex:2,
+        flex:11,
         marginHorizontal:20,
-        alignItems: 'center',
-    },
-
-    footer:{
-        flex:1,
         alignItems: 'center',
     },
 
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         color: 'black',
         borderRadius: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.lightaccent,
     },
 })
 

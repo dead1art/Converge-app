@@ -1,23 +1,29 @@
 import React, {useState,useContext} from 'react'
 import {theme} from "../../constants/colors"
-import { View, Text, StyleSheet, Dimensions, KeyboardAvoidingView, ScrollView, Image, Modal } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ActivityIndicator, ScrollView, Image } from 'react-native'
 import {Input, Button} from 'react-native-elements'
 import ReactChipsInput from 'react-native-chips'
+import maptheme from '../../../assets/mapTheme'
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import * as ImagePicker from 'expo-image-picker';
+import main from '../../api/main'
+import axios from 'axios';
 import MapView, { Marker } from 'react-native-maps';
-import Dialog, { DialogContent, SlideAnimation } from 'react-native-popup-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Context as eventContext} from '../../context/eventContext';
+// import { Context as eventContext} from '../../context/eventContext';
 import {AuthContext} from '../../context/AuthContext'
 import { TouchableOpacity } from 'react-native'
+import { FocusAwareStatusBar } from '../../components/statusbar'
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 
 const createEvent = ({navigation}) => {
 
-    const {addEvent} = useContext(eventContext);
+    // const {addEvent} = useContext(eventContext);
 
     const { state: authState } = React.useContext(AuthContext);
+
+    // const { state: eventState } = useContext(eventContext); 
 
     const token = authState.userToken;
 
@@ -25,7 +31,7 @@ const createEvent = ({navigation}) => {
 
     const stockImage = "https://discountseries.com/wp-content/uploads/2017/09/default.jpg"
 
-    const [image, setImage] = useState('')
+    const [image, setImage] = useState(stockImage)
     const [title,setTitle] = useState()
     const [addr,setAddr] = useState()
     const [desc,setDesc] = useState()
@@ -38,17 +44,7 @@ const createEvent = ({navigation}) => {
 
     const [location,setLocation] = useState([74.85657,12.91071])
 
-    // Success Modal
-
-    const [modalvisible, setModalvisible] = useState(false)
-
-    // Help Popup
-
     const [visible, setVisible] = useState(false)
-
-    // console.log(location);
-
-    // console.log(tagsData)
 
     const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,9 +61,13 @@ const createEvent = ({navigation}) => {
 
   };
 
-  //setting map location
 
-//   date picker
+  // --LoadingScreen
+
+  const [isloading, setIsloading] = useState(false)
+  const [error, setError] = useState(null)
+
+  // LoadingScreen--
 
   //date picker logic
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -85,11 +85,109 @@ const createEvent = ({navigation}) => {
   };
 
   const handleConfirm = (date) => {
-    console.log("A date has been picked: ", date);
+    // console.log("A date has been picked: ", date);
     const date_str = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
     setEvent_date(date_str);
     hideDatePicker();
   }
+
+    const addEvent = async(addr,max_attendees,desc,event_date,image,location,tags,title,token) => {
+
+    console.log(tags);
+    let localUri = image;
+    let filename = localUri.split('/').pop();
+
+  // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let formData = new FormData();
+
+    formData.append('image', { uri: localUri, name: filename, type });
+
+        try{
+            setIsloading(true)
+            const event_response = await main.post('/api/event/',{addr,max_attendees,desc,event_date,location,tags,title}, {
+                headers: {
+           'Authorization': `Bearer ${token}` 
+           }});
+        //    console.log(event_response.data);
+
+           const path_url = "https://converge-project.herokuapp.com/api/event/"+ event_response.data.id+"/";
+           console.log(path_url);
+
+           axios({
+            method: "patch",
+            url: path_url,
+            data: formData,
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}`
+            },
+          })
+            .then(function (response) {
+              //handle success
+            //   console.log(response);
+              setIsloading(false)
+              showMessage({
+                          message:"Event has been created Successfully!" ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"success" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}
+                        });  
+                navigation.goBack()
+            })
+            .catch(function (response) {
+              //handle error
+              console.log(response.response.data);
+              setIsloading(false)
+              showMessage({
+                          message:"There was an error validating your image!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
+            });
+        }
+        catch(error)
+        {
+            console.log(error);
+            setIsloading(false)
+            showMessage({
+                          message:"There was an error creating your event!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
+        }        
+    
+}
+
+     if (isloading) {
+        return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="black" />
+            <FocusAwareStatusBar style="auto" />
+        </View>
+        );
+    }
+
+    if (error) {
+        return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18}}>
+            {error}
+            </Text>
+            <FocusAwareStatusBar style="auto" />
+        </View>
+        );
+    }
 
     
     return (
@@ -97,12 +195,13 @@ const createEvent = ({navigation}) => {
 
             <View style={styles.header}>
 
+
                 <Button
                         type="clear"
                         containerStyle={{
                             position: 'absolute',
                             left: 15,
-                            top: 15,
+                            top: 43,
                             borderRadius: 10,
                         }}
                         icon={
@@ -148,7 +247,7 @@ const createEvent = ({navigation}) => {
             {/* Event Title */}
 
             <View style={styles.title}>
-            <Text>   Event Title </Text>
+            <Text style={{fontWeight:'bold'}}>   Event Title </Text>
             <Input 
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
@@ -159,8 +258,9 @@ const createEvent = ({navigation}) => {
             {/* Address */}
 
             <View style={styles.address}>
-            <Text>   Event Address </Text>
-            <Input 
+            <Text style={{fontWeight:'bold'}}>   Event Address </Text>
+            <Input
+                maxLength={40} 
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
                 value={addr}
@@ -172,7 +272,7 @@ const createEvent = ({navigation}) => {
             <View style={styles.date}>
 
             <View style={{flexDirection:'column',width:'50%'}}>
-            <Text>   Event Date</Text>
+            <Text style={{fontWeight:'bold'}}>   Event Date</Text>
                 {/* <View style={{flexDirection:'row'}}> */}
             <Input 
                 inputContainerStyle={styles.inputContainer}
@@ -202,8 +302,9 @@ const createEvent = ({navigation}) => {
 
 
             <View style={{flexDirection:'column',width:'50%', justifyContent:'space-between'}}>
-                <Text>   Max Attendees </Text>
+                <Text style={{fontWeight:'bold'}}>   Max Attendees </Text>
             <Input 
+                keyboardType="number-pad"
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.input}
                 value={max_attendees}
@@ -216,8 +317,9 @@ const createEvent = ({navigation}) => {
             {/* Description */}
 
             <View style={styles.description}>
-            <Text>   Description</Text>
+            <Text style={{fontWeight:'bold'}}>   Description</Text>
             <Input 
+                maxLength={100}
                 multiline={true}
                 // numberOfLines={3}
                 inputContainerStyle={styles.inputContainer}
@@ -231,7 +333,7 @@ const createEvent = ({navigation}) => {
 
             <View style={styles.tags}>
 
-            <Text>   Enter Tags</Text>
+            <Text style={{fontWeight:'bold'}}>   Enter Tags</Text>
             <ReactChipsInput 
                 label=" " 
                 initialChips={tags} 
@@ -261,7 +363,7 @@ const createEvent = ({navigation}) => {
 
             <View style={{flexDirection:'row'}}>
 
-            <Text style={{marginTop:10}}>   Set your location </Text>
+            <Text style={{marginTop:10, fontWeight:'bold',}}>   Set your location </Text>
 
             {/* Help Popup */}
 
@@ -274,10 +376,19 @@ const createEvent = ({navigation}) => {
                     color={theme.blue}
                     />
                 }
-                onPress={() => setVisible(true) }
+                onPress={() => {
+                    showMessage({
+                          message:"Hold and drag the Marker to set the location" ,
+                          type:"info",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
+                } }
                 />
 
-                <Dialog
+                {/* <Dialog
                 visible={visible}
                 onTouchOutside={() => setVisible(false)}
                 dialogAnimation={new SlideAnimation({
@@ -289,11 +400,12 @@ const createEvent = ({navigation}) => {
                   <Text style={{padding:10}}> Hold and drag the marker wherever you want to set the location. </Text>
                 </DialogContent>
 
-            </Dialog>
+            </Dialog> */}
 
             </View>
             
             <MapView 
+            customMapStyle={maptheme}
             initialRegion={{latitude: lat,
                         longitude: lon,
                         latitudeDelta: 0.04,
@@ -312,6 +424,7 @@ const createEvent = ({navigation}) => {
                         setLocation([coords.longitude,coords.latitude]);
                     }}
                     />
+                    
             </MapView>
 
             </View>
@@ -319,39 +432,34 @@ const createEvent = ({navigation}) => {
             <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
-                backgroundColor: theme.blue,
+                backgroundColor: theme.black,
                 marginTop:10,
-                marginLeft:20,
-                width:80,
-                marginBottom: 80,
+                // marginLeft:20,
+                width:120,
+                marginBottom: 40,
                 borderRadius: 10,
                 paddingHorizontal: 10,}}
-                title='Create'
+                title='Create Event'
+                disabled={!image || !title || !addr}
                 onPress={() => {
-                    addEvent({addr,max_attendees,desc,event_date,image,location,tags,title,token})
-                    setTimeout(() => { setModalvisible(true) }, 5000)
-                }}
+                    addEvent(addr,max_attendees,desc,event_date,image,location,tags,title,token)
+                    setImage(stockImage)
+                    setTitle('')
+                    setAddr('')
+                    setDesc('')
+                    setMax_attendees('')
+                    setTags(tagsData)
+                }
+                }
                 />
  
 
         </ScrollView>
 
-            {/* Success Modal */}
-
-            <Modal visible={modalvisible}>
-
-                <View>
-                    <Button
-                    type="outline"
-                    title="close"
-                    onPress={() => navigation.navigate("search")}
-                    />
-                    <Text> You have successfully created an event! </Text>
-                </View>
-
-            </Modal>
 
             </View>
+
+            <FocusAwareStatusBar style="auto"/>
         </View>
     )
 }
@@ -364,11 +472,11 @@ const styles = StyleSheet.create({
     },
     
     header:{
-        flex:0.5,
+        flex:1,
         backgroundColor:'white',
         alignItems: 'center',
-        paddingTop:20,
-        borderBottomWidth:1,
+        paddingTop:50,
+        // borderBottomWidth:1,
         borderColor:theme.lightaccent,
     },
 
@@ -378,9 +486,10 @@ const styles = StyleSheet.create({
     },
   
     content:{
-        flex:5.5,
+        flex:11,
         backgroundColor:'white',
         paddingHorizontal:20,
+        alignItems:'center',
     },
     
     inputContainer:{

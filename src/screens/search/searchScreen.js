@@ -3,15 +3,18 @@ import { SafeAreaView } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { RefreshControl, View, StyleSheet, Dimensions, StatusBar, FlatList, ActivityIndicator, Modal } from 'react-native';
 import { SearchBar, ButtonGroup } from 'react-native-elements';
-import { MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { DarkTheme } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '../../components/statusbar'
-
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Event from '../../components/search/Event'
 import { theme, tabBar } from '../../../src/constants/colors'
 import { createFilter } from 'react-native-search-filter';
+import * as Location from 'expo-location';
 import { Context as eventContext } from '../../context/eventContext';
 import main from '../../api/main';
+import axios from 'axios'
+import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
 // import Slider from '@react-native-community/slider';
 // import Category from '../components/Category'
@@ -33,10 +36,9 @@ const SearchScreen = ({ navigation }) => {
 
     const [radius, setRadius] = useState()
 
-    const buttons = [20, 40, 60, 80, 100, 150, 200, 300, 400, 500]
+    const buttons = [20, 40, 60, 80, 100, 150, 200, 300, 400, 500, 2000]
 
     const [disabled, setDisabled] = useState('')
-
 
     const updateRadius = (item, index) => {
         setRadius(item)
@@ -86,17 +88,53 @@ const SearchScreen = ({ navigation }) => {
 
     // Refreshing
 
-    const url = '/api/event/'
+    const url = 'https://converge-project.herokuapp.com/api/event/'
+
+    //Cancel Token
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+    //Location
+
+    // location access
+  
+//     const [current,setCurrent] = useState(null); 
+//     const [location, setLocation] = useState([]);
+//     const [errorMsg, setErrorMsg] = useState(null);
+
+//     useEffect(()=>{
+//     (async () => {
+//       let { status } = await Location.requestPermissionsAsync();
+//       if (status !== 'granted') {
+//         setErrorMsg('Permission to access location was denied');
+//         alert("Location is not turned on")
+//         return;
+//       }
+
+//       let current = await Location.getCurrentPositionAsync({});
+
+//       let lat = current.coords.latitude;
+//       let log = current.coords.longitude;
+
+//       setLocation([lat,log]);
+//       setCurrent(current);
+//       console.log(lat,log)
+
+//     })
+//     ();
+//   },[isFocused])
 
     // Fetching Events data from The API
 
-    useEffect(() => {
-        const abortController = new AbortController()
-        const getEvents = async () => {
+    useFocusEffect(
+    React.useCallback(() => {
+    let isActive = true;
+    const getEvents = async () => {
             try {
                 setIsloading(true)
                 dispatch({ type: "fetch_events_request" })
-                const response = await main.get(url, {
+                const response = await axios.get(url, {
                     headers: {
                         'Authorization': `Bearer ${authState.userToken}`
                     },
@@ -105,8 +143,10 @@ const SearchScreen = ({ navigation }) => {
                     }
                 })
                 // console.log(response);
+                if(isActive){
                 dispatch({ type: "fetch_events_success", payload: response.data })
                 setIsloading(false)
+                }
             }
             catch (err) {
                 setIsloading(false)
@@ -117,10 +157,46 @@ const SearchScreen = ({ navigation }) => {
         }
         getEvents();
 
-        return () => {
-            abortController.abort()
-        }
-    }, [radius,isFocused]);
+    return () => {
+      isActive = false;
+    //   console.log("unmounted component {searchScreen}")
+    };
+  }, [radius])
+);
+
+
+
+    // useEffect(() => {
+    //     const abortController = new AbortController()
+    //     const getEvents = async () => {
+    //         try {
+    //             setIsloading(true)
+    //             dispatch({ type: "fetch_events_request" })
+    //             const response = await main.get(url, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${authState.userToken}`
+    //                 },
+    //                 params: {
+    //                     radius: radius,
+    //                 }
+    //             })
+    //             // console.log(response);
+    //             dispatch({ type: "fetch_events_success", payload: response.data })
+    //             setIsloading(false)
+    //         }
+    //         catch (err) {
+    //             setIsloading(false)
+    //             dispatch({ type: "fetch_events_failure" });
+    //             console.log(err);
+    //             setError(err)
+    //         }
+    //     }
+    //     getEvents();
+
+    //     return () => {
+    //         abortController.abort()
+    //     }
+    // }, [radius]);
 
 
     const Header = () => {
@@ -128,7 +204,26 @@ const SearchScreen = ({ navigation }) => {
         return (
             <View style={styles.header}>
 
-                <Text style={styles.header__title}>Discover the most amazing events</Text>
+                <View style={{flexDirection: 'row', justifyContent:'space-between',marginTop:40}}>
+
+                    <Text style={styles.header__title}>Discover the most amazing events</Text>
+
+                    <Button
+                        type="clear"
+                        icon={
+                            <Ionicons
+                                name="location-outline"
+                                size={30}
+                            />
+                        } 
+                        containerStyle={{  
+                          position: 'absolute',
+                          right:20,
+                        }}   
+                        onPress={() => navigation.navigate("map")}
+                    />
+
+                </View>
 
                 <Button
                     type="clear"
@@ -162,7 +257,7 @@ const SearchScreen = ({ navigation }) => {
                     style={{
                         backgroundColor: theme.blue,
                         color: theme.white,
-                        top: 136,
+                        top: 123,
                         padding: 7,
                         borderRadius: 20,
                         right: 10,
@@ -173,7 +268,37 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* ButtonGroup */}
 
+                <View style={{flexDirection: 'row'}}>
+
                 <Text style={styles.eventsRadiusTitle}> Filter by Distance </Text>
+                <Button
+                type="clear"
+                containerStyle={{
+                    position: 'absolute',
+                    left:170,
+                    top:16,
+                }}
+                icon={
+                    <MaterialIcons
+                    name="info"
+                    size={18}
+                    color={theme.blue}
+                    />
+                }
+                onPress={() => {
+                    showMessage({
+                          message:"Please turn on your location" ,
+                          description: 'Go to (Profile > Edit profile)',
+                          type:"info",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20, backgroundColor:'#007BFF'}                          
+                        });  
+                } }
+                />
+
+                </View>
 
                 <View style={styles.buttonGroup}>
 
@@ -221,6 +346,7 @@ const SearchScreen = ({ navigation }) => {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color="black" />
+                <FocusAwareStatusBar style="auto" />
             </View>
         );
     }
@@ -231,6 +357,7 @@ const SearchScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 18 }}>
                     Error fetching data... Please check your network connection!
                 </Text>
+                <FocusAwareStatusBar style="auto" />
             </View>
         );
     }
@@ -263,7 +390,7 @@ const SearchScreen = ({ navigation }) => {
                     }}
                     inputContainerStyle={styles.input}
                     placeholder="Search for any events"
-                    placeholderTextColor="black"
+                    placeholderTextColor={theme.black}
                     onChangeText={setSearch}
                     value={search}
                 />
@@ -291,7 +418,7 @@ const SearchScreen = ({ navigation }) => {
                     data={filteredEvents}
                     keyExtractor={item => item.id.toString()}
                     numColumns={1}
-                    ListfooterComponent={<View style={{ height: 40 }}> Footer </View>}
+                    ListEmptyComponent={<Text> No Events </Text>}
                     refreshControl={
                         <RefreshControl
                             refreshing={refreshing}
@@ -313,7 +440,7 @@ const SearchScreen = ({ navigation }) => {
                     ListHeaderComponent={Header}
                     keyExtractor={item => item.id.toString()}
                     numColumns={2}
-                    ListfooterComponent={<View style={{ height: 40 }}> Footer </View>}
+                    ListEmptyComponent={<Text> There are no Events </Text>}
                     //   refreshControl={
                     //         <RefreshControl
                     //             refreshing={refreshing}
@@ -353,17 +480,16 @@ const styles = StyleSheet.create({
     },
 
     header__title: {
-        // width:'80%',
+        width:'75%',
         textAlign: 'left',
         fontWeight: 'bold',
-        fontSize: 30,
-        marginTop: 40,
-        marginHorizontal: 20,
+        fontSize: 25,
+        marginLeft: 20,
     },
 
     input: {
         borderRadius: 30,
-        color: 'white',
+        color: theme.white,
         paddingHorizontal: 10,
     },
 
@@ -392,7 +518,6 @@ const styles = StyleSheet.create({
 
     events: {
         flex: 3,
-        marginBottom: 50,
     },
 
     category: {

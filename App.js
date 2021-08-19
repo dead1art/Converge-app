@@ -3,33 +3,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import { Button, Text, TextInput, View, StyleSheet} from 'react-native';
 import {  Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
-import {tabBar} from './src/constants/colors'
+import {tabBar, theme} from './src/constants/colors'
 import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import main from './src/api/main';
 import {AuthContext} from './src/context/AuthContext';
 import { Provider as EventProvider } from './src/context/eventContext';
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
 
 // Autentication
 import signinScreen from './src/screens/authenctication/SigninScreen';
+import forgotPassword from './src/screens/authenctication/forgotPassword'
 import registerScreen from './src/screens/authenctication/RegisterScreen';
+import otpScreen from './src/screens/authenctication/otpScreen';
 // Home
 import homeScreen from './src/screens/home/homeScreen';
 // Search
 import searchScreen from './src/screens/search/searchScreen';
 import eventScreen from './src/screens/search/eventScreen'
 import profileScreen from './src/screens/profile/profileScreen';
+import mapScreen from './src/screens/search/mapScreen'
 // Create
 import createScreen from './src/screens/create/createScreen'
 import createEvent from './src/screens/create/createEvent';
 import createPost from './src/screens/create/createPost';
 // Chat
-import chatScreen from './src/screens/chat/chatScreen'
+import notificationScreen from './src/screens/chat/notificationScreen'
+import chatStack from './src/screens/chat/chatStack';
 // Profile
 import userScreen from './src/screens/profile/userScreen';
 import editScreen from './src/screens/profile/editScreen'
 import inviteScreen from './src/screens/profile/inviteScreen';
+import ChannelListScreen from './src/screens/chat/ChannelListScreen';
+import recommendedScreen from './src/screens/search/recommendedScreen';
+
 
 
 
@@ -37,11 +47,13 @@ import inviteScreen from './src/screens/profile/inviteScreen';
 
   const login = createStackNavigator(); 
 
+  const reg = createStackNavigator();
+
   const user = createStackNavigator();
 
   const create = createStackNavigator();
 
-  const Tab = createBottomTabNavigator();
+  const Tab = AnimatedTabBarNavigator();
 
   const getTabBarVisible = (route) => {
   const params = route.params;
@@ -53,12 +65,16 @@ import inviteScreen from './src/screens/profile/inviteScreen';
   return true;
 };
 
+
+
   const homeStack = ()=>{
     return (
       <Tab.Navigator
-      initialRouteName="home"
-      backBehavior="initialRoute"
+      initialRouteName="Home"
+      // backBehavior="initialRoute"
       tabBarOptions={{  
+        activeBackgroundColor: theme.blue,
+        activeTintColor: theme.white,
         keyboardHidesTabBar: true,
         showLabel: false,
         style: {
@@ -75,56 +91,78 @@ import inviteScreen from './src/screens/profile/inviteScreen';
       
       >
         <Tab.Screen 
-            name="home" 
+            name="Home" 
             component={homeScreen}
             options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "home" : "home-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "home" : "home-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
         <Tab.Screen 
-        name="search" 
+        name="Search" 
         component={searchScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "search" : "search-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "search" : "search-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="create" 
+        name="Create" 
         component={createStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name="add-circle-sharp" size={34} color={focused? tabBar.focused : tabBar.active}/>
+                <Ionicons name="add-circle-sharp" size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.active}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="chat" 
-        component={chatScreen}
+        name="Activity" 
+        component={notificationScreen}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "chatbox" : "chatbox-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "notifications" : "notifications-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
 
         <Tab.Screen 
-        name="userStack" 
+        name="Profile" 
         component={userStack}
         options={{
               tabBarIcon: ({focused}) => (
-                <Ionicons name={focused? "person" : "person-outline"} size={30} color={focused? tabBar.focused : tabBar.notFocused}/>
+                <Ionicons name={focused? "person" : "person-outline"} size={focused ? 20 : 30} color={focused? tabBar.focused : tabBar.notFocused}/>
               )
             }}
         />
       </Tab.Navigator>
     )
   }
+
+  const registerStack = () =>{
+    return (
+      <reg.Navigator initialRouteName="register">
+      <reg.Screen 
+        name= "register"
+        component={registerScreen}
+        options={{
+          headerShown:false 
+        }}
+      />
+      <reg.Screen 
+        name="otp"
+        component={otpScreen}
+        options={{
+          headerShown:false 
+        }}
+      />
+      </reg.Navigator>
+  )
+  }
+
 
   const rootStack = () => {
     return (
@@ -137,8 +175,15 @@ import inviteScreen from './src/screens/profile/inviteScreen';
               }
               }/>
         <login.Screen 
-              name="register" 
-              component={registerScreen}
+              name="forgot" 
+              component={forgotPassword}
+              options={{
+                headerShown:false 
+              }
+              }/>
+        <login.Screen 
+              name="registerStack" 
+              component={registerStack}
               options={{
                 headerShown:false 
               }}/>
@@ -166,21 +211,11 @@ import inviteScreen from './src/screens/profile/inviteScreen';
 
   const createStack = () => {
     return (
-      <create.Navigator initialRouteName="createEvent" screenOptions={{headerShown: false}}>
+      <create.Navigator initialRouteName="create" screenOptions={{headerShown: false}}>
 
         <create.Screen 
         name="create"
         component={createScreen}
-        />
-
-        <create.Screen 
-        name="createEvent"
-        component={createEvent}
-        />
-
-        <create.Screen 
-        name="createPost"
-        component={createPost}
         />
 
       </create.Navigator>
@@ -190,9 +225,14 @@ import inviteScreen from './src/screens/profile/inviteScreen';
 
 
 const initialState = {
+  user: [],
   isLoading: true,
   isSignout: false,
   userToken: null,
+  streamToken:null,
+  registerEmail:null,
+  haserror:false,
+  expoToken:null,
 }
 
 const reducer = (state, action) => {
@@ -201,6 +241,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         userToken: action.token,
+        streamToken:action.stream,
         isLoading: false,
       };
     case 'SIGN_IN':
@@ -208,12 +249,32 @@ const reducer = (state, action) => {
         ...state,
         isSignout: false,
         userToken: action.token,
+        streamToken: action.stream,
+        user: action.user,
       };
     case 'SIGN_OUT':
       return {
         ...state,
         isSignout: true,
         userToken: null,
+        streamToken: null,
+        expoToken:null,
+      };
+    case 'REGISTER':
+      return {
+        ...state,
+        registerEmail:action.email,
+        haserror:false,
+      };
+    case 'Error':
+      return {
+        ...state,
+        haserror:true,
+      };
+    case 'ExpoToken':
+      return{
+        ...state,
+        expoToken:action.expo,
       };
   }
 }
@@ -230,6 +291,7 @@ const Stack = createStackNavigator();
 
 
 export default function App({ navigation }) {
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const client_id="7G9ugODJhtBbJee4EURnmJFILJUpAFJ2COPKjqCz";
@@ -239,13 +301,15 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       let userToken;
+      let streamToken;
 
       try {
         userToken = await AsyncStorage.getItem("token");
+        streamToken = await AsyncStorage.getItem("stream");
       } catch (e) {
         console.log(e);
       }
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken, stream: streamToken});
     };
 
     bootstrapAsync();
@@ -259,10 +323,11 @@ export default function App({ navigation }) {
           const response = await main.post("/api/convert-token/",{ token, backend: "google-oauth2", client_id, client_secret, grant_type: "convert_token" });
           console.log(response);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({type: 'SIGN_IN', token:response.data.access_token})
+          dispatch({type: 'SIGN_IN', token:response.data.access_token, userid:userresponse.data.id})
         }
         catch(err)
         {
+          alert("Something went wrong");
           console.log(err);
         }
       },
@@ -273,29 +338,70 @@ export default function App({ navigation }) {
           const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
           console.log( response.data);
           await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token  });
+          const streamresponse = await main.get('/api/chat/token',{
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }
+          });
+          await AsyncStorage.setItem("stream", streamresponse.data.token);
+          const userResponse = await main.get('/api/profile/', {
+            headers: {
+              'Authorization': `Bearer ${response.data.access_token}` 
+            }         
+          })
+          showMessage({
+                          message:`Signed in as ${username}` ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"success" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
+          dispatch({ type: 'SIGN_IN', token:response.data.access_token, stream:streamresponse.data.token, user: userResponse.data });
          }
       catch(err)
         {
           console.log(err);
+          showMessage({
+                          message:"Invalid Credentials!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        }); 
          }
         
       },
       register:async({email, password, first_name, last_name})=>{
         try {
-          const username=email;
-          await main.post("/api/register/", { email, password, first_name, last_name });
-          const response = await main.post("/api/token/", { username, password, client_id, client_secret, grant_type });
-          console.log( response.data.access);
-          await AsyncStorage.setItem("token", response.data.access_token);
-          dispatch({ type: 'SIGN_IN', token:response.data.access_token});  
-        } catch (err) {
-            console.log(err);
+          const response = await main.post("/api/register/", { email, password, first_name, last_name });
+          dispatch({ type: 'REGISTER', email:response.data.email });
+        } catch (error) {
+            console.log(error);
+            dispatch({type:'Error', })
         }
 
       },
       signOut: async () => {
+        // try{
+        //   const response = await main.post('https://httpbin.org/post', 
+        //     { 
+        //       token:state.expoToken 
+        //     },
+        //     {
+        //      headers: {
+        //       'Authorization': `Bearer ${state.userToken}` 
+        //       }
+        //     })
+        //     console.log(response)
+        //     console.log(state.userToken)
+        //   }
+        // catch (err){
+        //   console.log(err)
+        // }
         await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("stream");
         dispatch({ type: 'SIGN_OUT'});
       },
     }),
@@ -328,13 +434,22 @@ export default function App({ navigation }) {
             )
             }
             <Stack.Screen name="event" component={eventScreen}/>
+            <Stack.Screen name="recommend" component={recommendedScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
+            <Stack.Screen name="map" component={mapScreen}/>
+
+            <Stack.Screen name="createEvent" component={createEvent}/>
+            <Stack.Screen name="createPost" component={createPost}/>
+
             <Stack.Screen name="profile" component={profileScreen}/>
             <Stack.Screen name="invite" component={inviteScreen}/>
+            <Stack.Screen name="room" component={chatStack} />
         </Stack.Navigator>
       </NavigationContainer>
       </EventProvider>
     </AuthContext.Provider>
+
+            <FlashMessage position="top" />
             </View>
   );
 }

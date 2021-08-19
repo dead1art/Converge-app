@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "converge",
+    "name": "Converge_android",
     "slug": "converge",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -29,6 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": ""
+    "description": "\n"
   }
 }

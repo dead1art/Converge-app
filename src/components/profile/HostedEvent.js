@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     content__details:{
         flex:2,
         paddingTop: 10,
+        paddingLeft:10,
         // marginHorizontal:10,
         borderBottomLeftRadius:20,
         borderBottomRightRadius:20,
@@ -81,8 +82,8 @@ const styles = StyleSheet.create({
 
     content__name:{
         flex:1,
-        fontSize: 18,
-        width:'80%',
+        fontSize: 16,
+        width:'100%',
         color:'black',
     },
 
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         color: 'gray',
         maxWidth:150,
-        maxHeight: 50,
     },
 
     // content__date:{
