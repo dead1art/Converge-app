@@ -38,45 +38,33 @@ const homeScreen = ({navigation})=> {
 
     // location access
   
-  const [current,setCurrent] = useState(null); 
-  const [location, setLocation] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(null);
+  // const [current,setCurrent] = useState(null); 
+  // const [location, setLocation] = useState([]);
+  // const [errorMsg, setErrorMsg] = useState(null);
 
-  useEffect(()=>{
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        alert("Location is not turned on")
-        return;
-      }
+  // useEffect(()=>{
+  //   (async () => {
+  //     let { status } = await Location.requestPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       setErrorMsg('Permission to access location was denied');
+  //       alert("Location is not turned on")
+  //       return;
+  //     }
 
-      let current = await Location.getCurrentPositionAsync({});
-      let log = current.coords.longitude;
-      var lat = current.coords.latitude;
-      setLocation([log,lat]);
-      setCurrent(current);
-      console.log(lat,log)
+  //     let current = await Location.getCurrentPositionAsync({});
 
-    })
-    ();
-  },[])
+  //     let lat = current.coords.latitude;
+  //     let log = current.coords.longitude;
 
-  useEffect(() => {
-    (async() =>{
-    try {
-      const response = await main.put('/api/profile/', {location},{
-                 headers: {
-            'Authorization': `Bearer ${authState.userToken}` 
-            }
-            })
-            console.log(response.data)
-    } catch (error) {
-        console.log(error)
-    }
-    })
-    ();
-  },[])
+  //     setLocation([lat,log]);
+  //     setCurrent(current);
+  //     console.log(lat,log)
+  //   })
+
+  //   ();
+
+  //   },[refreshing])
+
 
     //Notifications 
 
@@ -113,10 +101,10 @@ const homeScreen = ({navigation})=> {
       },
     })
     .then(function (response){
-      console.log(response)
+      // console.log(response)
     })
     .catch(function (response){
-      console.log(response)
+      // console.log(response)
     })
 
   } else {
@@ -143,7 +131,7 @@ const homeScreen = ({navigation})=> {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      // console.log(response);
     });
     
     return () => {
@@ -204,7 +192,7 @@ const homeScreen = ({navigation})=> {
                         'Authorization': `Bearer ${authState.userToken}`
                     },
                 })
-                setPost(response.data)         
+                setPost(response.data)       
                 setRefreshing(false)
                 showMessage({
                           message:"Posts Updated!" ,
@@ -220,6 +208,26 @@ const homeScreen = ({navigation})=> {
           setRefreshing(false)
       }
     }, [refreshing]);
+
+    // Post user current location
+
+  //   useEffect(()=> {
+  //   const postLocation = async() => {
+  //    try {
+  //     const response = await main.put('/api/profile/', {location},{
+  //                headers: {
+  //           'Authorization': `Bearer ${authState.userToken}` 
+  //         }
+  //           })
+  //           console.log(response.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  //   postLocation()
+  //   },[])
+
 
     function header(){
     return(

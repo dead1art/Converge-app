@@ -17,7 +17,7 @@ import {AuthContext} from '../../context/AuthContext';
 
 const ChannelListScreen = ({navigation}) => {
 
-        const chatClient = StreamChat.getInstance('gxz6ahcuv6p5');
+        const chatClient = StreamChat.getInstance('nzuqbc4twux5');
 
         const { state: authState } = useContext(AuthContext);
 

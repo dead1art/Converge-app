@@ -3,6 +3,7 @@ import {theme} from "../../constants/colors"
 import { View, Text, StyleSheet, Dimensions, ActivityIndicator, ScrollView, Image } from 'react-native'
 import {Input, Button} from 'react-native-elements'
 import ReactChipsInput from 'react-native-chips'
+import maptheme from '../../../assets/mapTheme'
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import * as ImagePicker from 'expo-image-picker';
 import main from '../../api/main'
@@ -404,6 +405,7 @@ const createEvent = ({navigation}) => {
             </View>
             
             <MapView 
+            customMapStyle={maptheme}
             initialRegion={{latitude: lat,
                         longitude: lon,
                         latitudeDelta: 0.04,

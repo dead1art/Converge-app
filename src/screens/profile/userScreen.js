@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import {AuthContext} from '../../context/AuthContext';
 import { theme } from '../../constants/colors'
 import main from '../../api/main';
+import axios from 'axios'
 import Profile from '../../components/profile/Profile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FocusAwareStatusBar } from '../../components/statusbar'
@@ -84,17 +85,25 @@ const userScreen = ({navigation}) => {
 
   // LoadingScreen--
 
-  const url = '/api/profile/'
+  const url = 'https://converge-project.herokuapp.com/api/profile/'
 
   const userInfo = state.users;
   const { hosted_events, tags } = userInfo;
 
+  //Cancel Token
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+  //fetch User
+
   useEffect(()=>{
-    const abortController = new AbortController()
+    // const abortController = new AbortController()
     const getUser = async() =>{
       try{
         setIsloading(true)
-        const response = await main.get(url, {
+        const response = await axios.get(url, {
+          cancelToken: source.token,
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
           }         
@@ -115,7 +124,8 @@ const userScreen = ({navigation}) => {
     getUser();
 
     return () => {
-      abortController.abort()
+      // abortController.abort()
+      source.cancel('unmounted component {userScreen}');
     }
   },[refreshing]);
 
@@ -124,6 +134,7 @@ const userScreen = ({navigation}) => {
     setRefreshing(true);
     // wait(2000).then(() => setRefreshing(false)); 
   }, []);
+
 
   //SignOut 
 

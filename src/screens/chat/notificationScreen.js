@@ -38,7 +38,7 @@ const notificationScreen = ({navigation}) => {
                     'Authorization': `Bearer ${authState.userToken}` 
                   }         
                 });
-                console.log(response.data);
+                // console.log(response.data);
                 setNotifications(response.data)
                 setIsloading(false)
               }

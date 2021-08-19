@@ -68,13 +68,21 @@ const profileScreen = ({navigation, route }) => {
 
   const userInfo = state.users;
 
+  //Cancel Token
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+  //fetch User
+
   useEffect(()=> {
+    // const abortController = new AbortController()
     const getUser = async() =>{
       try{
         dispatch({type:'FETCH_USER_REQUEST'});
         setIsloading(true)
         const response= await axios.get(url,{
-
+          cancelToken: source.token,
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
           }
@@ -93,12 +101,18 @@ const profileScreen = ({navigation, route }) => {
     }
 
     getUser();
+
+    return () => {
+       // abortController.abort()
+       source.cancel('unmounted component {profileScreen}');
+      }
   },[isFocused]);
 
   if (isloading) {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="black" />
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }
@@ -109,6 +123,7 @@ const profileScreen = ({navigation, route }) => {
             <Text style={{ fontSize: 18}}>
             {error}
             </Text>
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }

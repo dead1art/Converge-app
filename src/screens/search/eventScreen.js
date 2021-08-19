@@ -12,6 +12,7 @@ import { theme } from '../../constants/colors'
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { useScrollToTop } from '@react-navigation/native'
+import { showMessage, hideMessage } from "react-native-flash-message";
 import axios from 'axios';
 import {
   NavigationContainer,
@@ -29,7 +30,10 @@ const eventScreen = ({ route, navigation }) => {
     const item = route.params.item
     // const host = route.params.item
 
-    // console.log(host)
+    // console.log(item)
+
+    //Disable Button
+    // const [buttonDisable, setButtonDisable] = useState(false)
 
     // const [event, setEvent] = useState(route.params.item)
 
@@ -73,39 +77,39 @@ const eventScreen = ({ route, navigation }) => {
 
     //Recommended
 
-    useEffect(() => {
-        const abortController = new AbortController()
-        let url = "/api/event/recommended"
+    // useEffect(() => {
+    //     const abortController = new AbortController()
+    //     let url = "/api/event/recommended"
 
-        const getRecommended = async () => {
-            try {
-                setIsloading(true)
-                const response = await main.get(
-                    url,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${authState.userToken}`
-                        },
-                        params: {
-                            event: id,
-                        }
-                    })
-                setRecommended(response.data)
-                setIsloading(false)
-            }
-            catch (error) {
-                console.log(error)
-                setIsloading(false)
-            }
-        }
+    //     const getRecommended = async () => {
+    //         try {
+    //             setIsloading(true)
+    //             const response = await main.get(
+    //                 url,
+    //                 {
+    //                     headers: {
+    //                         'Authorization': `Bearer ${authState.userToken}`
+    //                     },
+    //                     params: {
+    //                         event: id,
+    //                     }
+    //                 })
+    //             setRecommended(response.data)
+    //             setIsloading(false)
+    //         }
+    //         catch (error) {
+    //             console.log(error)
+    //             setIsloading(false)
+    //         }
+    //     }
 
-        getRecommended()
+    //     getRecommended()
 
-        return () => {
-            abortController.abort()
-        }
+    //     return () => {
+    //         abortController.abort()
+    //     }
 
-    }, [isFocused])
+    // }, [isFocused])
 
     //Join Request
 
@@ -126,9 +130,18 @@ const eventScreen = ({ route, navigation }) => {
                     }
                     throw err;
                 });
-            // console.log(response.data)
+            console.log(response.data)
             setJointitle("Requested")
-            navigation.navigate("search")
+            showMessage({
+                          message:"Invite has been sent!" ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
+            // setButtonDisable(true)
+            navigation.goBack()
         }
 
         catch (err) {
@@ -209,7 +222,7 @@ const eventScreen = ({ route, navigation }) => {
                         </View>
 
                         <Button
-                            type={requested ? "clear" : "outline"}
+                            type="clear"
                             containerStyle={{
                                 backgroundColor: theme.blue,
                                 borderRadius: 20,
@@ -242,7 +255,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__dateTitle}> {date} {month} {year} </Text>
+                        <Text style={styles.event__dateTitle}>{date} {month} {year}</Text>
                     </View>
 
                     <View style={styles.event__place}>
@@ -260,7 +273,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__placeTitle}> {addr} </Text>
+                        <Text style={styles.event__placeTitle}>{addr}</Text>
                     </View>
 
                     <View style={styles.event__attendees}>
@@ -278,7 +291,7 @@ const eventScreen = ({ route, navigation }) => {
                                 />
                             }
                         />
-                        <Text style={styles.event__placeTitle}> Max Members: {max_attendees} </Text>
+                        <Text style={styles.event__placeTitle}>Max Members: {max_attendees}</Text>
                     </View>
 
                     <View style={styles.description}>
@@ -332,7 +345,7 @@ const eventScreen = ({ route, navigation }) => {
 
                     </View>
 
-                     {recommended &&
+                     {/* {recommended &&
 
                     <View style={{ marginBottom: 10 }}>
 
@@ -354,7 +367,7 @@ const eventScreen = ({ route, navigation }) => {
 
                     </View>
 
-                        }
+                        } */}
 
                 </View>
 
@@ -371,7 +384,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: Dimensions.get('screen').height,
-        backgroundColor: 'white',
+        backgroundColor: theme.white,
     },
 
     header: {
@@ -388,7 +401,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         elevation: 15,
         marginTop: -30,
-        backgroundColor: 'white',
+        backgroundColor: theme.white,
     },
 
     image: {
@@ -397,7 +410,7 @@ const styles = StyleSheet.create({
     },
 
     event__name: {
-        fontSize: 34,
+        fontSize: 32,
         fontWeight: 'bold',
         padding: 10,
         marginVertical: 10,
@@ -426,12 +439,14 @@ const styles = StyleSheet.create({
 
     event__dateTitle: {
         marginLeft: 20,
-        fontSize: 15,
+        fontSize: 14,
     },
 
     event__placeTitle: {
         marginLeft: 20,
-        fontSize: 15,
+        width:300,
+        textAlign:'left',
+        fontSize: 14,
     },
 
     description: {

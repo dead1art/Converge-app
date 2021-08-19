@@ -25,6 +25,7 @@ import homeScreen from './src/screens/home/homeScreen';
 import searchScreen from './src/screens/search/searchScreen';
 import eventScreen from './src/screens/search/eventScreen'
 import profileScreen from './src/screens/profile/profileScreen';
+import mapScreen from './src/screens/search/mapScreen'
 // Create
 import createScreen from './src/screens/create/createScreen'
 import createEvent from './src/screens/create/createEvent';
@@ -435,6 +436,7 @@ export default function App({ navigation }) {
             <Stack.Screen name="event" component={eventScreen}/>
             <Stack.Screen name="recommend" component={recommendedScreen}/>
             <Stack.Screen name="edit" component={editScreen}/>
+            <Stack.Screen name="map" component={mapScreen}/>
 
             <Stack.Screen name="createEvent" component={createEvent}/>
             <Stack.Screen name="createPost" component={createPost}/>

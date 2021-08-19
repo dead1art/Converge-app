@@ -100,6 +100,7 @@ const styles= StyleSheet.create({
         marginHorizontal:10,
         borderRadius:20,
         height: 100,
+        resizeMode: 'cover',
     },
     event: {
         marginTop: 10,

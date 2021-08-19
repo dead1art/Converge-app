@@ -9,9 +9,11 @@ import { theme } from '../../constants/colors'
 
 function Profile({ signout, data, nav }) {
   
-  const { first_name, last_name, image, bio, dob, email, tags, hosted_events } = data;
+  const { first_name, last_name, image, bio, dob, email, tags, hosted_events, location } = data;
   
   const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
+
+  console.log(location)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,7 +36,7 @@ function Profile({ signout, data, nav }) {
           }}
         />
         <Text style={styles.name}> {first_name} {last_name} </Text>
-        <Text style={bio ? styles.bio : styles.nobio}> {bio ? bio : "Edit Your Bio"} </Text>
+        <Text style={bio ? styles.bio : styles.nobio}>{bio ? bio : "Edit Your Bio"}</Text>
 
         <View style={{ flexDirection: 'row', marginBottom:10 }}>
 
@@ -190,7 +192,10 @@ const styles = StyleSheet.create({
   },
 
   bio: {
+    marginHorizontal:10,
     color: 'gray',
+    textAlign:'justify',
+    marginVertical: 10,
   },
 
   nobio: {

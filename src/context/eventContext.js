@@ -12,6 +12,7 @@ const initialState = {
     isEventSubmitted:false,
     submissionError:false,
     status:null,
+    location:[12.8727,74.8482],
 }
 
 const eventReducer = (state, action) =>{
@@ -52,6 +53,11 @@ const eventReducer = (state, action) =>{
             return{
                 ...state,
                 submissionError:true
+            };
+        case "fetch_location_success":
+            return{
+                ...state,
+                location:action.location
             };
         default:
             return state;

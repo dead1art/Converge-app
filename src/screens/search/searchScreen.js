@@ -10,8 +10,11 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import Event from '../../components/search/Event'
 import { theme, tabBar } from '../../../src/constants/colors'
 import { createFilter } from 'react-native-search-filter';
+import * as Location from 'expo-location';
 import { Context as eventContext } from '../../context/eventContext';
 import main from '../../api/main';
+import axios from 'axios'
+import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
 // import Slider from '@react-native-community/slider';
 // import Category from '../components/Category'
@@ -22,7 +25,7 @@ import {
 
 const SearchScreen = ({ navigation }) => {
 
-    // const isFocused = useIsFocused();
+    const isFocused = useIsFocused();
 
     const { state: authState } = useContext(AuthContext);
 
@@ -36,7 +39,6 @@ const SearchScreen = ({ navigation }) => {
     const buttons = [20, 40, 60, 80, 100, 150, 200, 300, 400, 500, 2000]
 
     const [disabled, setDisabled] = useState('')
-
 
     const updateRadius = (item, index) => {
         setRadius(item)
@@ -86,17 +88,53 @@ const SearchScreen = ({ navigation }) => {
 
     // Refreshing
 
-    const url = '/api/event/'
+    const url = 'https://converge-project.herokuapp.com/api/event/'
+
+    //Cancel Token
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+    //Location
+
+    // location access
+  
+//     const [current,setCurrent] = useState(null); 
+//     const [location, setLocation] = useState([]);
+//     const [errorMsg, setErrorMsg] = useState(null);
+
+//     useEffect(()=>{
+//     (async () => {
+//       let { status } = await Location.requestPermissionsAsync();
+//       if (status !== 'granted') {
+//         setErrorMsg('Permission to access location was denied');
+//         alert("Location is not turned on")
+//         return;
+//       }
+
+//       let current = await Location.getCurrentPositionAsync({});
+
+//       let lat = current.coords.latitude;
+//       let log = current.coords.longitude;
+
+//       setLocation([lat,log]);
+//       setCurrent(current);
+//       console.log(lat,log)
+
+//     })
+//     ();
+//   },[isFocused])
 
     // Fetching Events data from The API
 
-    useEffect(() => {
-        const abortController = new AbortController()
-        const getEvents = async () => {
+    useFocusEffect(
+    React.useCallback(() => {
+    let isActive = true;
+    const getEvents = async () => {
             try {
                 setIsloading(true)
                 dispatch({ type: "fetch_events_request" })
-                const response = await main.get(url, {
+                const response = await axios.get(url, {
                     headers: {
                         'Authorization': `Bearer ${authState.userToken}`
                     },
@@ -105,8 +143,10 @@ const SearchScreen = ({ navigation }) => {
                     }
                 })
                 // console.log(response);
+                if(isActive){
                 dispatch({ type: "fetch_events_success", payload: response.data })
                 setIsloading(false)
+                }
             }
             catch (err) {
                 setIsloading(false)
@@ -117,10 +157,46 @@ const SearchScreen = ({ navigation }) => {
         }
         getEvents();
 
-        return () => {
-            abortController.abort()
-        }
-    }, [radius]);
+    return () => {
+      isActive = false;
+    //   console.log("unmounted component {searchScreen}")
+    };
+  }, [radius])
+);
+
+
+
+    // useEffect(() => {
+    //     const abortController = new AbortController()
+    //     const getEvents = async () => {
+    //         try {
+    //             setIsloading(true)
+    //             dispatch({ type: "fetch_events_request" })
+    //             const response = await main.get(url, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${authState.userToken}`
+    //                 },
+    //                 params: {
+    //                     radius: radius,
+    //                 }
+    //             })
+    //             // console.log(response);
+    //             dispatch({ type: "fetch_events_success", payload: response.data })
+    //             setIsloading(false)
+    //         }
+    //         catch (err) {
+    //             setIsloading(false)
+    //             dispatch({ type: "fetch_events_failure" });
+    //             console.log(err);
+    //             setError(err)
+    //         }
+    //     }
+    //     getEvents();
+
+    //     return () => {
+    //         abortController.abort()
+    //     }
+    // }, [radius]);
 
 
     const Header = () => {
@@ -136,14 +212,15 @@ const SearchScreen = ({ navigation }) => {
                         type="clear"
                         icon={
                             <Ionicons
-                                name="compass-outline"
-                                size={24}
+                                name="location-outline"
+                                size={30}
                             />
                         } 
-                        containerStyle={{ 
-                            width:'50%',
-                            marginRight:20,
+                        containerStyle={{  
+                          position: 'absolute',
+                          right:20,
                         }}   
+                        onPress={() => navigation.navigate("map")}
                     />
 
                 </View>
@@ -210,12 +287,13 @@ const SearchScreen = ({ navigation }) => {
                 }
                 onPress={() => {
                     showMessage({
-                          message:"You can only use this feature if you have your location turned on" ,
-                          type:"warning",
+                          message:"Please turn on your location" ,
+                          description: 'Go to (Profile > Edit profile)',
+                          type:"info",
                           floating: true,
                           duration:5000,
-                          icon: {icon:"warning" , position: "left"},
-                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20, backgroundColor:'#007BFF'}                          
                         });  
                 } }
                 />
@@ -268,6 +346,7 @@ const SearchScreen = ({ navigation }) => {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color="black" />
+                <FocusAwareStatusBar style="auto" />
             </View>
         );
     }
@@ -278,6 +357,7 @@ const SearchScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 18 }}>
                     Error fetching data... Please check your network connection!
                 </Text>
+                <FocusAwareStatusBar style="auto" />
             </View>
         );
     }
@@ -310,7 +390,7 @@ const SearchScreen = ({ navigation }) => {
                     }}
                     inputContainerStyle={styles.input}
                     placeholder="Search for any events"
-                    placeholderTextColor="black"
+                    placeholderTextColor={theme.black}
                     onChangeText={setSearch}
                     value={search}
                 />
@@ -360,7 +440,7 @@ const SearchScreen = ({ navigation }) => {
                     ListHeaderComponent={Header}
                     keyExtractor={item => item.id.toString()}
                     numColumns={2}
-                    ListEmptyComponent={<Text> No Events </Text>}
+                    ListEmptyComponent={<Text> There are no Events </Text>}
                     //   refreshControl={
                     //         <RefreshControl
                     //             refreshing={refreshing}
@@ -400,7 +480,7 @@ const styles = StyleSheet.create({
     },
 
     header__title: {
-        width:'60%',
+        width:'75%',
         textAlign: 'left',
         fontWeight: 'bold',
         fontSize: 25,
@@ -409,7 +489,7 @@ const styles = StyleSheet.create({
 
     input: {
         borderRadius: 30,
-        color: 'white',
+        color: theme.white,
         paddingHorizontal: 10,
     },
 

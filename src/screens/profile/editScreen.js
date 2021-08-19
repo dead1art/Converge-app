@@ -162,7 +162,7 @@ axios({
         .catch(function (response) {
           //handle error
           console.log(response);
-    
+          alert("Please pick a valid date!")
         });
     
   };
@@ -201,7 +201,7 @@ axios({
         } catch (error) {
             console.error(error);
             showMessage({
-                          message:"There was an error updating you profile!" ,
+                          message:"There was an error updating your profile!" ,
                           type:"danger",
                           floating: true,
                           duration:5000,
