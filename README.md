@@ -4,7 +4,7 @@ Event Management System
 
 ![login](./screenshots/login.png)
 ![search](./screenshots/search.png)
-![map](./screenshots/map.png)
+![map](./screenshots/Map.png)
 ![Event](./screenshots/Event.png)
 
 
