@@ -17,7 +17,7 @@ An Android application that has been designed for the users to easily manage and
 3. Geographical representation of event locations.
 4. Customizable user profile. 
 
-<u>Tools</u>
+<ins>Tools</ins>
 1. Oauth2 for Google sign in.
 2. Google maps api for implementation of google maps.
 3. Stream chat api for the inclusion of chat facility in the application.
