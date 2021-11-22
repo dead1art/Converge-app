@@ -2,19 +2,27 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { FocusAwareStatusBar } from '../components/statusbar'
+import { FocusAwareStatusBar } from '../../components/statusbar'
 import { Input, Avatar, Button } from "react-native-elements"
 import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native';
+import ReactChipsInput from 'react-native-chips'
 import * as ImagePicker from 'expo-image-picker';
-import main from '../api/main';
-import {AuthContext} from '../context/AuthContext';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import main from '../../api/main';
+import {AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
 import * as Location from 'expo-location';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { theme } from '../../constants/colors';
  
 const editScreen = ({route, navigation}) => {
 
       const { state: authState } = React.useContext(AuthContext);
+
+  //ChipInput
+
+  const tagsData = ["sports","health","celebration"]
 
   // location access
   
@@ -27,17 +35,20 @@ const editScreen = ({route, navigation}) => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
+        alert("Location is not turned on")
         return;
       }
 
       let current = await Location.getCurrentPositionAsync({});
 
-      var lat = current.coords.latitude;
       let log = current.coords.longitude;
+      var lat = current.coords.latitude;
 
-      setLocation([lat,log]);
+      setLocation([log,lat]);
 
       setCurrent(current);
+
+      console.log(lat,log)
 
     })();
   },[])
@@ -107,34 +118,96 @@ axios({
     .catch(function (response) {
       //handle error
       console.log(response);
+
     });
 
   };
 
-    // Image Picker
+  //date picker logic
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    // console.warn("A date has been picked: ", date);
+    hideDatePicker();
+    // console.log(date);
+    
+    const date_str = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
+    setDob(date_str)
+    // console.log(date_str);
+
+    let formData = new FormData();
+
+    formData.append('dob',date_str);
+
+    axios({
+        method: "put",
+        url: "https://converge-project.herokuapp.com/api/profile/",
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${authState.userToken}`},
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+          alert("Please pick a valid date!")
+        });
+    
+  };
+
+    // Image Picker
     const {userInfo} = route.params;
 
     const [image, setImage] = useState(userInfo.image)
-    const [fname, setFname] = useState(userInfo.first_name)
-    const [lname, setLname] = useState(userInfo.last_name)
+    const [first_name, setFirst_name] = useState(userInfo.first_name)
+    const [last_name, setLast_name] = useState(userInfo.last_name)
     const [bio, setBio] = useState(userInfo.bio)
     const [dob, setDob] = useState(userInfo.dob)
     const [email, setEmail] = useState(userInfo.email)
+    const [tags,setTags] = useState(userInfo.tags);
 
     // {image && console.log(image)}
+    const noImage = "https://nursing.matoshri.edu.in/assets/images/no-image-faculty.png"
 
-    const editProfileHandler = async(bio, dob ) => {
+    const editProfileHandler = async(first_name, last_name, bio, email, tags) => {
         try {
-            const response = await main.put("/api/profile/", { bio, dob,location}, {
+            const response = await main.put("/api/profile/", { first_name, last_name, bio, email, tags, location}, {
                  headers: {
             'Authorization': `Bearer ${authState.userToken}` 
             }
             });
             console.log(response.data)
             navigation.goBack();
+            showMessage({
+                          message:"Profile Updated Successfully!" ,
+                          type:"success",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"info" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
         } catch (error) {
             console.error(error);
+            showMessage({
+                          message:"There was an error updating your profile!" ,
+                          type:"danger",
+                          floating: true,
+                          duration:5000,
+                          icon: {icon:"danger" , position: "left"},
+                          style: {paddingVertical: 20, paddingHorizontal:20}                          
+                        });  
         }
     }
 
@@ -152,68 +225,69 @@ axios({
         <Avatar
         rounded
         containerStyle={{
-            borderWidth:6,
-            borderColor:'white',
+            marginTop:20,
             backgroundColor: 'white',
         }}
         size={150}
         source={{
             uri:
-            image=="null" ? "https://images.unsplash.com/photo-1618085220188-b4f210d22703?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8dG93SlpGc2twR2d8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" : image,
+            image ? image : noImage,
         }}
         />
 
     <Button 
             titleStyle={{color: "white"}}
             buttonStyle={{ 
-                backgroundColor: '#2663FF',
+                backgroundColor: theme.blue,
                 marginTop: 40,
                 marginBottom: 20,
-                borderRadius: 20,
+                borderRadius: 10,
                 paddingHorizontal: 20,}}
                 title='Update Picture'
                 onPress={pickImage}
                 />
                 
             <View style={styles.info}>
-                <Text> First Name </Text>  
+                <Text>   First Name </Text>  
                 <Input 
+                disabled
                 inputContainerStyle={{ 
                     marginTop:10,
                     borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
-                value={fname} 
-                onChangeText={setFname} /> 
+                value={first_name} 
+                onChangeText={setFirst_name} /> 
             </View>
 
             <View style={styles.info}>
-                <Text> Last Name </Text>  
-                <Input 
+                <Text>   Last Name</Text>  
+                <Input
+                disabled 
                 inputContainerStyle={{ 
                     marginTop:10,
                     borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
-                value={lname} 
-                onChangeText={setLname} /> 
+                value={last_name} 
+                onChangeText={setLast_name} /> 
             </View>
 
             <View style={styles.info}> 
-                 <Text> Bio </Text>
+                 <Text>   Bio</Text>
                 <Input 
                 textAlign="left"
                 inputContainerStyle={{ 
                     marginTop:10,
                     borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -222,29 +296,61 @@ axios({
             </View>
             
             <View style={styles.info}> 
-                <Text> Date Of Birth </Text>
+                <Text>   Date Of Birth</Text>
                 <Input 
+                textAlign="left"
+                rightIcon={
+                  <MaterialIcons
+                    name="calendar-today"
+                    size={26}
+                    color={theme.black}
+                    onPress={showDatePicker}
+                  />
+                }
                 inputContainerStyle={{ 
                     marginTop:10,
+                    paddingRight:20,
                     borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
                 value={dob} 
-                onChangeText={setDob} />
+                disabled />
+                
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
             </View>
+
+            <View style={styles.tags}>
+
+            <Text>   Enter Interests</Text>
+            <ReactChipsInput 
+                label=" " 
+                initialChips={tags} 
+                onChangeChips={(chips) => setTags(chips)} 
+                // alertRequired={true} 
+                chipStyle={styles.chip}     
+                inputStyle={styles.chipInput} 
+                labelStyle={styles.chipLabel} 
+                labelOnBlur={{ color: '#666' }} />
+
+            </View> 
             
             <View style={styles.info}>
-                <Text> Email </Text>
+                <Text>   Email</Text>
                 <Input
                 disabled
                 inputContainerStyle={{ 
                     marginTop:10,
                     borderBottomWidth: 0, 
-                    backgroundColor: 'white',
-                    borderRadius:20,
+                    backgroundColor: theme.lightaccent,
+                    borderRadius:10,
                     height: 50,
                 }}
                 style={styles.input}
@@ -270,7 +376,7 @@ axios({
             />
             }
            onPress={()=>{
-            editProfileHandler(bio,dob)
+            editProfileHandler(first_name, last_name, bio, email, tags)
            }}
             />
 
@@ -292,13 +398,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#E5E8EE',
+        backgroundColor: theme.white,
         height: Dimensions.get('screen').height,
     },
     
     content: {
         width: '100%',
-        borderRadius: 40,
         marginTop: 30,
         flex: 1,
         padding: 20,
@@ -306,6 +411,7 @@ const styles = StyleSheet.create({
     },
 
     header__profile: {
+        marginTop: 10,
         marginBottom: 20,
         fontWeight: 'bold',
         fontSize: 30,
@@ -325,17 +431,46 @@ const styles = StyleSheet.create({
     },
 
     info: {
-        borderRadius: 30,
         width: '100%',
         paddingVertical: 10,
     },
 
     input: {
-        borderRadius:30,
+        borderRadius:0,
         paddingHorizontal: 20,
-        color: 'black',
-        backgroundColor: 'white',
+        color: theme.black,
     },
+
+    tags:{
+        paddingVertical:10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    
+    chipInput:{
+        width: 330,
+        marginLeft:10,
+        marginTop:-20,
+        marginBottom:20,
+        borderBottomWidth: 0, 
+        color:theme.black,
+        backgroundColor: theme.lightaccent,
+        borderRadius:10,
+        paddingHorizontal:20,
+        height:50,
+        borderColor: theme.gray,
+    },
+    
+    chip:{
+        marginTop:10,
+        marginLeft:10,
+        borderRadius:10,
+        paddingHorizontal:10,
+        paddingVertical:10,
+        borderWidth:0,
+        backgroundColor: theme.lightaccent, 
+    },
+
 
 })
 

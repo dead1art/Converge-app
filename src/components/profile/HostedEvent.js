@@ -4,9 +4,16 @@ import { View,Text, StyleSheet, Modal, Image, TouchableOpacity } from 'react-nat
 import { Button, Avatar } from "react-native-elements"
 import {  Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
+import { theme } from '../../constants/colors';
 
-function Event({eventdata, press}) {
-    const { id, title, image, addr, event_date, dateMonth } = eventdata;
+function HostedEvent({eventdata, press}) {
+    
+    const { id, title, image, addr, event_date } = eventdata;
+
+    let d = new Date(event_date)
+    let dateString = d.toDateString().slice(4,10); 
+
+    // console.log(dateString)
 
     return(
             <TouchableOpacity
@@ -19,15 +26,15 @@ function Event({eventdata, press}) {
                     style={styles.image}
                     source={{uri : image}}
                     >
+                    </ImageBackground>
                
 
                     <View style={styles.content__details}>
                         <Text style={styles.content__name}>{title}</Text> 
-                        <Text style={styles.content__location}>{addr}</Text>
-                        <Text style={{ fontSize:14,  color:'gray',}}>{event_date}</Text>
+                        {/* <Text style={styles.content__location}>{addr}</Text> */}
+                        {/* <Text style={styles.content__date}>{dateString}</Text> */}
                     </View>
 
-                    </ImageBackground>
         
             </TouchableOpacity>
     )
@@ -35,17 +42,17 @@ function Event({eventdata, press}) {
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
-        flexDirection: 'row',
-        height:280,
+        height:180,
+        width:95,
         marginHorizontal:10,
         marginVertical:10,
-        backgroundColor: 'white',
+        // backgroundColor: theme.white,
         borderColor: '#eff7fc',
         borderRadius: 20,
     },
     
     image:{
+        flex:2,
         width: '100%',
         height: '100%',
     },
@@ -63,27 +70,36 @@ const styles = StyleSheet.create({
     // },
 
     content__details:{
-        paddingLeft:20,
-        color: 'white',
-        marginTop:'50%',
+        flex:2,
         paddingTop: 10,
+        paddingLeft:10,
         // marginHorizontal:10,
         borderBottomLeftRadius:20,
         borderBottomRightRadius:20,
-        height: 94,
-        backgroundColor: 'rgba(0,0,0, 0.5)',
+        height: 60,
         textAlign: 'justify',
     },
 
     content__name:{
-        fontWeight:'bold',
-        fontSize: 20,
-        color:'white',
+        flex:1,
+        fontSize: 16,
+        width:'100%',
+        color:'black',
     },
 
     content__location:{
+        flex:1,
+        justifyContent: 'center',
         color: 'gray',
+        maxWidth:150,
     },
+
+    // content__date:{
+    //     flex:1,
+    //     justifyContent: 'flex-end',
+    //     fontSize:14,
+    //     color:'gray',
+    // }
 })
 
-export default Event;
+export default HostedEvent;

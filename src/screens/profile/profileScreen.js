@@ -1,13 +1,13 @@
 import React, { useContext,useEffect, useState} from 'react';
 import { RefreshControl,View,Text, StyleSheet, SafeAreaView, Dimensions, StatusBar, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
-// import {AuthContext} from '../../App';
-import {AuthContext} from '../context/AuthContext';
-import main from '../api/main';
-import Profile from '../components/Profile'
+import {AuthContext} from '../../context/AuthContext';
+import { MaterialIcons } from "@expo/vector-icons"
+import main from '../../api/main';
+import axios from 'axios'
+import UserProfile from '../../components/profile/UserProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FocusAwareStatusBar } from '../components/statusbar'
-import { ScrollView } from 'react-native';
+import { FocusAwareStatusBar } from '../../components/statusbar'
 import {
   NavigationContainer,
   useIsFocused,
@@ -18,7 +18,6 @@ const initialState = {
   isFetching:false,
   hasError:false
 }
-
 
 const reducer = (state, action) => {
   switch (action.type){
@@ -43,7 +42,12 @@ const reducer = (state, action) => {
   }
 }
 
-const userScreen = ({navigation}) => {
+
+const profileScreen = ({navigation, route }) => {
+
+  const { host } = route.params.item;
+
+  // console.log(host)
 
   const isFocused = useIsFocused();
 
@@ -60,14 +64,25 @@ const userScreen = ({navigation}) => {
 
   // LoadingScreen--
 
-  console.log(authState.userToken);
+  const url = "https://converge-project.herokuapp.com/api/profile/" + host + "/";
 
   const userInfo = state.users;
-  useEffect(()=>{
+
+  //Cancel Token
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+  //fetch User
+
+  useEffect(()=> {
+    // const abortController = new AbortController()
     const getUser = async() =>{
       try{
+        dispatch({type:'FETCH_USER_REQUEST'});
         setIsloading(true)
-        const response= await main.get('/api/profile/',{
+        const response= await axios.get(url,{
+          cancelToken: source.token,
           headers: {
             'Authorization': `Bearer ${authState.userToken}` 
           }
@@ -78,6 +93,7 @@ const userScreen = ({navigation}) => {
         setIsloading(false)
       }
       catch(err){
+        dispatch({type:'FETCH_USER_ERROR'});
         setIsloading(false)
         console.log(err);
         setError(err)
@@ -85,12 +101,18 @@ const userScreen = ({navigation}) => {
     }
 
     getUser();
+
+    return () => {
+       // abortController.abort()
+       source.cancel('unmounted component {profileScreen}');
+      }
   },[isFocused]);
 
   if (isloading) {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="black" />
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }
@@ -101,6 +123,7 @@ const userScreen = ({navigation}) => {
             <Text style={{ fontSize: 18}}>
             {error}
             </Text>
+            <FocusAwareStatusBar style="auto" />
         </View>
         );
     }
@@ -108,14 +131,12 @@ const userScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
 
-      <FocusAwareStatusBar style="auto" />
-      <StatusBar barStyle="dark-content" backgroundColor="white"/>
-        <Profile 
+        <UserProfile 
         data={userInfo} 
-        signout={authContextValue.signOut} 
-        nav={() => navigation.navigate('edit', {userInfo})}
+        back={() => navigation.goBack()}
         />
 
+      <FocusAwareStatusBar style="auto" />
       
     </SafeAreaView>
   );
@@ -135,4 +156,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default userScreen;
+export default profileScreen;
